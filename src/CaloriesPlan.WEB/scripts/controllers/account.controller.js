@@ -54,5 +54,13 @@
                 var rolesOwner = $routeParams.userName;
                 navigator.goToEditRoles(rolesOwner);
             }
+
+            $scope.goBack = function () {
+                if (accountService.isUserHasRoles(["Admin", "Manager"])) {
+                    navigator.goToAccountsList();
+                } else {
+                    navigator.goToNutritionReport($scope.userName);
+                }
+            }
         }
     ]);

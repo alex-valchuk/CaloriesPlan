@@ -24,7 +24,7 @@
             <tr>
                 <th>User Name</th>
                 <th>Daily Calories Limit</th>
-                <th></th>
+                <th ng-if="isAdmin()"></th>
                 <th></th>
             </tr>
         </thead>
@@ -32,8 +32,8 @@
             <tr ng-repeat="account in accounts">
                 <td>{{ account.userName }}</td>
                 <td>{{ account.dailyCaloriesLimit }}</td>
-                <td>
-                    <a ng-if="isAdmin()" href="#/nutrition-report/{{account.userName}}">Nutrition Report</a>&nbsp;&nbsp;
+                <td ng-if="isAdmin()">
+                    <a href="#/nutrition-report/{{account.userName}}">Nutrition Report</a>&nbsp;&nbsp;
                 </td>
                 <td align="right">
                     <a href="#/account/{{account.userName}}">Edit</a>&nbsp;&nbsp;

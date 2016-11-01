@@ -13,12 +13,13 @@
             <div class="col-md-6"></div>
             <div class="col-md-6">
                 <span class="pull-right">
-                    <select ng-model="selectedNotUserRole" 
-                            ng-options="role.value as role.roleName for role in notUserRoles"
-                            ng-change="onNotUserRoleChanged(selectedNotUserRole)" 
-                            class="form-control" required></select>
-
                     <a ng-click="addRole()" class="btn btn-primary">Add Role</a>
+                </span>
+                <span class="pull-right" style="margin-right: 10px;">
+                    <select ng-model="selectedNotUserRole"
+                            ng-options="role.value as role.roleName for role in notUserRoles"
+                            ng-change="onNotUserRoleChanged(selectedNotUserRole)"
+                            class="form-control" required></select>
                 </span>
             </div>
         </div>

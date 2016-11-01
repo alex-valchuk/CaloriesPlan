@@ -273,7 +273,9 @@
             }
 
             this.isUserHasRoles = function (requiredRoles) {
-                if (requiredRoles && requiredRoles.length > 0) {
+                if (userData.roles &&
+                    requiredRoles &&
+                    requiredRoles.length > 0) {
                     for (var i = 0; i < requiredRoles.length; i++) {
 
                         var requiredRole = requiredRoles[i];

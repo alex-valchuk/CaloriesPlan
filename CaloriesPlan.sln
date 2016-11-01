@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B535D6CB-601F-4B29-BD4E-D686F5EFE205}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit", "Unit", "{B144814C-D751-4F55-BB9A-3461EE033A64}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{B144814C-D751-4F55-BB9A-3461EE033A64}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.API", "src\CaloriesPlan.API\CaloriesPlan.API.csproj", "{AF5CC617-CFB3-4E38-87B5-12851C8EDD57}"
 EndProject
@@ -46,7 +46,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.DTO", "src\Cal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.UTL", "src\CaloriesPlan.UTL\CaloriesPlan.UTL.csproj", "{6EAD09F2-AF57-42A3-B60E-0DC3906FE3C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.BLL.Tests", "tests\Unit\CaloriesPlan.BLL.Tests\CaloriesPlan.BLL.Tests.csproj", "{796F7452-CB6F-4BAC-AFCD-D02243818288}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.BLL.Tests", "tests\unit\CaloriesPlan.BLL.Tests\CaloriesPlan.BLL.Tests.csproj", "{796F7452-CB6F-4BAC-AFCD-D02243818288}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "e2e", "e2e", "{99EB5083-F7C9-405B-A7B9-F2DF15280EEC}"
 	ProjectSection(SolutionItems) = preProject
