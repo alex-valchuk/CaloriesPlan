@@ -1,0 +1,16 @@
+App_Data/
+[Nn]ode_modules/
+[Pp]ackages/
+[Bb]in/
+[Oo]bj/
+[Cc]sx/
+[Ee]cf/
+[Rr]cf/
+.vs/
+.tscache/
+wwwroot/
+typings/
+
+
+*.suo
+*.md

@@ -1,0 +1,91 @@
+﻿<my-menu></my-menu>
+<div ng-controller="NutritionReportController" ng-init="init()" class="container">
+    <h2 class="form-group">{{requestedUser}}'s Nutrition Report</h2>
+
+    <div class="form-group" ng-repeat="error in errors">
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    </div>
+
+    <table class="table-condensed" cellpadding="2" cellspacing="2">
+        <tr>
+            <th></th>
+            <th>From</th>
+            <th colspan="3">To</th>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>
+                <input type="date" ng-model="filter.dateFrom" class="form-control" required />
+            </td>
+            <td>
+                <input type="date" ng-model="filter.dateTo" class="form-control" required />
+            </td>
+            <td>
+                <select ng-model="dateRange.selectedValue" ng-change="onDateRangeChanged(dateRange.selectedValue)" class="form-control">
+                    <option ng-repeat="option in dateRange.availableOptions" value="{{option.value}}">{{option.name}}</option>
+                </select>
+            </td>
+            <td>
+                <button class="btn btn-primary" ng-click="fillForm()">Filter</button>
+            </td>
+        </tr>
+        <tr>
+            <th>Time</th>
+            <td>
+                <input type="time" ng-model="filter.timeFrom" class="form-control" required />
+            </td>
+            <td>
+                <input type="time" ng-model="filter.timeTo" class="form-control" required />
+            </td>
+            <td>
+                <select ng-model="timeRange.selectedValue" ng-change="onTimeRangeChanged(timeRange.selectedValue)" class="form-control">
+                    <option ng-repeat="option in timeRange.availableOptions" value="{{option.value}}">{{option.name}}</option>
+                </select>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <span class="pull-right">
+                    <a href="#/nutrition-report/{{requestedUser}}/meal" class="btn btn-primary">Add New Meal</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <table class="table table-bordered">
+        <thead class="thead-inverse">
+            <tr>
+                <th>Date/Text</th>
+                <th>Time</th>
+                <th>Calories: (Norm is {{nutritionReport.dailyCaloriesLimit}} calories per day)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="(date, meals) in nutritionReport.meals | map:toLocaleDate | groupBy:'date'"
+                class="{{ getTotalCalories(meals) <= nutritionReport.dailyCaloriesLimit | friendlyBooleanStyle }}">
+                <td>{{ date }}</td>
+                <td></td>
+                <td><strong>Total: {{ getTotalCalories(meals) }}</strong></td>
+                <td></td>
+            </tr>
+            <tr ng-repeat-end ng-repeat="meal in meals">
+                <td>{{meal.text}}</td>
+                <td>{{meal.eatingDate | utcToLocal:'hh:mm a'}}</td>
+                <td>{{meal.calories}}</td>
+                <td align="right">
+                    <a class="hand" ng-click="editMeal(meal.id)">Edit</a>&nbsp;&nbsp;
+                    <a class="hand" ng-click="deleteMeal(meal.id)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>

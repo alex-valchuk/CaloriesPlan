@@ -1,0 +1,14 @@
+﻿.red-row {
+    background-color: #FF4136;
+}
+.green-row {
+    background-color: #2ECC40;
+}
+.thead-inverse {
+    background-color: #373a3c;
+    color: white;
+    font-weight:bold;
+}
+.hand {
+    cursor: pointer;
+}

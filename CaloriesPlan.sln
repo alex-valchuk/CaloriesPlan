@@ -1,0 +1,106 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{349F8DB2-1DFC-4DF7-B291-9FE7B02A33C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2073C980-6D7C-4F2B-9D18-BA71F77D36D4}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B535D6CB-601F-4B29-BD4E-D686F5EFE205}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit", "Unit", "{B144814C-D751-4F55-BB9A-3461EE033A64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.API", "src\CaloriesPlan.API\CaloriesPlan.API.csproj", "{AF5CC617-CFB3-4E38-87B5-12851C8EDD57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.DAL", "src\CaloriesPlan.DAL\CaloriesPlan.DAL.csproj", "{7FA473FA-7F91-4E33-878C-CC169F2C6B5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.BLL", "src\CaloriesPlan.BLL\CaloriesPlan.BLL.csproj", "{19CA4AEA-8C3E-4B6C-98A7-D383E0BD05A8}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CaloriesPlan.WEB", "src\CaloriesPlan.WEB\", "{8BDDDBEC-19BD-4968-87A3-3FE5E5ED75B3}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_3419"
+		Debug.AspNetCompiler.PhysicalPath = "src\CaloriesPlan.WEB\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_3419\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_3419"
+		Release.AspNetCompiler.PhysicalPath = "src\CaloriesPlan.WEB\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_3419\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "3419"
+		SlnRelativePath = "src\CaloriesPlan.WEB\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.DTO", "src\CaloriesPlan.DTO\CaloriesPlan.DTO.csproj", "{8EC2EE63-88CD-4884-A02D-DF29AD80CBBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.UTL", "src\CaloriesPlan.UTL\CaloriesPlan.UTL.csproj", "{6EAD09F2-AF57-42A3-B60E-0DC3906FE3C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaloriesPlan.BLL.Tests", "tests\Unit\CaloriesPlan.BLL.Tests\CaloriesPlan.BLL.Tests.csproj", "{796F7452-CB6F-4BAC-AFCD-D02243818288}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "e2e", "e2e", "{99EB5083-F7C9-405B-A7B9-F2DF15280EEC}"
+	ProjectSection(SolutionItems) = preProject
+		tests\e2e\config.js = tests\e2e\config.js
+		tests\e2e\spec.js = tests\e2e\spec.js
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF5CC617-CFB3-4E38-87B5-12851C8EDD57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF5CC617-CFB3-4E38-87B5-12851C8EDD57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF5CC617-CFB3-4E38-87B5-12851C8EDD57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF5CC617-CFB3-4E38-87B5-12851C8EDD57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FA473FA-7F91-4E33-878C-CC169F2C6B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FA473FA-7F91-4E33-878C-CC169F2C6B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FA473FA-7F91-4E33-878C-CC169F2C6B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FA473FA-7F91-4E33-878C-CC169F2C6B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19CA4AEA-8C3E-4B6C-98A7-D383E0BD05A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19CA4AEA-8C3E-4B6C-98A7-D383E0BD05A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19CA4AEA-8C3E-4B6C-98A7-D383E0BD05A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19CA4AEA-8C3E-4B6C-98A7-D383E0BD05A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BDDDBEC-19BD-4968-87A3-3FE5E5ED75B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BDDDBEC-19BD-4968-87A3-3FE5E5ED75B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BDDDBEC-19BD-4968-87A3-3FE5E5ED75B3}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BDDDBEC-19BD-4968-87A3-3FE5E5ED75B3}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{8EC2EE63-88CD-4884-A02D-DF29AD80CBBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EC2EE63-88CD-4884-A02D-DF29AD80CBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EC2EE63-88CD-4884-A02D-DF29AD80CBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EC2EE63-88CD-4884-A02D-DF29AD80CBBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EAD09F2-AF57-42A3-B60E-0DC3906FE3C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EAD09F2-AF57-42A3-B60E-0DC3906FE3C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EAD09F2-AF57-42A3-B60E-0DC3906FE3C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EAD09F2-AF57-42A3-B60E-0DC3906FE3C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{796F7452-CB6F-4BAC-AFCD-D02243818288}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{796F7452-CB6F-4BAC-AFCD-D02243818288}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{796F7452-CB6F-4BAC-AFCD-D02243818288}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{796F7452-CB6F-4BAC-AFCD-D02243818288}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B144814C-D751-4F55-BB9A-3461EE033A64} = {B535D6CB-601F-4B29-BD4E-D686F5EFE205}
+		{AF5CC617-CFB3-4E38-87B5-12851C8EDD57} = {349F8DB2-1DFC-4DF7-B291-9FE7B02A33C1}
+		{7FA473FA-7F91-4E33-878C-CC169F2C6B5F} = {349F8DB2-1DFC-4DF7-B291-9FE7B02A33C1}
+		{19CA4AEA-8C3E-4B6C-98A7-D383E0BD05A8} = {349F8DB2-1DFC-4DF7-B291-9FE7B02A33C1}
+		{8BDDDBEC-19BD-4968-87A3-3FE5E5ED75B3} = {349F8DB2-1DFC-4DF7-B291-9FE7B02A33C1}
+		{8EC2EE63-88CD-4884-A02D-DF29AD80CBBA} = {349F8DB2-1DFC-4DF7-B291-9FE7B02A33C1}
+		{6EAD09F2-AF57-42A3-B60E-0DC3906FE3C6} = {349F8DB2-1DFC-4DF7-B291-9FE7B02A33C1}
+		{796F7452-CB6F-4BAC-AFCD-D02243818288} = {B144814C-D751-4F55-BB9A-3461EE033A64}
+		{99EB5083-F7C9-405B-A7B9-F2DF15280EEC} = {B535D6CB-601F-4B29-BD4E-D686F5EFE205}
+	EndGlobalSection
+EndGlobal

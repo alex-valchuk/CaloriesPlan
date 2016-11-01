@@ -1,0 +1,49 @@
+﻿<my-menu></my-menu>
+<div ng-controller="MealController" ng-init="init()" class="container">
+    <div class="row center-block">
+        <div class="col-lg-4 col-lg-offset-4">
+            <h2 class="form-group">{{ mealOperationName }}</h2>
+            <br />
+
+            <div class="form-group" ng-repeat="error in errors">
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            </div>
+
+            <div class="form-group alert alert-success" ng-if="success">
+                {{ success }}
+            </div>
+
+            <div class="form-group">
+                <label>Text:</label>
+                <input type="text" ng-model="meal.text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Calories:</label>
+                <input type="text" ng-model="meal.calories" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Eating date:</label>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown">
+                        <div class="input-group">
+                            <input type="text" id="date" name="date" class="form-control hand" value="{{meal.eatingDate | date:'yyyy-MM-dd hh:mm a'}}" disabled="disabled" style="cursor: pointer; background-color: transparent;">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <datetimepicker ng-model="meal.eatingDate"
+                                        data-datetimepicker-config="{ dropdownSelector: '#dropdown' }"></datetimepicker>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button ng-click="save()" class="btn btn-primary">Save</button>
+                <a ng-click="goBack()" class="btn btn-secondary">Back</a>
+            </div>
+        </div>
+    </div>
+</div>

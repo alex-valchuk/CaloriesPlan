@@ -1,0 +1,39 @@
+﻿<div ng-controller="RegisterController" ng-init="init()" class="container">
+    <div class="row center-block">
+        <div class="col-lg-4 col-lg-offset-4">
+            <h2 class="form-group">{{signupText}}</h2>
+
+            <div class="form-group" ng-repeat="error in errors">
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            </div>
+
+            <div class="form-group alert alert-success" ng-if="success">
+                {{ success }}
+            </div>
+
+            <div class="form-group">
+                <label>User Name:</label>
+                <input type="text" ng-model="registerModel.userName" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" ng-model="registerModel.password" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Confirm Password:</label>
+                <input type="password" ng-model="registerModel.confirmPassword" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <button ng-click="signup()" class="btn btn-primary">{{signupText}}</button>
+                <a ng-click="goBack()" class="btn btn-secondary">{{cancelText}}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

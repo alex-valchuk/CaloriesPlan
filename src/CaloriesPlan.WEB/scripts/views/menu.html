@@ -1,0 +1,28 @@
+﻿<nav ng-if="isAuthenticated" class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">Calories Plan</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#/nutrition-report/{{userName}}">Nutrition Report<span class="sr-only">(current)</span></a>
+                </li>
+                <li ng-if="isAdminOrManager()">
+                    <a href="#/accounts-list">Manage Accounts<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{userName}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/account/{{userName}}">Profile</a></li>
+                        <li><a href="" ng-click="signout()">Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
