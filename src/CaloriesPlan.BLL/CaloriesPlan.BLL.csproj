@@ -86,11 +86,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\AspNetIdentity\AspNetIdentityRegistrationResut.cs" />
-    <Compile Include="Entities\IRegistrationResult.cs" />
     <Compile Include="Exceptions\InvalidDateRangeException.cs" />
     <Compile Include="Exceptions\AccountDoesNotExistException.cs" />
+    <Compile Include="Exceptions\PropertyInconsistencyException.cs" />
     <Compile Include="Exceptions\MealDoesNotExistException.cs" />
+    <Compile Include="Exceptions\RegistrationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IAccountService.cs" />
     <Compile Include="Services\Impl\Base\ServiceBase.cs" />

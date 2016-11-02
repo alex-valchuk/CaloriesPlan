@@ -1,9 +1,10 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Linq;
+using System.Web.Http;
 
 using CaloriesPlan.BLL.Services;
 using CaloriesPlan.BLL.Exceptions;
 using CaloriesPlan.DTO.In;
-using CaloriesPlan.BLL.Entities;
 using CaloriesPlan.API.Controllers.Base;
 using CaloriesPlan.API.Filters;
 using CaloriesPlan.UTL.Const;
@@ -49,6 +50,11 @@ namespace CaloriesPlan.API.Controllers
                 var userRoles = this.accountService.GetUserRoles(userName);
                 return this.Ok(userRoles);
             }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
+            }
             catch
             {
                 //add logging functionality
@@ -67,6 +73,11 @@ namespace CaloriesPlan.API.Controllers
                 var userRoles = this.accountService.GetNotUserRoles(userName);
                 return this.Ok(userRoles);
             }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
+            }
             catch
             {
                 //add logging functionality
@@ -84,6 +95,11 @@ namespace CaloriesPlan.API.Controllers
             {
                 var account = this.accountService.GetAccount(userName);
                 return this.Ok(account);
+            }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
             }
             catch
             {
@@ -112,6 +128,11 @@ namespace CaloriesPlan.API.Controllers
             {
                 //add logging functionality
                 return this.BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
             }
             catch
             {
@@ -142,6 +163,11 @@ namespace CaloriesPlan.API.Controllers
                 //add logging functionality
                 return this.BadRequest();
             }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
+            }
             catch
             {
                 //add logging functionality
@@ -164,6 +190,11 @@ namespace CaloriesPlan.API.Controllers
             {
                 //add logging functionality
                 return this.BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
             }
             catch
             {
@@ -194,6 +225,11 @@ namespace CaloriesPlan.API.Controllers
                 //add logging functionality
                 return this.BadRequest();
             }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
+            }
             catch
             {
                 //add logging functionality
@@ -214,43 +250,29 @@ namespace CaloriesPlan.API.Controllers
                     return this.BadRequest(this.ModelState);
                 }
 
-                var registrationResult = this.accountService.RegisterUser(registerDto);
-
-                return this.GetSuitableResult(registrationResult);
+                this.accountService.RegisterUser(registerDto);
+                return this.Ok();
+            }
+            catch (PropertyInconsistencyException ex)
+            {
+                //add logging functionality
+                return this.BadProperty(ex);
+            }
+            catch (RegistrationException ex)
+            {
+                //add logging functionality
+                return this.BadRegistration(ex);
+            }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadArgument(ex);
             }
             catch
             {
                 //add logging functionality
                 return this.InternalServerError();
             }
-        }
-
-        private IHttpActionResult GetSuitableResult(IRegistrationResult result)
-        {
-            if (result == null)
-            {
-                return this.InternalServerError();
-            }
-            else if (result.Succeeded)
-            {
-                return this.Ok();
-            }
-
-            if (result.Errors != null)
-            {
-                foreach (string error in result.Errors)
-                {
-                    this.ModelState.AddModelError("", error);
-                }
-            }
-
-            if (this.ModelState.IsValid)
-            {
-                // No ModelState errors are available to send, so just return an empty BadRequest.
-                return this.BadRequest();
-            }
-
-            return this.BadRequest(this.ModelState);
         }
     }
 }

@@ -4,18 +4,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 
 using Newtonsoft.Json;
 
 using CaloriesPlan.DAL.Dao;
-using CaloriesPlan.DAL.DataModel;
 using CaloriesPlan.DTO.Out;
 using CaloriesPlan.UTL;
 using CaloriesPlan.BLL.Exceptions;
-using CaloriesPlan.BLL.Entities;
-using CaloriesPlan.BLL.Entities.AspNetIdentity;
 using CaloriesPlan.BLL.Services.Impl.Base;
 using CaloriesPlan.DTO.In;
 
@@ -34,27 +30,34 @@ namespace CaloriesPlan.BLL.Services.Impl
             this.userDao = userDao;
         }
 
-        public IRegistrationResult RegisterUser(InRegisterDto registerDto)
+        public void RegisterUser(InRegisterDto registerDto)
         {
+            if (registerDto == null ||
+                string.IsNullOrEmpty(registerDto.UserName) ||
+                string.IsNullOrEmpty(registerDto.Password))
+                throw new ArgumentNullException("Register data");
+
+            if (registerDto.Password != registerDto.ConfirmPassword)
+                throw new PropertyInconsistencyException("Password", "Password does not match password confirmation");
+
+
             var defaultCaloriesLimit = this.configProvider.GetDefaultCaloriesLimit();
 
-            var user = new User
-            {
-                DailyCaloriesLimit = defaultCaloriesLimit > 0 ? defaultCaloriesLimit : 50,
-                UserName = registerDto.UserName
-            };
+            var user = this.userDao.NewUserInstance();
+            user.UserName = registerDto.UserName;
+            user.DailyCaloriesLimit =
+                defaultCaloriesLimit > 0
+                    ? defaultCaloriesLimit
+                    : 50;//if not configured
 
-            AspNetIdentityRegistrationResut registrationResult = null;
 
-            var identityResult = this.userDao.CreateUser(user, registerDto.Password);
-            if (identityResult.Succeeded)
-            {
-                identityResult = this.userDao.AddUserRole(user, "User");
+            var userRegistrationResult = this.userDao.CreateUser(user, registerDto.Password);
+            if (userRegistrationResult.Succeeded == false)
+                throw new RegistrationException(userRegistrationResult);
 
-                registrationResult = new AspNetIdentityRegistrationResut(identityResult);
-            }
-
-            return registrationResult;
+            var roleRegistrationResult = this.userDao.AddUserRole(user, "User");
+            if (roleRegistrationResult.Succeeded == false)
+                throw new RegistrationException(roleRegistrationResult);
         }
 
         public IList<OutAccountDto> GetAccounts()
@@ -67,17 +70,37 @@ namespace CaloriesPlan.BLL.Services.Impl
 
         public OutAccountDto GetAccount(string userName)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
             var user = this.userDao.GetUserByName(userName);
+            if (user == null)
+                return null;
+
+
             var dto = this.ConvertToOutAccountDto(user);
 
             var dbUserRoles = this.userDao.GetUserRoles(user);
-            dto.UserRoles = this.ConvertToOutUserRoleDtoList(dbUserRoles);
+            if (dbUserRoles != null)
+            {
+                dto.UserRoles = this.ConvertToOutUserRoleDtoList(dbUserRoles);
+            }
 
             return dto;
         }
 
         public void UpdateAccount(string userName, InAccountDto accountDto)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
+            if (accountDto == null)
+                throw new ArgumentNullException("Account");
+
+            if (accountDto.DailyCaloriesLimit == null)
+                throw new ArgumentNullException("DailyCaloriesLimit");
+
+
             var user = this.userDao.GetUserByName(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
@@ -89,17 +112,30 @@ namespace CaloriesPlan.BLL.Services.Impl
 
         public void DeleteAccount(string userName)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
             var user = this.userDao.GetUserByName(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
+
 
             this.userDao.Delete(user);
         }
 
         public IList<OutUserRoleDto> GetUserRoles(string userName)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
             var user = this.userDao.GetUserByName(userName);
+            if (user == null)
+                throw new AccountDoesNotExistException();
+
             var dbRoles = this.userDao.GetUserRoles(user);
+            if (dbRoles == null)
+                return null;
+
 
             var dtoRoles = this.ConvertToOutUserRoleDtoList(dbRoles);
             return dtoRoles;
@@ -107,8 +143,17 @@ namespace CaloriesPlan.BLL.Services.Impl
 
         public IList<OutUserRoleDto> GetNotUserRoles(string userName)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
             var user = this.userDao.GetUserByName(userName);
+            if (user == null)
+                throw new AccountDoesNotExistException();
+
             var dbRoles = this.userDao.GetNotUserRoles(user);
+            if (dbRoles == null)
+                return null;
+
 
             var dtoRoles = this.ConvertToOutUserRoleDtoList(dbRoles);
             return dtoRoles;
@@ -116,23 +161,53 @@ namespace CaloriesPlan.BLL.Services.Impl
 
         public void AddUserRole(string userName, string roleName)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
+            if (string.IsNullOrEmpty(roleName))
+                throw new ArgumentNullException("RoleName");
+
             var user = this.userDao.GetUserByName(userName);
+            if (user == null)
+                throw new AccountDoesNotExistException();
+
+
             this.userDao.AddUserRole(user, roleName);
         }
 
         public void DeleteUserRole(string userName, string roleName)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
+            if (string.IsNullOrEmpty(roleName))
+                throw new ArgumentNullException("RoleName");
+
             var user = this.userDao.GetUserByName(userName);
+            if (user == null)
+                throw new AccountDoesNotExistException();
+
+
             this.userDao.DeleteUserRole(user, roleName);
         }
 
         public async Task<AuthenticationTicket> GetAuthenticationTicket(string userName, string password, string authType)
         {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException("Password");
+
+            if (string.IsNullOrEmpty(authType))
+                throw new ArgumentNullException("Authentication Type");
+
             var user = await this.userDao.GetUserByCredentials(userName, password);
             if (user == null)
                 return null;
 
             var claimsIdentity = await this.userDao.CreateIdentity(user, authType);
+
             var roles = claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
             var roleNames = JsonConvert.SerializeObject(roles.Select(x => x.Value));
 
@@ -155,6 +230,10 @@ namespace CaloriesPlan.BLL.Services.Impl
 
         private IList<OutAccountDto> ConvertToOutAccountDtoList(IList<Models.IUser> dbUsers)
         {
+            if (dbUsers == null ||
+                dbUsers.Count == 0)
+                return null;
+
             var dtoUsers = new List<OutAccountDto>();
 
             foreach (var dbUser in dbUsers)
@@ -168,6 +247,9 @@ namespace CaloriesPlan.BLL.Services.Impl
 
         private OutAccountDto ConvertToOutAccountDto(Models.IUser dbUser)
         {
+            if (dbUser == null)
+                return null;
+
             var dtoUser = new OutAccountDto
             {
                 UserName = dbUser.UserName,
@@ -177,8 +259,12 @@ namespace CaloriesPlan.BLL.Services.Impl
             return dtoUser;
         }
 
-        private IList<OutUserRoleDto> ConvertToOutUserRoleDtoList(IList<IdentityRole> dbRoles)
+        private IList<OutUserRoleDto> ConvertToOutUserRoleDtoList(IList<Models.IRole> dbRoles)
         {
+            if (dbRoles == null)
+                return null;
+
+
             var dtoRoles = new List<OutUserRoleDto>();
 
             foreach (var dbRole in dbRoles)
@@ -190,8 +276,11 @@ namespace CaloriesPlan.BLL.Services.Impl
             return dtoRoles;
         }
 
-        private OutUserRoleDto ConvertToOutUserRoleDto(IdentityRole dbRole)
+        private OutUserRoleDto ConvertToOutUserRoleDto(Models.IRole dbRole)
         {
+            if (dbRole == null)
+                return null;
+
             var dtoRole = new OutUserRoleDto
             {
                 RoleName = dbRole.Name

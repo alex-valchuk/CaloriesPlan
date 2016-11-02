@@ -2,13 +2,15 @@
 
 using Microsoft.AspNet.Identity;
 
-namespace CaloriesPlan.BLL.Entities.AspNetIdentity
+using CaloriesPlan.UTL.Wrappers;
+
+namespace CaloriesPlan.DAL.Wrappers
 {
-    public class AspNetIdentityRegistrationResut : IRegistrationResult
+    public class AspNetIdentityRegistrationResult : IAccountRegistrationResult
     {
         private readonly IdentityResult identityResult;
 
-        public AspNetIdentityRegistrationResut(IdentityResult identityResult)
+        public AspNetIdentityRegistrationResult(IdentityResult identityResult)
         {
             this.identityResult = identityResult;
         }

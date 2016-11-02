@@ -7,8 +7,11 @@ using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
+using CaloriesPlan.UTL.Wrappers;
 using CaloriesPlan.DAL.Dao.EF.Base;
 using CaloriesPlan.DAL.DataModel;
+using CaloriesPlan.DAL.Wrappers;
+
 using Models = CaloriesPlan.DAL.DataModel.Abstractions;
 
 namespace CaloriesPlan.DAL.Dao.EF
@@ -24,10 +27,16 @@ namespace CaloriesPlan.DAL.Dao.EF
             this.roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(this.dbContext));
         }
 
-        public IdentityResult CreateUser(User user, string password)
+        public Models.IUser NewUserInstance()
         {
-            var result = this.userManager.Create(user, password);
-            return result;
+            return new User();
+        }
+
+        public IAccountRegistrationResult CreateUser(Models.IUser user, string password)
+        {
+            var identityResult = this.userManager.Create((User)user, password);
+
+            return new AspNetIdentityRegistrationResult(identityResult);
         }
 
         public async Task<ClaimsIdentity> CreateIdentity(User user, string authType)
@@ -61,24 +70,26 @@ namespace CaloriesPlan.DAL.Dao.EF
             this.userManager.Delete((User)user);
         }
 
-        public IList<IdentityRole> GetUserRoles(Models.IUser user)
+        public IList<Models.IRole> GetUserRoles(Models.IUser user)
         {            
             return this.dbContext.Roles
                 .Where(r => r.Users.Any(u => u.UserId == user.Id))
-                .ToList();
+                .Select(r => new Role(r.Name))
+                .ToList<Models.IRole>();
         }
 
-        public IList<IdentityRole> GetNotUserRoles(Models.IUser user)
+        public IList<Models.IRole> GetNotUserRoles(Models.IUser user)
         {
             return this.dbContext.Roles
                 .Where(r => r.Users.Any(u => u.UserId == user.Id) == false)
-                .ToList();
+                .Select(r => new Role(r.Name))
+                .ToList<Models.IRole>();
         }
 
-        public IdentityResult AddUserRole(Models.IUser user, string roleName)
+        public IAccountRegistrationResult AddUserRole(Models.IUser user, string roleName)
         {
-            var result = this.userManager.AddToRole(user.Id, roleName);
-            return result;
+            var identityResult = this.userManager.AddToRole(user.Id, roleName);
+            return new AspNetIdentityRegistrationResult(identityResult);
         }
 
         public void DeleteUserRole(Models.IUser user, string roleName)

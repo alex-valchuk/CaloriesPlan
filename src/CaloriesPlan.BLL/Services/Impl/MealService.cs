@@ -28,12 +28,12 @@ namespace CaloriesPlan.BLL.Services.Impl
         public OutNutritionReportDto GetUserNutritionReport(string userName, InMealReportFilterDto filter)
         {
             if (string.IsNullOrEmpty(userName))
-                throw new ArgumentNullException("UserName not specified");
+                throw new ArgumentNullException("UserName");
 
             if (filter == null ||
                 filter.DateFrom == null || filter.DateTo == null ||
                 filter.TimeFrom == null || filter.TimeTo == null)
-                throw new ArgumentNullException("Filter not specified correctly");
+                throw new ArgumentNullException("Filter");
 
 
             var user = this.userDao.GetUserByName(userName);
@@ -70,10 +70,10 @@ namespace CaloriesPlan.BLL.Services.Impl
         public void CreateMeal(string userName, InMealDto mealDto)
         {
             if (string.IsNullOrEmpty(userName))
-                throw new ArgumentNullException("UserName not specified");
+                throw new ArgumentNullException("UserName");
 
             if (mealDto == null)
-                throw new ArgumentNullException("Meal not specified");
+                throw new ArgumentNullException("Meal");
 
 
             var user = this.userDao.GetUserByName(userName);
@@ -97,7 +97,7 @@ namespace CaloriesPlan.BLL.Services.Impl
                 string.IsNullOrEmpty(mealDto.Text) ||
                 mealDto.Calories == null ||
                 mealDto.EatingDate == null)
-                throw new ArgumentNullException("Meal not specified correctly");
+                throw new ArgumentNullException("Meal");
 
 
             var dbMeal = this.mealDao.GetMealByID(id);

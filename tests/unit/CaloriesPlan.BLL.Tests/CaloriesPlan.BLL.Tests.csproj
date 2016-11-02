@@ -59,11 +59,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AccountServiceTests.cs" />
     <Compile Include="MealServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

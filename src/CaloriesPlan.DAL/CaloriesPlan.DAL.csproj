@@ -92,8 +92,10 @@
     <Compile Include="Dao\EF\EFMealDao.cs" />
     <Compile Include="Dao\IUserDao.cs" />
     <Compile Include="DataModel\Abstractions\IMeal.cs" />
+    <Compile Include="DataModel\Abstractions\IRole.cs" />
     <Compile Include="DataModel\Abstractions\IUser.cs" />
     <Compile Include="DataModel\Meal.cs" />
+    <Compile Include="DataModel\Role.cs" />
     <Compile Include="DataModel\User.cs" />
     <Compile Include="Migrations\201610251515467_Initial.cs" />
     <Compile Include="Migrations\201610251515467_Initial.Designer.cs">
@@ -113,12 +115,18 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wrappers\AspNetIdentityRegistrationResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CaloriesPlan.UTL\CaloriesPlan.UTL.csproj">
+      <Project>{6ead09f2-af57-42a3-b60e-0dc3906fe3c6}</Project>
+      <Name>CaloriesPlan.UTL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201610251515467_Initial.resx">
       <DependentUpon>201610251515467_Initial.cs</DependentUpon>

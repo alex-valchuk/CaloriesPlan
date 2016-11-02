@@ -117,7 +117,8 @@ namespace CaloriesPlan.BLL.Tests
             var userName = "Alex";
             this.userDaoMock.Setup(ud => ud.GetUserByName(It.IsAny<string>())).Returns(Mock.Of<IUser>());
 
-            var filter = this.GetInvalidFilter();
+            var filter = this.GetValidFilter();
+            filter.DateFrom = filter.DateTo.Value.AddDays(1);
 
             //act
             this.mealService.GetUserNutritionReport(userName, filter);
@@ -334,17 +335,6 @@ namespace CaloriesPlan.BLL.Tests
                 Text = "Soup",
                 Calories = 10,
                 EatingDate = DateTime.Now
-            };
-        }
-
-        private InMealReportFilterDto GetInvalidFilter()
-        {
-            return new InMealReportFilterDto
-            {
-                DateFrom = DateTime.Now.AddDays(1),
-                DateTo = DateTime.Now,
-                TimeFrom = DateTime.Now,
-                TimeTo = DateTime.Now
             };
         }
 
