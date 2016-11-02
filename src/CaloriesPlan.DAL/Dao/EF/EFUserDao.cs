@@ -74,7 +74,7 @@ namespace CaloriesPlan.DAL.Dao.EF
         {            
             return this.dbContext.Roles
                 .Where(r => r.Users.Any(u => u.UserId == user.Id))
-                .Select(r => new Role(r.Name))
+                .Select(r => new Role { Name = r.Name })
                 .ToList<Models.IRole>();
         }
 
@@ -82,7 +82,7 @@ namespace CaloriesPlan.DAL.Dao.EF
         {
             return this.dbContext.Roles
                 .Where(r => r.Users.Any(u => u.UserId == user.Id) == false)
-                .Select(r => new Role(r.Name))
+                .Select(r => new Role { Name = r.Name })
                 .ToList<Models.IRole>();
         }
 
