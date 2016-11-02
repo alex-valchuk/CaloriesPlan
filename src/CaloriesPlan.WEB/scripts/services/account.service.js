@@ -342,7 +342,7 @@
             }
 
             function clearHttpAuthHeader() {
-                $http.defaults.headers.common.Authorization = 'Bearer ' + userData.bearerToken;
+                $http.defaults.headers.common.Authorization = '';
             }
 
             function clearUserData() {

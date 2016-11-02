@@ -2,7 +2,7 @@
 
 using CaloriesPlan.BLL.Services;
 using CaloriesPlan.BLL.Exceptions;
-using CaloriesPlan.API.Models;
+using CaloriesPlan.DTO.In;
 using CaloriesPlan.BLL.Entities;
 using CaloriesPlan.API.Controllers.Base;
 using CaloriesPlan.API.Filters;
@@ -96,7 +96,7 @@ namespace CaloriesPlan.API.Controllers
         [HttpPut]
         [OwnerOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
         [Route(ParamUserName)]
-        public IHttpActionResult Put(string userName, AccountModel account)
+        public IHttpActionResult Put(string userName, InAccountDto accountDto)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace CaloriesPlan.API.Controllers
                     return this.BadRequest(this.ModelState);
                 }
 
-                this.accountService.UpdateAccount(userName, account.DailyCaloriesLimit.Value);
+                this.accountService.UpdateAccount(userName, accountDto);
                 return this.Ok();
             }
             catch (AccountDoesNotExistException)
@@ -205,7 +205,7 @@ namespace CaloriesPlan.API.Controllers
         [AllowAnonymous]
         [Route("register")]
         [HttpPost]
-        public IHttpActionResult Register(RegisterModel registerModel)
+        public IHttpActionResult Register(InRegisterDto registerDto)
         {
             try
             {
@@ -214,7 +214,7 @@ namespace CaloriesPlan.API.Controllers
                     return this.BadRequest(this.ModelState);
                 }
 
-                var registrationResult = this.accountService.RegisterUser(registerModel.UserName, registerModel.Password);
+                var registrationResult = this.accountService.RegisterUser(registerDto);
 
                 return this.GetSuitableResult(registrationResult);
             }

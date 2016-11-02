@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 
 using Newtonsoft.Json;
@@ -15,8 +17,9 @@ using CaloriesPlan.BLL.Exceptions;
 using CaloriesPlan.BLL.Entities;
 using CaloriesPlan.BLL.Entities.AspNetIdentity;
 using CaloriesPlan.BLL.Services.Impl.Base;
-using System;
-using Microsoft.AspNet.Identity.EntityFramework;
+using CaloriesPlan.DTO.In;
+
+using Models = CaloriesPlan.DAL.DataModel.Abstractions;
 
 namespace CaloriesPlan.BLL.Services.Impl
 {
@@ -31,19 +34,19 @@ namespace CaloriesPlan.BLL.Services.Impl
             this.userDao = userDao;
         }
 
-        public IRegistrationResult RegisterUser(string userName, string password)
+        public IRegistrationResult RegisterUser(InRegisterDto registerDto)
         {
             var defaultCaloriesLimit = this.configProvider.GetDefaultCaloriesLimit();
 
             var user = new User
             {
                 DailyCaloriesLimit = defaultCaloriesLimit > 0 ? defaultCaloriesLimit : 50,
-                UserName = userName
+                UserName = registerDto.UserName
             };
 
             AspNetIdentityRegistrationResut registrationResult = null;
 
-            var identityResult = this.userDao.CreateUser(user, password);
+            var identityResult = this.userDao.CreateUser(user, registerDto.Password);
             if (identityResult.Succeeded)
             {
                 identityResult = this.userDao.AddUserRole(user, "User");
@@ -73,13 +76,13 @@ namespace CaloriesPlan.BLL.Services.Impl
             return dto;
         }
 
-        public void UpdateAccount(string userName, int dailyCaloriesLimit)
+        public void UpdateAccount(string userName, InAccountDto accountDto)
         {
             var user = this.userDao.GetUserByName(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
 
-            user.DailyCaloriesLimit = dailyCaloriesLimit;
+            user.DailyCaloriesLimit = accountDto.DailyCaloriesLimit.Value;
 
             this.userDao.Update(user);
         }
@@ -150,7 +153,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             return new AuthenticationProperties(data);
         }
 
-        private IList<OutAccountDto> ConvertToOutAccountDtoList(IList<User> dbUsers)
+        private IList<OutAccountDto> ConvertToOutAccountDtoList(IList<Models.IUser> dbUsers)
         {
             var dtoUsers = new List<OutAccountDto>();
 
@@ -163,7 +166,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             return dtoUsers;
         }
 
-        private OutAccountDto ConvertToOutAccountDto(User dbUser)
+        private OutAccountDto ConvertToOutAccountDto(Models.IUser dbUser)
         {
             var dtoUser = new OutAccountDto
             {

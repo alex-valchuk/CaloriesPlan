@@ -5,13 +5,19 @@ using System.Data.SqlClient;
 using System.Linq;
 
 using CaloriesPlan.DAL.DataModel;
+using CaloriesPlan.DAL.DataModel.Abstractions;
 using CaloriesPlan.DAL.Dao.EF.Base;
 
 namespace CaloriesPlan.DAL.Dao.EF
 {
     public class EFMealDao : EFDaoBase, IMealDao
     {
-        public List<Meal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo)
+        public IMeal NewMealInstance()
+        {
+            return new Meal();
+        }
+
+        public List<IMeal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo)
         {
             var userNameParam = new SqlParameter("@UserName", SqlDbType.NVarChar, 200);
             var dateFromParam = new SqlParameter("@DateFrom", SqlDbType.DateTime);
@@ -33,30 +39,30 @@ namespace CaloriesPlan.DAL.Dao.EF
                     timeFromParam,
                     timeToParam);
 
-            return query.ToList();
+            return query.ToList<IMeal>();
         }
 
-        public Meal GetMealByID(int mealID)
+        public IMeal GetMealByID(int mealID)
         {
             return 
                 this.dbContext.Meals
                     .FirstOrDefault(m => m.ID == mealID);
         }
 
-        public void Create(Meal dbMeal)
+        public void Create(IMeal dbMeal)
         {
-            this.dbContext.Meals.Add(dbMeal);
+            this.dbContext.Meals.Add((Meal)dbMeal);
             this.dbContext.SaveChanges();
         }
 
-        public void Update(Meal dbMeal)
+        public void Update(IMeal dbMeal)
         {
             this.dbContext.SaveChanges();
         }
 
-        public void Delete(Meal dbMeal)
+        public void Delete(IMeal dbMeal)
         {
-            this.dbContext.Meals.Remove(dbMeal);
+            this.dbContext.Meals.Remove((Meal)dbMeal);
             this.dbContext.SaveChanges();
         }
     }

@@ -212,18 +212,12 @@
     <Compile Include="Controllers\Base\ControllerBase.cs" />
     <Compile Include="Controllers\MealsController.cs" />
     <Compile Include="Filters\OwnerOrIsInOneOfRoles.cs" />
-    <Compile Include="Models\AccountModel.cs" />
-    <Compile Include="Models\MealModel.cs" />
-    <Compile Include="Models\LoginModel.cs" />
-    <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\UnityDependencyResolver.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\ViewModels\Account\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CaloriesPlan.BLL\CaloriesPlan.BLL.csproj">
       <Project>{19ca4aea-8c3e-4b6c-98a7-d383e0bd05a8}</Project>

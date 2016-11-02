@@ -3,9 +3,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 using CaloriesPlan.DAL.DataModel;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Models = CaloriesPlan.DAL.DataModel.Abstractions;
 
 namespace CaloriesPlan.DAL.Dao
 {
@@ -15,14 +16,14 @@ namespace CaloriesPlan.DAL.Dao
         Task<ClaimsIdentity> CreateIdentity(User user, string authType);
         Task<User> GetUserByCredentials(string userName, string password);
 
-        IList<User> GetUsers();
-        User GetUserByName(string userName);
-        void Update(User user);
-        void Delete(User user);
+        IList<Models.IUser> GetUsers();
+        Models.IUser GetUserByName(string userName);
+        void Update(Models.IUser user);
+        void Delete(Models.IUser user);
 
-        IList<IdentityRole> GetUserRoles(User user);
-        IList<IdentityRole> GetNotUserRoles(User user);
-        IdentityResult AddUserRole(User user, string roleName);
-        void DeleteUserRole(User user, string roleName);
+        IList<IdentityRole> GetUserRoles(Models.IUser user);
+        IList<IdentityRole> GetNotUserRoles(Models.IUser user);
+        IdentityResult AddUserRole(Models.IUser user, string roleName);
+        void DeleteUserRole(Models.IUser user, string roleName);
     }
 }

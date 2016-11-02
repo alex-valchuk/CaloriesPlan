@@ -2,10 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using CaloriesPlan.DAL.DataModel.Abstractions;
+
 namespace CaloriesPlan.DAL.DataModel
 {
     [Table("Meal")]
-    public class Meal
+    public class Meal : IMeal
     {
         [Required]
         public int ID { get; set; }

@@ -91,6 +91,8 @@
     <Compile Include="Dao\EF\Base\EFDaoBase.cs" />
     <Compile Include="Dao\EF\EFMealDao.cs" />
     <Compile Include="Dao\IUserDao.cs" />
+    <Compile Include="DataModel\Abstractions\IMeal.cs" />
+    <Compile Include="DataModel\Abstractions\IUser.cs" />
     <Compile Include="DataModel\Meal.cs" />
     <Compile Include="DataModel\User.cs" />
     <Compile Include="Migrations\201610251515467_Initial.cs" />

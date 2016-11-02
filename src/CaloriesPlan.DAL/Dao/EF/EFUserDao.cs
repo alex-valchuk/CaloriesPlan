@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 using CaloriesPlan.DAL.Dao.EF.Base;
 using CaloriesPlan.DAL.DataModel;
+using Models = CaloriesPlan.DAL.DataModel.Abstractions;
 
 namespace CaloriesPlan.DAL.Dao.EF
 {
@@ -40,47 +41,47 @@ namespace CaloriesPlan.DAL.Dao.EF
             return await this.userManager.FindAsync(userName, password);
         }
 
-        public IList<User> GetUsers()
+        public IList<Models.IUser> GetUsers()
         {
-            return this.userManager.Users.ToList();
+            return this.userManager.Users.ToList<Models.IUser>();
         }
 
-        public User GetUserByName(string userName)
+        public Models.IUser GetUserByName(string userName)
         {
             return this.userManager.Users.FirstOrDefault(u => u.UserName == userName);
         }
 
-        public void Update(User user)
+        public void Update(Models.IUser user)
         {
-            this.userManager.Update(user);
+            this.userManager.Update((User)user);
         }
 
-        public void Delete(User user)
+        public void Delete(Models.IUser user)
         {
-            this.userManager.Delete(user);
+            this.userManager.Delete((User)user);
         }
 
-        public IList<IdentityRole> GetUserRoles(User user)
+        public IList<IdentityRole> GetUserRoles(Models.IUser user)
         {            
             return this.dbContext.Roles
                 .Where(r => r.Users.Any(u => u.UserId == user.Id))
                 .ToList();
         }
 
-        public IList<IdentityRole> GetNotUserRoles(User user)
+        public IList<IdentityRole> GetNotUserRoles(Models.IUser user)
         {
             return this.dbContext.Roles
                 .Where(r => r.Users.Any(u => u.UserId == user.Id) == false)
                 .ToList();
         }
 
-        public IdentityResult AddUserRole(User user, string roleName)
+        public IdentityResult AddUserRole(Models.IUser user, string roleName)
         {
             var result = this.userManager.AddToRole(user.Id, roleName);
             return result;
         }
 
-        public void DeleteUserRole(User user, string roleName)
+        public void DeleteUserRole(Models.IUser user, string roleName)
         {
             this.userManager.RemoveFromRole(user.Id, roleName);
         }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CaloriesPlan.DTO.In
 {
-    public class MealReportFilterDto
+    public class InMealReportFilterDto
     {
         [Required]
         public DateTime? DateFrom { get; set; }

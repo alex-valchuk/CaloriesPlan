@@ -35,7 +35,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.5.23.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Moq.4.5.23\lib\net45\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -50,8 +59,30 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="MealServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\CaloriesPlan.BLL\CaloriesPlan.BLL.csproj">
+      <Project>{19ca4aea-8c3e-4b6c-98a7-d383e0bd05a8}</Project>
+      <Name>CaloriesPlan.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\CaloriesPlan.DAL\CaloriesPlan.DAL.csproj">
+      <Project>{7fa473fa-7f91-4e33-878c-cc169f2c6b5f}</Project>
+      <Name>CaloriesPlan.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\CaloriesPlan.DTO\CaloriesPlan.DTO.csproj">
+      <Project>{8EC2EE63-88CD-4884-A02D-DF29AD80CBBA}</Project>
+      <Name>CaloriesPlan.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\CaloriesPlan.UTL\CaloriesPlan.UTL.csproj">
+      <Project>{6ead09f2-af57-42a3-b60e-0dc3906fe3c6}</Project>
+      <Name>CaloriesPlan.UTL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

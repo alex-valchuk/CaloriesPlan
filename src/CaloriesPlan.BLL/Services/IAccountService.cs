@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using CaloriesPlan.DTO.In;
 using CaloriesPlan.DTO.Out;
 using CaloriesPlan.BLL.Entities;
 
@@ -7,10 +8,10 @@ namespace CaloriesPlan.BLL.Services
 {
     public interface IAccountService
     {
-        IRegistrationResult RegisterUser(string userName, string password);
+        IRegistrationResult RegisterUser(InRegisterDto registerDto);
         IList<OutAccountDto> GetAccounts();
         OutAccountDto GetAccount(string userName);
-        void UpdateAccount(string userName, int dailyCaloriesLimit);
+        void UpdateAccount(string userName, InAccountDto accountDto);
         void DeleteAccount(string userName);
 
         IList<OutUserRoleDto> GetUserRoles(string userName);

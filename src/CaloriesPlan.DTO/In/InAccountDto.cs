@@ -1,6 +1,6 @@
-﻿namespace CaloriesPlan.API.Models
+﻿namespace CaloriesPlan.DTO.In
 {
-    public class AccountModel
+    public class InAccountDto
     {
         public int? DailyCaloriesLimit { get; set; }
     }

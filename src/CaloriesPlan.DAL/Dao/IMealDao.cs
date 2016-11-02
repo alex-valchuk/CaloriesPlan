@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using CaloriesPlan.DAL.DataModel;
+using CaloriesPlan.DAL.DataModel.Abstractions;
 
 namespace CaloriesPlan.DAL.Dao
 {
     public interface IMealDao
     {
-        List<Meal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo);
-        Meal GetMealByID(int mealID);
-        void Create(Meal dbMeal);
-        void Update(Meal dbMeal);
-        void Delete(Meal dbMeal);
+        IMeal NewMealInstance();
+
+        List<IMeal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo);
+        IMeal GetMealByID(int mealID);
+        void Create(IMeal dbMeal);
+        void Update(IMeal dbMeal);
+        void Delete(IMeal dbMeal);
     }
 }

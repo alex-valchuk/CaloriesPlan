@@ -3,10 +3,10 @@
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.BLL.Services;
 using CaloriesPlan.BLL.Exceptions;
-using CaloriesPlan.API.Models;
 using CaloriesPlan.API.Filters;
 using CaloriesPlan.API.Controllers.Base;
 using CaloriesPlan.UTL.Const;
+using System;
 
 namespace CaloriesPlan.API.Controllers
 {
@@ -27,7 +27,7 @@ namespace CaloriesPlan.API.Controllers
         //POST api/meals/{userName}
         [HttpPost]
         [Route(ParamUserName)]
-        public IHttpActionResult Report(string userName, MealReportFilterDto filter)
+        public IHttpActionResult Report(string userName, InMealReportFilterDto filter)
         {
             try
             {
@@ -40,6 +40,11 @@ namespace CaloriesPlan.API.Controllers
                 return this.Ok(userMeals);
             }
             catch (InvalidDateRangeException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
+            }
+            catch (ArgumentNullException ex)
             {
                 //add logging functionality
                 return this.BadRequest(ex.Message);
@@ -70,7 +75,7 @@ namespace CaloriesPlan.API.Controllers
         //POST api/meals/{userName}/meal
         [HttpPost]
         [Route(ParamUserName + "/meal")]
-        public IHttpActionResult Post(string userName, MealModel meal)
+        public IHttpActionResult Post(string userName, InMealDto mealDto)
         {
             try
             {
@@ -79,8 +84,13 @@ namespace CaloriesPlan.API.Controllers
                     return this.BadRequest(this.ModelState);
                 }
 
-                this.mealService.CreateMeal(meal.Text, meal.Calories.Value, meal.EatingDate.Value, userName);
+                this.mealService.CreateMeal(userName, mealDto);
                 return this.Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
             }
             catch
             {
@@ -92,7 +102,7 @@ namespace CaloriesPlan.API.Controllers
         //PUT api/meals/{userName}/meal/{id}
         [HttpPut]
         [Route(ParamUserName + "/meal/" + ParamID)]
-        public IHttpActionResult Put(int id, MealModel meal)
+        public IHttpActionResult Put(int id, InMealDto mealDto)
         {
             try
             {
@@ -101,13 +111,18 @@ namespace CaloriesPlan.API.Controllers
                     return this.BadRequest(this.ModelState);
                 }
 
-                this.mealService.UpdateMeal(id, meal.Text, meal.Calories.Value, meal.EatingDate.Value);
+                this.mealService.UpdateMeal(id, mealDto);
                 return this.Ok();
             }
             catch (MealDoesNotExistException)
             {
                 //add logging functionality
                 return this.BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
             }
             catch
             {

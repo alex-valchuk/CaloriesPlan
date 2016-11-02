@@ -2,9 +2,11 @@
 
 using Microsoft.AspNet.Identity.EntityFramework;
 
+using CaloriesPlan.DAL.DataModel.Abstractions;
+
 namespace CaloriesPlan.DAL.DataModel
 {
-    public class User : IdentityUser
+    public class User : IdentityUser, IUser
     {
         [Required]        
         public int DailyCaloriesLimit { get; set; }
