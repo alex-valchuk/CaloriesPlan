@@ -13,10 +13,14 @@
 
             this.getNutritionReport = function (userName, filter, successCallback, failureCallback) {
                 var request = {
-                    method: "POST",
-                    url: this.baseUrl + userName,
-                    headers: this.jsonConfig.headers,
-                    data: filter
+                    method: "GET",
+                    url: this.baseUrl +
+                        "?userName=" + userName +
+                        "&dateFrom=" + filter.dateFrom.toISOString() +
+                        "&dateTo=" + filter.dateTo.toISOString() +
+                        "&timeFrom=" + filter.timeFrom.toISOString() +
+                        "&timeTo=" + filter.timeTo.toISOString(),
+                    headers: this.jsonConfig.headers
                 };
 
                 $http(request)

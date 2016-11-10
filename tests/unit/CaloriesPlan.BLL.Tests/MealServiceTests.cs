@@ -38,65 +38,8 @@ namespace CaloriesPlan.BLL.Tests
         public void GetUserNutritionReport_EmptyUserName_ArgumentNullExceptionThrown()
         {
             //act
-            this.mealService.GetUserNutritionReport(null, It.IsAny<InMealReportFilterDto>());
+            this.mealService.GetUserNutritionReport(null, null);
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException), "Filter not specified correctly")]
-        public void GetUserNutritionReport_EmptyFilter_ArgumentNullExceptionThrown()
-        {
-            //act
-            this.mealService.GetUserNutritionReport("Alex", null);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException), "Filter not specified correctly")]
-        public void GetUserNutritionReport_EmptyFilterDateFrom_ArgumentNullExceptionThrown()
-        {
-            //arrange
-            var filter = this.GetValidFilter();
-            filter.DateFrom = null;
-
-            //act
-            this.mealService.GetUserNutritionReport("Alex", filter);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException), "Filter not specified correctly")]
-        public void GetUserNutritionReport_EmptyFilterDateTo_ArgumentNullExceptionThrown()
-        {
-            //arrange
-            var filter = this.GetValidFilter();
-            filter.DateTo = null;
-
-            //act
-            this.mealService.GetUserNutritionReport("Alex", filter);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException), "Filter not specified correctly")]
-        public void GetUserNutritionReport_EmptyFilterTimeFrom_ArgumentNullExceptionThrown()
-        {
-            //arrange
-            var filter = this.GetValidFilter();
-            filter.TimeFrom = null;
-
-            //act
-            this.mealService.GetUserNutritionReport("Alex", filter);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException), "Filter not specified correctly")]
-        public void GetUserNutritionReport_EmptyFilterTimeTo_ArgumentNullExceptionThrown()
-        {
-            //arrange
-            var filter = this.GetValidFilter();
-            filter.TimeTo = null;
-
-            //act
-            this.mealService.GetUserNutritionReport("Alex", filter);
-        }
-
         [TestMethod]
         [ExpectedException(typeof(AccountDoesNotExistException), "User does not exist")]
         public void GetUserNutritionReport_OfNotExistedUser_AccountDoesNotExistExceptionThrown()
@@ -136,6 +79,7 @@ namespace CaloriesPlan.BLL.Tests
             //act
             var report = this.mealService.GetUserNutritionReport(userName, filter);
 
+            //assert
             Assert.IsNotNull(report);
         }
 
@@ -151,6 +95,7 @@ namespace CaloriesPlan.BLL.Tests
             //act
             var report = this.mealService.GetUserNutritionReport(userName, filter);
 
+            //assert
             Assert.IsNull(report.Meals);
         }
 
@@ -172,6 +117,7 @@ namespace CaloriesPlan.BLL.Tests
             //act
             var report = this.mealService.GetUserNutritionReport(userName, filter);
 
+            //assert
             Assert.IsNotNull(report.Meals);
         }
 

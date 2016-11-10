@@ -30,11 +30,20 @@ namespace CaloriesPlan.BLL.Services.Impl
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("UserName");
 
-            if (filter == null ||
-                filter.DateFrom == null || filter.DateTo == null ||
-                filter.TimeFrom == null || filter.TimeTo == null)
-                throw new ArgumentNullException("Filter");
+            if (filter == null)
+                filter = new InMealReportFilterDto();
 
+            if (filter.DateFrom == null)
+                filter.DateFrom = DateTime.Now.AddYears(-50);
+                
+            if (filter.DateTo == null)
+                filter.DateTo = DateTime.Now.AddYears(50);
+                
+            if (filter.TimeFrom == null)
+                filter.TimeFrom = new DateTime(1970, 1, 1, 0, 0, 0).ToUniversalTime();
+                
+            if (filter.TimeTo == null)
+                filter.TimeTo = new DateTime(1970, 1, 1, 23, 59, 59).ToUniversalTime();
 
             var user = this.userDao.GetUserByName(userName);
             if (user == null)
@@ -48,7 +57,9 @@ namespace CaloriesPlan.BLL.Services.Impl
 
             var nutritionReport = new OutNutritionReportDto(user.DailyCaloriesLimit);
 
-            var dbMeals = this.mealDao.GetMealsByUserName(userName, filter.DateFrom.Value, filter.DateTo.Value, filter.TimeFrom.Value, filter.TimeTo.Value);
+            var dbMeals = this.mealDao.GetMealsByUserName(userName, 
+                filter.DateFrom.Value, filter.DateTo.Value,
+                filter.TimeFrom.Value, filter.TimeTo.Value);
             if (dbMeals != null)
             {
                 nutritionReport.Meals = this.ConvertToDtoList(dbMeals);

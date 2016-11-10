@@ -43,7 +43,7 @@
 
             function onSuccessfullSave() {
                 $scope.toastSuccess("Account has been successfully saved.");
-                navigator.goBack();
+                $scope.goBack();
             }
 
             function onFailedSave(data, code) {

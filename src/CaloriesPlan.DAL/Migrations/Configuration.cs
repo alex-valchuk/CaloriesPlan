@@ -31,8 +31,7 @@ namespace CaloriesPlan.DAL.Migrations
                 }
             }
 
-            var userStore = new UserStore<User>(context);
-            var userManager = new UserManager<User>(userStore);
+            var userDao = new EFUserDao();
 
             var userNames = new[] { "Alex", "Mike", "Ulia" };
             for (int userIndex = 0; userIndex < userNames.Length; userIndex++)
@@ -45,12 +44,12 @@ namespace CaloriesPlan.DAL.Migrations
                 {
                     user = new User { UserName = userName, DailyCaloriesLimit = 50 };
 
-                    userManager.Create(user, "123456");
+                    userDao.CreateUser(user, "123456");
                 }
 
                 if (!context.Users.Any(u => u.UserName == userName && u.Roles.Any(ur => context.Roles.Any(r => r.Id == ur.RoleId && r.Name == roleName))))
                 {
-                    userManager.AddToRole(user.Id, roleName);
+                    userDao.AddUserRole(user, roleName);
                 }
             }
         }

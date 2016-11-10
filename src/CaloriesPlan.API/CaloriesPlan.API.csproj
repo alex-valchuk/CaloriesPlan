@@ -211,7 +211,8 @@
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\Base\ControllerBase.cs" />
     <Compile Include="Controllers\MealsController.cs" />
-    <Compile Include="Filters\OwnerOrIsInOneOfRoles.cs" />
+    <Compile Include="Filters\AuthorizedOrOwnerParamOrIsInOneOfRoles.cs" />
+    <Compile Include="Filters\OwnerRouteOrIsInOneOfRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Startup.cs" />

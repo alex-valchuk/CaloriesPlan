@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -34,7 +35,11 @@ namespace CaloriesPlan.DAL.Dao.EF
 
         public IAccountRegistrationResult CreateUser(Models.IUser user, string password)
         {
-            var identityResult = this.userManager.Create((User)user, password);
+            var identityUser = (User)user;
+            identityUser.PasswordSalt = this.GenerateSalt(32);
+            password = this.GetPasswordWithSalt(password: password, passwordSalt: identityUser.PasswordSalt);
+
+            var identityResult = this.userManager.Create(identityUser, password);
 
             return new AspNetIdentityRegistrationResult(identityResult);
         }
@@ -47,6 +52,9 @@ namespace CaloriesPlan.DAL.Dao.EF
 
         public async Task<User> GetUserByCredentials(string userName, string password)
         {
+            var identityUser = this.userManager.Users.FirstOrDefault(u => u.UserName == userName);
+            password = this.GetPasswordWithSalt(password: password, passwordSalt: identityUser.PasswordSalt);
+
             return await this.userManager.FindAsync(userName, password);
         }
 
@@ -95,6 +103,22 @@ namespace CaloriesPlan.DAL.Dao.EF
         public void DeleteUserRole(Models.IUser user, string roleName)
         {
             this.userManager.RemoveFromRole(user.Id, roleName);
+        }
+
+        public string GetPasswordWithSalt(string password, string passwordSalt)
+        {
+            return password + passwordSalt;
+        }
+
+        private string GenerateSalt(int maximumSaltLength)
+        {
+            var salt = new byte[maximumSaltLength];
+            using (var random = new RNGCryptoServiceProvider())
+            {
+                random.GetNonZeroBytes(salt);
+            }
+
+            return Convert.ToBase64String(salt);
         }
     }
 }

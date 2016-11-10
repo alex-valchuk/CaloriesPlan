@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Http;
 
 using CaloriesPlan.BLL.Services;
@@ -41,7 +40,7 @@ namespace CaloriesPlan.API.Controllers
 
         //GET api/accounts/{userName}/user-roles
         [HttpGet]
-        [OwnerOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
+        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
         [Route(ParamUserName + "/user-roles")]
         public IHttpActionResult GetUserRoles(string userName)
         {
@@ -87,7 +86,7 @@ namespace CaloriesPlan.API.Controllers
 
         //GET api/accounts/:userName
         [HttpGet]
-        [OwnerOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
+        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
         [Route(ParamUserName)]
         public IHttpActionResult Get(string userName)
         {
@@ -110,7 +109,7 @@ namespace CaloriesPlan.API.Controllers
 
         //PUT api/accounts/:userName
         [HttpPut]
-        [OwnerOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
+        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
         [Route(ParamUserName)]
         public IHttpActionResult Put(string userName, InAccountDto accountDto)
         {

@@ -1,17 +1,16 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.BLL.Services;
 using CaloriesPlan.BLL.Exceptions;
-using CaloriesPlan.API.Filters;
 using CaloriesPlan.API.Controllers.Base;
+using CaloriesPlan.API.Filters;
 using CaloriesPlan.UTL.Const;
-using System;
 
 namespace CaloriesPlan.API.Controllers
 {
     [Authorize]
-    [OwnerOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
     [RoutePrefix("api/meals")]
     public class MealsController : ControllerBase
     {
@@ -24,10 +23,13 @@ namespace CaloriesPlan.API.Controllers
             this.accountService = accountService;
         }
 
-        //POST api/meals/{userName}
-        [HttpPost]
-        [Route(ParamUserName)]
-        public IHttpActionResult Report(string userName, InMealReportFilterDto filter)
+        //GET api/meals/
+        [HttpGet]
+        [Route("")]
+        [AuthorizedOrOwnerParamOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
+        public IHttpActionResult Get(
+            [FromUri] string userName = null, 
+            [FromUri] InMealReportFilterDto filter = null)
         {
             try
             {
@@ -36,7 +38,14 @@ namespace CaloriesPlan.API.Controllers
                     return this.BadRequest(this.ModelState);
                 }
 
+                if (filter == null)
+                    filter = new InMealReportFilterDto();
+
+                if (string.IsNullOrEmpty(userName))
+                    userName = this.User.Identity.Name;
+
                 var userMeals = this.mealService.GetUserNutritionReport(userName, filter);
+
                 return this.Ok(userMeals);
             }
             catch (InvalidDateRangeException ex)
@@ -57,6 +66,7 @@ namespace CaloriesPlan.API.Controllers
         }
 
         //GET api/meals/{userName}/meal/{id}
+        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
         [Route(ParamUserName + "/meal/" + ParamID)]
         public IHttpActionResult Get(int id)
         {
@@ -74,6 +84,7 @@ namespace CaloriesPlan.API.Controllers
 
         //POST api/meals/{userName}/meal
         [HttpPost]
+        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
         [Route(ParamUserName + "/meal")]
         public IHttpActionResult Post(string userName, InMealDto mealDto)
         {
@@ -101,6 +112,7 @@ namespace CaloriesPlan.API.Controllers
 
         //PUT api/meals/{userName}/meal/{id}
         [HttpPut]
+        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
         [Route(ParamUserName + "/meal/" + ParamID)]
         public IHttpActionResult Put(int id, InMealDto mealDto)
         {
@@ -133,6 +145,7 @@ namespace CaloriesPlan.API.Controllers
 
         //DELETE api/meals/{userName}/meal/{id}
         [HttpDelete]
+        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
         [Route(ParamUserName + "/meal/" + ParamID)]
         public IHttpActionResult Delete(int id)
         {
