@@ -34,10 +34,10 @@ namespace CaloriesPlan.BLL.Services.Impl
                 filter = new InMealReportFilterDto();
 
             if (filter.DateFrom == null)
-                filter.DateFrom = DateTime.Now.AddYears(-50);
+                filter.DateFrom = DateTime.UtcNow.AddYears(-50);
                 
             if (filter.DateTo == null)
-                filter.DateTo = DateTime.Now.AddYears(50);
+                filter.DateTo = DateTime.UtcNow.AddYears(50);
                 
             if (filter.TimeFrom == null)
                 filter.TimeFrom = new DateTime(1970, 1, 1, 0, 0, 0).ToUniversalTime();

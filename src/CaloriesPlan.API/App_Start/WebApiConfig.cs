@@ -2,8 +2,10 @@
 using System.Net.Http.Formatting;
 using System.Web.Http;
 
-using Newtonsoft.Json.Serialization;
 using Microsoft.Owin.Security.OAuth;
+
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace CaloriesPlan.API
 {
@@ -25,7 +27,10 @@ namespace CaloriesPlan.API
                 defaults: new { id = RouteParameter.Optional });
 
             var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
-            jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            var serializerSettings = jsonFormatter.SerializerSettings;
+            
+            serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            serializerSettings.Converters.Add(new IsoDateTimeConverter());
         }
     }
 }

@@ -11,6 +11,12 @@
                 }
             }
 
+            function leadingZeros(number, requiredLength) {
+                return (number.toString().length < requiredLength)
+                    ? leadingZeros("0" + number, requiredLength)
+                    : number;
+            }
+
             this.getNutritionReport = function (userName, filter, successCallback, failureCallback) {
                 var request = {
                     method: "GET",
@@ -20,6 +26,10 @@
                         "&dateTo=" + filter.dateTo.toISOString() +
                         "&timeFrom=" + filter.timeFrom.toISOString() +
                         "&timeTo=" + filter.timeTo.toISOString(),
+                        /*"&dateFrom=" + filter.dateFrom +
+                        "&dateTo=" + filter.dateTo +
+                        "&timeFrom=" + filter.timeFrom +
+                        "&timeTo=" + filter.timeTo,*/
                     headers: this.jsonConfig.headers
                 };
 

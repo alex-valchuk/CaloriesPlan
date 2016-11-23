@@ -15,12 +15,10 @@ namespace CaloriesPlan.API.Controllers
     public class MealsController : ControllerBase
     {
         private readonly IMealService mealService;
-        private readonly IAccountService accountService;
 
-        public MealsController(IMealService foodService, IAccountService accountService)
+        public MealsController(IMealService mealService)
         {
-            this.mealService = foodService;
-            this.accountService = accountService;
+            this.mealService = mealService;
         }
 
         //GET api/meals/
@@ -37,9 +35,6 @@ namespace CaloriesPlan.API.Controllers
                 {
                     return this.BadRequest(this.ModelState);
                 }
-
-                if (filter == null)
-                    filter = new InMealReportFilterDto();
 
                 if (string.IsNullOrEmpty(userName))
                     userName = this.User.Identity.Name;

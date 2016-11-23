@@ -14,10 +14,10 @@
             }
 
             $scope.filter = {
-                dateFrom: new Date(2016, 0, 1, 0, 0, 0),
+                /*dateFrom: new Date(2016, 0, 1, 0, 0, 0),
                 dateTo: new Date(2017, 0, 1, 0, 0, 0),
                 timeFrom: new Date(1970, 0, 1, 0, 0, 0),    //unix epoch
-                timeTo: new Date(1970, 0, 1, 23, 59, 0)       //unix epoch
+                timeTo: new Date(1970, 0, 1, 23, 59, 0)       //unix epoch*/
             };
 
             function setupDateRanges () {
@@ -69,28 +69,30 @@
                 $scope.filter.dateTo = selectedOption.dateTo;
             }
 
-            function setupTimeRanges () {
+            function setupTimeRanges() {
+                var year = new Date().getFullYear();
+
                 $scope.timeRange = {
                     availableOptions: [
                       {
                           value: '0', name: 'Whole Day',
-                          timeFrom: new Date(1970, 0, 1, 0, 0, 0),
-                          timeTo: new Date(1970, 0, 1, 23, 59, 59)
+                          timeFrom: new Date(year, 0, 1, 0, 0, 0),
+                          timeTo: new Date(year, 0, 1, 23, 59, 59)
                       },
                       {
                           value: '1', name: 'Breakfast',
-                          timeFrom: new Date(1970, 0, 1, 7, 0, 0),
-                          timeTo: new Date(1970, 0, 1, 8, 0, 0)
+                          timeFrom: new Date(year, 0, 1, 7, 0, 0),
+                          timeTo: new Date(year, 0, 1, 8, 0, 0)
                       },
                       {
                           value: '2', name: 'Lunch',
-                          timeFrom: new Date(1970, 0, 1, 13, 0, 0),
-                          timeTo: new Date(1970, 0, 1, 14, 0, 0)
+                          timeFrom: new Date(year, 0, 1, 13, 0, 0),
+                          timeTo: new Date(year, 0, 1, 14, 0, 0)
                       },
                       {
                           value: '3', name: 'Dinner',
-                          timeFrom: new Date(1970, 0, 1, 18, 0, 0),
-                          timeTo: new Date(1970, 0, 1, 19, 0, 0)
+                          timeFrom: new Date(year, 0, 1, 18, 0, 0),
+                          timeTo: new Date(year, 0, 1, 19, 0, 0)
                       }
                     ]
                 };
