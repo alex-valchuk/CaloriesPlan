@@ -1,8 +1,8 @@
 ﻿angular.module('appModule')
     .service('Navigator', ['$window', '$location',
         function ($window, $location) {
-            this.goToLogin = function () {
-                goTo("login");
+            this.goToSignIn = function () {
+                goTo("signin");
             }
 
             this.goToNutritionReport = function (userName) {

@@ -2,7 +2,7 @@
 
 namespace CaloriesPlan.DTO.In
 {
-    public class InLoginDto
+    public class InSignInDto
     {
         [StringLength(200, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         public string UserName { get; set; }

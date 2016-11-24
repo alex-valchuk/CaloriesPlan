@@ -42,7 +42,7 @@
                     navigator.goToAccountsList();
                 }
                 else {
-                    navigator.goToLogin();
+                    navigator.goToSignIn();
                 }
             }
 

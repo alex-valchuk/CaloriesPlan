@@ -44,6 +44,8 @@
     <Compile Include="Config\Desktop\DesktopConfigProvider.cs" />
     <Compile Include="Config\IConfigProvider.cs" />
     <Compile Include="Const\AuthorizationParams.cs" />
+    <Compile Include="Loggers\Abstractions\IApplicationLogger.cs" />
+    <Compile Include="Loggers\NLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wrappers\IAccountRegistrationResult.cs" />
   </ItemGroup>

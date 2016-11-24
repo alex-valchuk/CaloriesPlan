@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="In\InAccountDto.cs" />
-    <Compile Include="In\InLoginDto.cs" />
+    <Compile Include="In\InSignInDto.cs" />
     <Compile Include="In\InMealDto.cs" />
     <Compile Include="In\InMealReportFilterDto.cs" />
     <Compile Include="In\InRegisterDto.cs" />

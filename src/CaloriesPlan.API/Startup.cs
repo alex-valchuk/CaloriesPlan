@@ -4,6 +4,7 @@ using System.Web.Http;
 using Microsoft.Practices.Unity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
+
 using Owin;
 
 using CaloriesPlan.API.Providers;
@@ -13,6 +14,8 @@ using CaloriesPlan.DAL.Dao;
 using CaloriesPlan.DAL.Dao.EF;
 using CaloriesPlan.UTL;
 using CaloriesPlan.UTL.Config.Desktop;
+using CaloriesPlan.UTL.Loggers.Abstractions;
+using CaloriesPlan.UTL.Loggers;
 
 [assembly: OwinStartup(typeof(CaloriesPlan.API.Startup))]
 namespace CaloriesPlan.API
@@ -36,14 +39,15 @@ namespace CaloriesPlan.API
 
         public void ConfigureOAuth(IAppBuilder app)
         {
+            var applicationLogger = this.unityContainer.Resolve<IApplicationLogger>();
             var oAuthService = this.unityContainer.Resolve<IOAuthService>();
 
             var oAuthServerOptions = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/api/accounts/login"),
+                TokenEndpointPath = new PathString("/api/accounts/signin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-                Provider = new ApplicationOAuthProvider(oAuthService)
+                Provider = new ApplicationOAuthProvider(applicationLogger, oAuthService)
             };
 
             // Token Generation
@@ -57,6 +61,7 @@ namespace CaloriesPlan.API
             
             //utils
             this.unityContainer.RegisterType<IConfigProvider, DesktopConfigProvider>(new HierarchicalLifetimeManager());
+            this.unityContainer.RegisterType<IApplicationLogger, NLogger>(new HierarchicalLifetimeManager());
 
             //dao
             this.unityContainer.RegisterType<IMealDao, EFMealDao>(new HierarchicalLifetimeManager());

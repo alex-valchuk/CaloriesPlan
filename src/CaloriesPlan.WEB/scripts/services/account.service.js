@@ -39,18 +39,22 @@
                     });
             };
 
-            this.login = function (userName, password, successCallback, failureCallback) {
+            this.signIn = function (userName, password) {
                 var request = {
                     method: 'POST',
-                    url: this.baseUrl + "login",
+                    url: this.baseUrl + "signin",
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     data: 'grant_type=password&userName=' + userName + '&password=' + password,
                 };
 
-                $http(request)
-                    .success(function (data, val) {
+                var promise = $http(request);
+                promise.then(
+                    /* succeess */
+                    function (response) {
+                        var data = response.data;
+
                         userData.isAuthenticated = true;
                         userData.userName = data.userName;
                         userData.bearerToken = data.access_token;
@@ -59,16 +63,9 @@
 
                         setHttpAuthHeader();
                         saveAuthData();
-
-                        if (typeof successCallback === 'function') {
-                            successCallback();
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
                     });
+                
+                return promise;
             };
 
             this.signout = function (successCallback, failureCallback) {

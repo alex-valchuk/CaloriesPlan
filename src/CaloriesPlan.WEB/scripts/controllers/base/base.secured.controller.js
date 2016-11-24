@@ -15,7 +15,7 @@
                     $scope.userName = accountService.getUserName();
                 } else {
 
-                    navigator.goToLogin();
+                    navigator.goToSignIn();
                 }
             }
 

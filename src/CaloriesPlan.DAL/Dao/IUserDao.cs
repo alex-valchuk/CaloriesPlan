@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 using CaloriesPlan.UTL.Wrappers;
-using CaloriesPlan.DAL.DataModel;
 
 using Models = CaloriesPlan.DAL.DataModel.Abstractions;
 
@@ -14,8 +13,8 @@ namespace CaloriesPlan.DAL.Dao
         Models.IUser NewUserInstance();
 
         IAccountRegistrationResult CreateUser(Models.IUser user, string password);
-        Task<ClaimsIdentity> CreateIdentity(User user, string authType);
-        Task<User> GetUserByCredentials(string userName, string password);
+        Task<ClaimsIdentity> CreateIdentity(Models.IUser user, string authType);
+        Task<Models.IUser> GetUserByCredentials(string userName, string password);
 
         IList<Models.IUser> GetUsers();
         Models.IUser GetUserByName(string userName);

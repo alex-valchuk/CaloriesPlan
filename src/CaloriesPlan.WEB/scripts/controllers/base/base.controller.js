@@ -23,6 +23,60 @@
                 });
             }
 
+            $scope.onFailure = function (error) {
+                if (error) {
+                    var data = error.data;
+                    var code = error.status;
+
+                    if (code) {
+                        switch (code) {
+                            case -1:
+                                $scope.addError($scope.unableToContactServer);
+                                break;
+
+                            case 401:
+                                if (data.message) {
+                                    $scope.toastFailure(data.message);
+                                }
+
+                                navigator.goToSignIn();
+                                break;
+
+                            case 403:
+                                if (data.message) {
+                                    $scope.toastFailure(data.message);
+                                } else {
+                                    $scope.toastFailure($scope.notAvailableResource);
+                                }
+
+                                navigator.goBack();
+                                break;
+
+                            default:
+                                if (data) {
+                                    if (data.modelState) {
+                                        $scope.parseModelErrors(data.modelState);
+                                        return;
+
+                                    } else if (data.error_description) {
+                                        $scope.addError(data.error_description);
+                                        return;
+
+                                    } else if (data.message) {
+                                        $scope.addError(data.message);
+                                        return;
+                                    }
+                                }
+
+                                $scope.addError($scope.internalServerError);
+                                break;
+                        }
+                    }
+                }
+
+                $scope.addError($scope.unableToContactServer);
+            }
+
             $scope.commonFailureCallback = function (data, code) {
                 if (code) {
                     switch (code) {
@@ -35,7 +89,7 @@
                                 $scope.toastFailure(data.message);
                             }
 
-                            navigator.goToLogin();
+                            navigator.goToSignIn();
                             break;
 
                         case 403:

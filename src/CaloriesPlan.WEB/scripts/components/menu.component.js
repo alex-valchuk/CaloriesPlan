@@ -13,7 +13,7 @@ function MenuController($scope, $controller, navigator, accountService) {
         $scope.refresh();
     };
 
-    $scope.refresh = function () {//calling from login as well
+    $scope.refresh = function () {//calling from signin as well
         $scope.authenticate();//calling base method
     }
 
@@ -27,7 +27,7 @@ function MenuController($scope, $controller, navigator, accountService) {
         $scope.refresh();
 
         if (navigator) {
-            navigator.goToLogin();
+            navigator.goToSignIn();
         }
     }
 

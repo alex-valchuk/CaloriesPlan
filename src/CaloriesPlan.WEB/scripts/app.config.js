@@ -5,11 +5,11 @@
         $routeProvider
           .when('/',
               {
-                  redirectTo: '/login'
+                  redirectTo: '/signin'
               })
-          .when('/login',
+          .when('/signin',
               {
-                  templateUrl: 'scripts/views/login.html'
+                  templateUrl: 'scripts/views/sign-in.html'
               })
           .when('/register',
               {

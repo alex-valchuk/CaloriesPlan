@@ -44,18 +44,23 @@ namespace CaloriesPlan.DAL.Dao.EF
             return new AspNetIdentityRegistrationResult(identityResult);
         }
 
-        public async Task<ClaimsIdentity> CreateIdentity(User user, string authType)
+        public async Task<ClaimsIdentity> CreateIdentity(Models.IUser user, string authType)
         {
-            var claimsIdentity = await this.userManager.CreateIdentityAsync(user, authType);
+            var claimsIdentity = await this.userManager.CreateIdentityAsync((User)user, authType);
             return claimsIdentity;
         }
 
-        public async Task<User> GetUserByCredentials(string userName, string password)
+        public async Task<Models.IUser> GetUserByCredentials(string userName, string password)
         {
             var identityUser = this.userManager.Users.FirstOrDefault(u => u.UserName == userName);
-            password = this.GetPasswordWithSalt(password: password, passwordSalt: identityUser.PasswordSalt);
+            if (identityUser != null)
+            {
+                password = this.GetPasswordWithSalt(password: password, passwordSalt: identityUser.PasswordSalt);
 
-            return await this.userManager.FindAsync(userName, password);
+                return await this.userManager.FindAsync(userName, password);
+            }
+
+            return null;
         }
 
         public IList<Models.IUser> GetUsers()

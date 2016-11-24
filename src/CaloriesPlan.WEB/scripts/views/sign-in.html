@@ -1,4 +1,4 @@
-﻿<div ng-controller="LoginController" ng-init="init()" class="container" data-toggle="validator" role="form">
+﻿<div ng-controller="SignInController" ng-init="init()" class="container" data-toggle="validator" role="form">
     <div class="row center-block">
         <div class="col-lg-4 col-lg-offset-4">
             <h2 class="form-group">Sign In</h2>
@@ -15,16 +15,16 @@
 
             <div class="form-group">
                 <label>User Name:</label>
-                <input type="text" required ng-model="loginModel.userName" class="form-control" />
+                <input type="text" required ng-model="signInModel.userName" class="form-control" />
             </div>
 
             <div class="form-group">
                 <label>Password:</label>
-                <input type="password" required data-minlength="6" ng-model="loginModel.password" class="form-control" />
+                <input type="password" required data-minlength="6" ng-model="signInModel.password" class="form-control" />
             </div>
 
             <div class="form-group">
-                <button id="btn-signin" ng-click="signin()" class="btn btn-primary">Sign In</button>
+                <button id="btn-signin" ng-click="signIn()" class="btn btn-primary">Sign In</button>
                 <a href="#/register" class="btn btn-secondary">Sign Up</a>
             </div>
         </div>
