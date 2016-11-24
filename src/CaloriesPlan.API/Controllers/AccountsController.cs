@@ -21,6 +21,44 @@ namespace CaloriesPlan.API.Controllers
             this.accountService = accountService;
         }
 
+        //POST api/accounts/signup
+        [AllowAnonymous]
+        [Route("signup")]
+        [HttpPost]
+        public IHttpActionResult SignUp(InSignUpDto signUpDto)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    return this.BadRequest(this.ModelState);
+                }
+
+                this.accountService.SignUp(signUpDto);
+                return this.Ok();
+            }
+            catch (PropertyInconsistencyException ex)
+            {
+                //add logging functionality
+                return this.BadProperty(ex);
+            }
+            catch (RegistrationException ex)
+            {
+                //add logging functionality
+                return this.BadRegistration(ex);
+            }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadArgument(ex);
+            }
+            catch
+            {
+                //add logging functionality
+                return this.InternalServerError();
+            }
+        }
+
         //GET api/accounts
         [HttpGet]
         [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
@@ -228,44 +266,6 @@ namespace CaloriesPlan.API.Controllers
             {
                 //add logging functionality
                 return this.BadRequest(ex.Message);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
-        }
-
-        //POST api/accounts/register
-        [AllowAnonymous]
-        [Route("register")]
-        [HttpPost]
-        public IHttpActionResult Register(InRegisterDto registerDto)
-        {
-            try
-            {
-                if (!this.ModelState.IsValid)
-                {
-                    return this.BadRequest(this.ModelState);
-                }
-
-                this.accountService.RegisterUser(registerDto);
-                return this.Ok();
-            }
-            catch (PropertyInconsistencyException ex)
-            {
-                //add logging functionality
-                return this.BadProperty(ex);
-            }
-            catch (RegistrationException ex)
-            {
-                //add logging functionality
-                return this.BadRegistration(ex);
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadArgument(ex);
             }
             catch
             {

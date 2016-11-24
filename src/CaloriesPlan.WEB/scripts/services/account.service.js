@@ -11,42 +11,33 @@
                 roles: []
             };
 
-            this.jsonConfig = {
-                headers: {
+            this.headers = {
+                json: {
                     'Content-Type': 'application/json'
+                },
+                form: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }
 
-            this.register = function (userName, password, confirmPassword, successCallback, failureCallback) {
-                var registerModel = {
-                    "UserName": userName,
-                    "Password": password,
-                    "ConfirmPassword": confirmPassword
+            this.signUp = function (signUpModel) {
+                var request = {
+                    method: 'POST',
+                    url: this.baseUrl + "signup",
+                    headers: this.headers.json,
+                    data: signUpModel
                 };
 
-                var url = this.baseUrl + "register";
-
-                $http.post(url, registerModel, this.jsonConfig)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback();
-                        }
-                    })
-                    .error(function (data, code) {                        
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             };
 
-            this.signIn = function (userName, password) {
+            this.signIn = function (signInModel) {
                 var request = {
                     method: 'POST',
                     url: this.baseUrl + "signin",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    data: 'grant_type=password&userName=' + userName + '&password=' + password,
+                    headers: this.headers.form,
+                    data: 'grant_type=password&userName=' + signInModel.userName + '&password=' + signInModel.password,
                 };
 
                 var promise = $http(request);
@@ -110,7 +101,7 @@
                 var request = {
                     method: 'GET',
                     url: this.baseUrl,
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
                 $http(request)
@@ -130,7 +121,7 @@
                 var request = {
                     method: 'GET',
                     url: this.baseUrl + userName,
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
                 $http(request)
@@ -150,7 +141,7 @@
                 var request = {
                     method: 'PUT',
                     url: this.baseUrl + userName,
-                    headers: this.jsonConfig.headers,
+                    headers: this.headers.json,
                     data: {
                         "dailyCaloriesLimit": dailyCaloriesLimit
                     }
@@ -173,7 +164,7 @@
                 var request = {
                     method: "DELETE",
                     url: this.baseUrl + userName,
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
                 $http(request)
@@ -193,7 +184,7 @@
                 var request = {
                     method: "GET",
                     url: this.baseUrl + userName + "/user-roles",
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
                 $http(request)
@@ -213,7 +204,7 @@
                 var request = {
                     method: "GET",
                     url: this.baseUrl + userName + "/not-user-roles",
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
                 $http(request)
@@ -233,7 +224,7 @@
                 var request = {
                     method: "POST",
                     url: this.baseUrl + userName + "/user-roles/" + roleName,
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
                 $http(request)
@@ -253,7 +244,7 @@
                 var request = {
                     method: "DELETE",
                     url: this.baseUrl + userName + "/user-roles/" + roleName,
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
                 $http(request)

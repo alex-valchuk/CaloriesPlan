@@ -6,6 +6,6 @@ namespace CaloriesPlan.BLL.Services
 {
     public interface IOAuthService
     {
-        Task<AuthenticationTicket> GetAuthenticationTicket(string userName, string password, string authType);
+        Task<AuthenticationTicket> SignIn(string userName, string password, string authType);
     }
 }

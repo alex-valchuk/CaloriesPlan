@@ -37,7 +37,7 @@ namespace CaloriesPlan.BLL.Tests
         public void RegisterUser_EmptyRegisterDto_ArgumentNullExceptionThrown()
         {
             //act
-            this.accountService.RegisterUser(null);
+            this.accountService.SignUp(null);
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace CaloriesPlan.BLL.Tests
             registerDto.UserName = null;
 
             //act
-            this.accountService.RegisterUser(registerDto);
+            this.accountService.SignUp(registerDto);
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace CaloriesPlan.BLL.Tests
             registerDto.Password = null;
 
             //act
-            this.accountService.RegisterUser(registerDto);
+            this.accountService.SignUp(registerDto);
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@ namespace CaloriesPlan.BLL.Tests
             registerDto.Password += "2";
 
             //act
-            this.accountService.RegisterUser(registerDto);
+            this.accountService.SignUp(registerDto);
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace CaloriesPlan.BLL.Tests
             this.userDaoMock.Setup(d => d.CreateUser(It.IsAny<IUser>(), registerDto.Password)).Returns(result);
 
             //act
-            this.accountService.RegisterUser(registerDto);
+            this.accountService.SignUp(registerDto);
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace CaloriesPlan.BLL.Tests
             this.userDaoMock.Setup(d => d.AddUserRole(It.IsAny<IUser>(), "User")).Returns(roleResult);
 
             //act
-            this.accountService.RegisterUser(registerDto);
+            this.accountService.SignUp(registerDto);
         }
 
         [TestMethod]
@@ -238,9 +238,9 @@ namespace CaloriesPlan.BLL.Tests
             this.userDaoMock.Verify(d => d.Update(dbUser));
         }
 
-        private InRegisterDto GetValidRegisterDto()
+        private InSignUpDto GetValidRegisterDto()
         {
-            return new InRegisterDto
+            return new InSignUpDto
             {
                 UserName = "Alex",
                 Password = "123456",

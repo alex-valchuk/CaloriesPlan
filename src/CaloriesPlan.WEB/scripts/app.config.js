@@ -11,9 +11,9 @@
               {
                   templateUrl: 'scripts/views/sign-in.html'
               })
-          .when('/register',
+          .when('/signup',
               {
-                  templateUrl: 'scripts/views/register.html'
+                  templateUrl: 'scripts/views/sign-up.html'
               })
           .when('/nutrition-report/:userName',
               {
@@ -29,7 +29,7 @@
               })
           .when('/account',
               {
-                  templateUrl: 'scripts/views/register.html'
+                  templateUrl: 'scripts/views/sign-up.html'
               })
           .when('/account/:userName',
               {

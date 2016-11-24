@@ -7,7 +7,7 @@ namespace CaloriesPlan.BLL.Services
 {
     public interface IAccountService
     {
-        void RegisterUser(InRegisterDto registerDto);
+        void SignUp(InSignUpDto signUpDto);
         IList<OutAccountDto> GetAccounts();
         OutAccountDto GetAccount(string userName);
         void UpdateAccount(string userName, InAccountDto accountDto);

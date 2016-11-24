@@ -17,15 +17,13 @@
             $scope.signIn = function () {
                 $scope.clearInfoMessages();
 
-                accountService.signIn(
-                    $scope.signInModel.userName,
-                    $scope.signInModel.password)
+                accountService.signIn($scope.signInModel)
                     .then(
-                        onSuccessfullSignIn,
+                        onSuccessfulSignIn,
                         $scope.onFailure);
             }
 
-            function onSuccessfullSignIn() {
+            function onSuccessfulSignIn() {
                 navigator.goToNutritionReport($scope.signInModel.userName);
             }
         }

@@ -30,34 +30,60 @@ namespace CaloriesPlan.BLL.Services.Impl
             this.userDao = userDao;
         }
 
-        public void RegisterUser(InRegisterDto registerDto)
+        public void SignUp(InSignUpDto signUpDto)
         {
-            if (registerDto == null ||
-                string.IsNullOrEmpty(registerDto.UserName) ||
-                string.IsNullOrEmpty(registerDto.Password))
+            if (signUpDto == null ||
+                string.IsNullOrEmpty(signUpDto.UserName) ||
+                string.IsNullOrEmpty(signUpDto.Password))
                 throw new ArgumentNullException("Register data");
 
-            if (registerDto.Password != registerDto.ConfirmPassword)
+            if (signUpDto.Password != signUpDto.ConfirmPassword)
                 throw new PropertyInconsistencyException("Password", "Password does not match password confirmation");
 
 
             var defaultCaloriesLimit = this.configProvider.GetDefaultCaloriesLimit();
 
             var user = this.userDao.NewUserInstance();
-            user.UserName = registerDto.UserName;
+            user.UserName = signUpDto.UserName;
             user.DailyCaloriesLimit =
                 defaultCaloriesLimit > 0
                     ? defaultCaloriesLimit
                     : 50;//if not configured
 
 
-            var userRegistrationResult = this.userDao.CreateUser(user, registerDto.Password);
+            var userRegistrationResult = this.userDao.CreateUser(user, signUpDto.Password);
             if (userRegistrationResult.Succeeded == false)
                 throw new RegistrationException(userRegistrationResult);
 
             var roleRegistrationResult = this.userDao.AddUserRole(user, "User");
             if (roleRegistrationResult.Succeeded == false)
                 throw new RegistrationException(roleRegistrationResult);
+        }
+
+        public async Task<AuthenticationTicket> SignIn(string userName, string password, string authType)
+        {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException("Password");
+
+            if (string.IsNullOrEmpty(authType))
+                throw new ArgumentNullException("Authentication Type");
+
+            var user = await this.userDao.GetUserByCredentials(userName, password);
+            if (user == null)
+                return null;
+
+            var claimsIdentity = await this.userDao.CreateIdentity(user, authType);
+
+            var roles = claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
+            var roleNames = JsonConvert.SerializeObject(roles.Select(x => x.Value));
+
+            var authProperties = this.CreateAuthProperties(user.UserName, roleNames);
+            var authTicket = new AuthenticationTicket(claimsIdentity, authProperties);
+
+            return authTicket;
         }
 
         public IList<OutAccountDto> GetAccounts()
@@ -189,32 +215,6 @@ namespace CaloriesPlan.BLL.Services.Impl
 
 
             this.userDao.DeleteUserRole(user, roleName);
-        }
-
-        public async Task<AuthenticationTicket> GetAuthenticationTicket(string userName, string password, string authType)
-        {
-            if (string.IsNullOrEmpty(userName))
-                throw new ArgumentNullException("User Name");
-
-            if (string.IsNullOrEmpty(password))
-                throw new ArgumentNullException("Password");
-
-            if (string.IsNullOrEmpty(authType))
-                throw new ArgumentNullException("Authentication Type");
-
-            var user = await this.userDao.GetUserByCredentials(userName, password);
-            if (user == null)
-                return null;
-
-            var claimsIdentity = await this.userDao.CreateIdentity(user, authType);
-
-            var roles = claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
-            var roleNames = JsonConvert.SerializeObject(roles.Select(x => x.Value));
-
-            var authProperties = this.CreateAuthProperties(user.UserName, roleNames);
-            var authTicket = new AuthenticationTicket(claimsIdentity, authProperties);
-
-            return authTicket;
         }
 
         private AuthenticationProperties CreateAuthProperties(string userName, string roleNames)

@@ -45,7 +45,7 @@
     <Compile Include="In\InSignInDto.cs" />
     <Compile Include="In\InMealDto.cs" />
     <Compile Include="In\InMealReportFilterDto.cs" />
-    <Compile Include="In\InRegisterDto.cs" />
+    <Compile Include="In\InSignUpDto.cs" />
     <Compile Include="Out\OutAccountDto.cs" />
     <Compile Include="Out\OutMealDto.cs" />
     <Compile Include="Out\OutNutritionReportDto.cs" />
