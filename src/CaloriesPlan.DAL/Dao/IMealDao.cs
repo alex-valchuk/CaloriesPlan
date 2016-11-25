@@ -9,7 +9,7 @@ namespace CaloriesPlan.DAL.Dao
     {
         IMeal NewMealInstance();
 
-        List<IMeal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo);
+        List<IMeal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows);
         IMeal GetMealByID(int mealID);
         void Create(IMeal dbMeal);
         void Update(IMeal dbMeal);

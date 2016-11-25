@@ -25,11 +25,9 @@
                         "&dateFrom=" + filter.dateFrom.toISOString() +
                         "&dateTo=" + filter.dateTo.toISOString() +
                         "&timeFrom=" + filter.timeFrom.toISOString() +
-                        "&timeTo=" + filter.timeTo.toISOString(),
-                        /*"&dateFrom=" + filter.dateFrom +
-                        "&dateTo=" + filter.dateTo +
-                        "&timeFrom=" + filter.timeFrom +
-                        "&timeTo=" + filter.timeTo,*/
+                        "&timeTo=" + filter.timeTo.toISOString() +
+                        "&itemsCount=" + filter.itemsCount +
+                        "&page=" + filter.page,
                     headers: this.jsonConfig.headers
                 };
 

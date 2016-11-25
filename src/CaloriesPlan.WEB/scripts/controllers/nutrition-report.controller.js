@@ -14,10 +14,8 @@
             }
 
             $scope.filter = {
-                /*dateFrom: new Date(2016, 0, 1, 0, 0, 0),
-                dateTo: new Date(2017, 0, 1, 0, 0, 0),
-                timeFrom: new Date(1970, 0, 1, 0, 0, 0),    //unix epoch
-                timeTo: new Date(1970, 0, 1, 23, 59, 0)       //unix epoch*/
+                itemsCount: 5,
+                page: 0
             };
 
             function setupDateRanges () {

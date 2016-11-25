@@ -17,27 +17,25 @@ namespace CaloriesPlan.DAL.Dao.EF
             return new Meal();
         }
 
-        public List<IMeal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo)
+        public List<IMeal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows)
         {
-            var userNameParam = new SqlParameter("@UserName", SqlDbType.NVarChar, 200);
-            var dateFromParam = new SqlParameter("@DateFrom", SqlDbType.DateTime);
-            var dateToParam = new SqlParameter("@DateTo", SqlDbType.DateTime);
-            var timeFromParam = new SqlParameter("@TimeFrom", SqlDbType.DateTime);
-            var timeToParam = new SqlParameter("@TimeTo", SqlDbType.DateTime);
-
-            userNameParam.Value = userName;
-            dateFromParam.Value = dateFrom;
-            dateToParam.Value = dateTo;
-            timeFromParam.Value = timeFrom;
-            timeToParam.Value = timeTo;
+            var userNameParam = new SqlParameter("@UserName", SqlDbType.NVarChar, 200) { Value = userName };
+            var dateFromParam = new SqlParameter("@DateFrom", SqlDbType.DateTime) { Value = dateFrom };
+            var dateToParam = new SqlParameter("@DateTo", SqlDbType.DateTime) { Value = dateTo };
+            var timeFromParam = new SqlParameter("@TimeFrom", SqlDbType.DateTime) { Value = timeFrom };
+            var timeToParam = new SqlParameter("@TimeTo", SqlDbType.DateTime) { Value = timeTo };
+            var offsetParam = new SqlParameter("@Offset", SqlDbType.Int) { Value = offset };
+            var rowsParam = new SqlParameter("@Rows", SqlDbType.Int) { Value = rows };
 
             var query = this.dbContext.Meals
-                .SqlQuery("execute [dbo].sp_GetUserMeals @UserName, @DateFrom, @DateTo, @TimeFrom, @TimeTo",
+                .SqlQuery("execute [dbo].sp_GetUserMeals @UserName, @DateFrom, @DateTo, @TimeFrom, @TimeTo, @Offset, @Rows",
                     userNameParam,
                     dateFromParam,
                     dateToParam,
                     timeFromParam,
-                    timeToParam);
+                    timeToParam,
+                    offsetParam,
+                    rowsParam);
 
             return query.ToList<IMeal>();
         }

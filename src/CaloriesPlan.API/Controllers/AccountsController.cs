@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.Http;
 
 using CaloriesPlan.BLL.Services;
@@ -51,6 +52,26 @@ namespace CaloriesPlan.API.Controllers
             {
                 //add logging functionality
                 return this.BadArgument(ex);
+            }
+            catch
+            {
+                //add logging functionality
+                return this.InternalServerError();
+            }
+        }
+
+        //POST api/accounts/signout
+        [AllowAnonymous]
+        [Route("signout")]
+        [HttpPost]
+        public IHttpActionResult SignOut()
+        {
+            try
+            {
+                var authentication = HttpContext.Current.GetOwinContext().Authentication;
+                authentication.Challenge();
+
+                return this.Ok();
             }
             catch
             {

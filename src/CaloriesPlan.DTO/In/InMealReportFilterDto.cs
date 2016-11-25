@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CaloriesPlan.DTO.In
 {
@@ -8,6 +9,9 @@ namespace CaloriesPlan.DTO.In
         private DateTime? dateTo;
         private DateTime? timeFrom;
         private DateTime? timeTo;
+
+        private int itemsCount = 10;
+        private int page = 0;
 
         public DateTime? DateFrom
         {
@@ -55,6 +59,20 @@ namespace CaloriesPlan.DTO.In
                 return this.timeTo;
             }
             set { this.timeTo = value; }
+        }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Value should be more than 0.")]
+        public int ItemsCount
+        {
+            get { return this.itemsCount; }
+            set { this.itemsCount = value; }
+        }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Value should be a positive integer.")]
+        public int Page
+        {
+            get { return this.page; }
+            set { this.page = value; }
         }
     }
 }

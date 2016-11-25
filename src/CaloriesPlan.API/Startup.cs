@@ -44,7 +44,9 @@ namespace CaloriesPlan.API
 
             var oAuthServerOptions = new OAuthAuthorizationServerOptions
             {
+#if DEBUG
                 AllowInsecureHttp = true,
+#endif
                 TokenEndpointPath = new PathString("/api/accounts/signin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
                 Provider = new ApplicationOAuthProvider(applicationLogger, oAuthService)

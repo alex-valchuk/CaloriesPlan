@@ -17,21 +17,20 @@ function MenuController($scope, $controller, navigator, accountService) {
         $scope.authenticate();//calling base method
     }
 
-    $scope.signout = function () {
+    $scope.signOut = function () {
         $scope.clearInfoMessages();
 
-        accountService.signout(onSuccessfullSignout, onFailedSignout);
+        accountService.signOut()
+            .then(
+                onSuccessfulSignOut,
+                $scope.onFailure);
     }
 
-    function onSuccessfullSignout() {
+    function onSuccessfulSignOut() {
         $scope.refresh();
 
         if (navigator) {
             navigator.goToSignIn();
         }
-    }
-
-    function onFailedSignout(data, code) {
-        $scope.commonFailureCallback(data, code);
     }
 }

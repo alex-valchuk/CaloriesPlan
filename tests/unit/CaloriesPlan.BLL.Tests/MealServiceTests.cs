@@ -112,7 +112,14 @@ namespace CaloriesPlan.BLL.Tests
             {
                 Mock.Of<IMeal>()
             };
-            this.mealDaoMock.Setup(md => md.GetMealsByUserName(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(dbMeals);
+            this.mealDaoMock.Setup(md => md.GetMealsByUserName(
+                It.IsAny<string>(), 
+                It.IsAny<DateTime>(), 
+                It.IsAny<DateTime>(), 
+                It.IsAny<DateTime>(), 
+                It.IsAny<DateTime>(),
+                It.IsAny<int>(),
+                It.IsAny<int>())).Returns(dbMeals);
 
             //act
             var report = this.mealService.GetUserNutritionReport(userName, filter);

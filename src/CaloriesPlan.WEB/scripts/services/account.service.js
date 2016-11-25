@@ -1,6 +1,6 @@
 ﻿angular.module('appModule')
-    .service('AccountService', ['$http', '$cookieStore',
-        function ($http, $cookieStore) {
+    .service('AccountService', ['$http', '$cookieStore', '$q',
+        function ($http, $cookieStore, $q) {
             this.baseUrl = "http://localhost/CaloriesPlan/api/accounts/";
 
             var userData = {
@@ -59,20 +59,22 @@
                 return promise;
             };
 
-            this.signout = function (successCallback, failureCallback) {
-                try {
-                    clearHttpAuthHeader();
-                    clearAuthData();
-                    clearUserData();
+            this.signOut = function () {
+                var request = {
+                    method: 'POST',
+                    url: this.baseUrl + "signout",
+                };
 
-                    if (typeof successCallback === 'function') {
-                        successCallback();
-                    }
-                } catch (ex) {
-                    if (typeof failureCallback === 'function') {
-                        failureCallback(ex.message);
-                    }
-                }
+                var promise = $http(request);
+                promise.then(
+                    /* succeess */
+                    function (response) {
+                        //clearHttpAuthHeader();
+                        //clearAuthData();
+                        //clearUserData();
+                    });
+
+                return promise;
             }
 
             this.isAuthenticated = function () {

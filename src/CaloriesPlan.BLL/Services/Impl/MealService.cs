@@ -57,9 +57,13 @@ namespace CaloriesPlan.BLL.Services.Impl
 
             var nutritionReport = new OutNutritionReportDto(user.DailyCaloriesLimit);
 
+            var offset = filter.Page * filter.ItemsCount;
+            var rows = filter.ItemsCount;
+
             var dbMeals = this.mealDao.GetMealsByUserName(userName, 
                 filter.DateFrom.Value, filter.DateTo.Value,
-                filter.TimeFrom.Value, filter.TimeTo.Value);
+                filter.TimeFrom.Value, filter.TimeTo.Value,
+                offset, rows);
             if (dbMeals != null)
             {
                 nutritionReport.Meals = this.ConvertToDtoList(dbMeals);

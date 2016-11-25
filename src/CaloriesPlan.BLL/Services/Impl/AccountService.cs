@@ -16,6 +16,7 @@ using CaloriesPlan.BLL.Services.Impl.Base;
 using CaloriesPlan.DTO.In;
 
 using Models = CaloriesPlan.DAL.DataModel.Abstractions;
+using System.Net;
 
 namespace CaloriesPlan.BLL.Services.Impl
 {
