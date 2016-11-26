@@ -17,7 +17,7 @@
                     : number;
             }
 
-            this.getNutritionReport = function (userName, filter, successCallback, failureCallback) {
+            this.getNutritionReport = function (userName, filter) {
                 var request = {
                     method: "GET",
                     url: this.baseUrl +
@@ -31,17 +31,8 @@
                     headers: this.jsonConfig.headers
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
             this.getMeal = function (userName, mealID, successCallback, failureCallback) {
@@ -91,24 +82,15 @@
                     });
             }
 
-            this.deleteMeal = function (userName, mealID, successCallback, failureCallback) {
+            this.deleteMeal = function (userName, mealID) {
                 var request = {
                     method: "DELETE",
                     url: this.baseUrl + userName + "/meal/" + mealID,
                     headers: this.jsonConfig.headers
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
         }
     ]);

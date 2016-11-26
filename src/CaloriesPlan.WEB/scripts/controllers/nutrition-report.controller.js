@@ -118,19 +118,14 @@
             };
 
             $scope.fillForm = function () {
-                mealService.getNutritionReport(
-                    $routeParams.userName,
-                    $scope.filter,
-                    onSuccessfulGettingUserMeals,
-                    onFailedGettingUserMeals);
+                mealService.getNutritionReport($routeParams.userName, $scope.filter)
+                    .then(
+                        onSuccessfulGettingNutritionReport,
+                        $scope.onFailure);
             }
 
-            function onSuccessfulGettingUserMeals(data) {
-                $scope.nutritionReport = data;
-            }
-
-            function onFailedGettingUserMeals(data, code) {
-                $scope.commonFailureCallback(data, code);
+            function onSuccessfulGettingNutritionReport(response) {
+                $scope.nutritionReport = response.data;
             }
 
             $scope.editMeal = function (mealID) {
@@ -138,16 +133,15 @@
             }
 
             $scope.deleteMeal = function (mealID) {
-                mealService.deleteMeal($routeParams.userName, mealID, onSuccessfulDeletingMeal, onFailedDeletingMeal);
+                mealService.deleteMeal($routeParams.userName, mealID)
+                    .then(
+                        onSuccessfulDeletingMeal,
+                        $scope.onFailure);
             }
 
             function onSuccessfulDeletingMeal() {
                 $scope.toastSuccess("Meal has been successfully deleted.");
                 $scope.fillForm();
-            }
-
-            function onFailedDeletingMeal(data, code) {
-                $scope.commonFailureCallback(data, code);
             }
         }
     ]);
