@@ -5,9 +5,12 @@
 
             var unableToContactServer = "Unable to contact server; please, try again later.";
 
-            this.jsonConfig = {
-                headers: {
+            this.headers = {
+                json: {
                     'Content-Type': 'application/json'
+                },
+                form: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }
 
@@ -28,31 +31,22 @@
                         "&timeTo=" + filter.timeTo.toISOString() +
                         "&pageSize=" + filter.pageSize +
                         "&page=" + filter.page,
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
                 var promise = $http(request);
                 return promise;
             }
 
-            this.getMeal = function (userName, mealID, successCallback, failureCallback) {
+            this.getMeal = function (userName, mealID) {
                 var request = {
                     method: "GET",
                     url: this.baseUrl + userName + "/meal/" + mealID,
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
             this.saveMeal = function (userName, meal, successCallback, failureCallback) {
@@ -65,28 +59,19 @@
                 var request = {
                     method: apiMethod,
                     url: apiUrl,
-                    headers: this.jsonConfig.headers,
+                    headers: this.headers.json,
                     data: meal
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
             this.deleteMeal = function (userName, mealID) {
                 var request = {
                     method: "DELETE",
                     url: this.baseUrl + userName + "/meal/" + mealID,
-                    headers: this.jsonConfig.headers
+                    headers: this.headers.json
                 };
 
                 var promise = $http(request);
