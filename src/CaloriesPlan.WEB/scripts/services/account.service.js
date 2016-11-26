@@ -146,84 +146,48 @@
                 return promise;
             }
 
-            this.getUserRoles = function (userName, successCallback, failureCallback) {
+            this.getUserRoles = function (userName) {
                 var request = {
                     method: "GET",
                     url: this.baseUrl + userName + "/user-roles",
                     headers: this.headers.json
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
-            this.getNotUserRoles = function (userName, successCallback, failureCallback) {
+            this.getNonUserRoles = function (userName) {
                 var request = {
                     method: "GET",
                     url: this.baseUrl + userName + "/not-user-roles",
                     headers: this.headers.json
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
-            this.addUserRole = function (userName, roleName, successCallback, failureCallback) {
+            this.addUserRole = function (userName, roleName) {
                 var request = {
                     method: "POST",
                     url: this.baseUrl + userName + "/user-roles/" + roleName,
                     headers: this.headers.json
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
-            this.deleteUserRole = function (userName, roleName, successCallback, failureCallback) {
+            this.deleteUserRole = function (userName, roleName) {
                 var request = {
                     method: "DELETE",
                     url: this.baseUrl + userName + "/user-roles/" + roleName,
                     headers: this.headers.json
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
             this.isUserHasRoles = function (requiredRoles) {

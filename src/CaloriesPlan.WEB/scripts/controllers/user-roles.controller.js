@@ -14,20 +14,26 @@
             }
 
             function fillForm() {
-                $scope.selectedNotUserRole = -1;
+                $scope.selectedNonUserRole = -1;
 
-                fillNotUserRoles();
+                fillNonUserRoles();
                 fillUserRoles();
             }
 
-            function fillNotUserRoles() {
-                accountService.getNotUserRoles(
-                    $routeParams.userName,
-                    onSuccessfulGettingNotUserRoles,
-                    onFailedGettingNotUserRoles);
+            $scope.onNonUserRoleChanged = function (index) {
+                var selectedOption = $scope.notUserRoles[index];
+                $scope.selectedNonUserRole = selectedOption.value;
             }
 
-            function onSuccessfulGettingNotUserRoles(data) {
+            function fillNonUserRoles() {
+                accountService.getNonUserRoles($routeParams.userName)
+                    .then(
+                        onSuccessfulGettingNonUserRoles,
+                        $scope.onFailure);
+            }
+
+            function onSuccessfulGettingNonUserRoles(response) {
+                var data = response.data;
                 if (data) {
                     $scope.notUserRoles = data;
 
@@ -36,38 +42,28 @@
                     }
 
                     if (data.length > 0) {
-                        $scope.selectedNotUserRole = data[0].value
+                        $scope.selectedNonUserRole = data[0].value
                     }
                 }
             }
 
-            $scope.onNotUserRoleChanged = function (index) {
-                var selectedOption = $scope.notUserRoles[index];
-                $scope.selectedNotUserRole = selectedOption.value;
-            }
-
-            function onFailedGettingNotUserRoles(data, code) {
-                $scope.commonFailureCallback(data, code);
-            }
-
             function fillUserRoles() {
-                accountService.getUserRoles(
-                    $routeParams.userName,
-                    onSuccessfulGettingUserRoles,
-                    onFailedGettingUserRoles);
+                accountService.getUserRoles($routeParams.userName)
+                    .then(
+                        onSuccessfulGettingUserRoles,
+                        $scope.onFailure);
             }
 
-            function onSuccessfulGettingUserRoles(data) {
-                $scope.roles = data;
-            }
-
-            function onFailedGettingUserRoles(data, code) {
-                $scope.commonFailureCallback(data, code);
+            function onSuccessfulGettingUserRoles(response) {
+                $scope.roles = response.data;
             }
 
             $scope.addRole = function () {
-                var roleName = $scope.notUserRoles[$scope.selectedNotUserRole].roleName;
-                accountService.addUserRole($routeParams.userName, roleName, onSuccessfulAddingRole, onFailedAddingRole);
+                var roleName = $scope.notUserRoles[$scope.selectedNonUserRole].roleName;
+                accountService.addUserRole($routeParams.userName, roleName)
+                    .then(
+                        onSuccessfulAddingRole,
+                        $scope.onFailure);
             }
 
             function onSuccessfulAddingRole() {
@@ -75,21 +71,16 @@
                 fillForm();
             }
 
-            function onFailedAddingRole(data, code) {
-                $scope.commonFailureCallback(data, code);
-            }
-
             $scope.deleteRole = function (roleName) {
-                accountService.deleteUserRole($routeParams.userName, roleName, onSuccessfulDeletingRole, onFailedDeletingRole);
+                accountService.deleteUserRole($routeParams.userName, roleName)
+                    .then(
+                        onSuccessfulDeletingRole,
+                        $scope.onFailure);
             }
 
             function onSuccessfulDeletingRole() {
                 $scope.toastSuccess("Role has been successfully deleted.");
                 fillForm();
-            }
-
-            function onFailedDeletingRole(data, code) {
-                $scope.commonFailureCallback(data, code);
             }
         }
     ]);
