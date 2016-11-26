@@ -16,38 +16,29 @@
 
                 var userName = $routeParams.userName;
                 if (userName && userName !== undefined) {
-                    accountService.getAccount(
-                        userName,
-                        onSuccessfulGettingAccount,
-                        onFailedGettingAccount);
+                    accountService.getAccount(userName)
+                        .then(
+                            onSuccessfulGettingAccount,
+                            $scope.onFailure);
                 }
             }
 
-            function onSuccessfulGettingAccount(data) {
-                $scope.accountModel = data;
-            }
-
-            function onFailedGettingAccount(data, code) {
-                $scope.commonFailureCallback(data, code);
+            function onSuccessfulGettingAccount(response) {
+                $scope.accountModel = response.data;
             }
 
             $scope.save = function () {
                 $scope.clearInfoMessages();
                 
-                accountService.saveAccount(
-                    $scope.accountModel.userName,
-                    $scope.accountModel.dailyCaloriesLimit,
-                    onSuccessfullSave,
-                    onFailedSave);
+                accountService.saveAccount($scope.accountModel)
+                    .then(
+                        onSuccessfulSave,
+                        $scope.onFailure);
             }
 
-            function onSuccessfullSave() {
+            function onSuccessfulSave() {
                 $scope.toastSuccess("Account has been successfully saved.");
                 $scope.goBack();
-            }
-
-            function onFailedSave(data, code) {
-                $scope.commonFailureCallback(data, code);
             }
 
             $scope.editRoles = function () {

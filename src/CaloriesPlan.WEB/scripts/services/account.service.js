@@ -110,47 +110,29 @@
                 return promise;
             }
 
-            this.getAccount = function (userName, successCallback, failureCallback) {
+            this.getAccount = function (userName) {
                 var request = {
                     method: 'GET',
                     url: this.baseUrl + userName,
                     headers: this.headers.json
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
-            this.saveAccount = function (userName, dailyCaloriesLimit, successCallback, failureCallback) {
+            this.saveAccount = function (accountModel) {
                 var request = {
                     method: 'PUT',
-                    url: this.baseUrl + userName,
+                    url: this.baseUrl + accountModel.userName,
                     headers: this.headers.json,
                     data: {
-                        "dailyCaloriesLimit": dailyCaloriesLimit
+                        "dailyCaloriesLimit": accountModel.dailyCaloriesLimit
                     }
                 };
                 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback();
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
             this.deleteAccount = function (userName) {
