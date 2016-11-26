@@ -99,24 +99,15 @@
                 return "";
             }
 
-            this.getAccounts = function (successCallback, failureCallback) {
+            this.getAccounts = function () {
                 var request = {
                     method: 'GET',
                     url: this.baseUrl,
                     headers: this.headers.json
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
             this.getAccount = function (userName, successCallback, failureCallback) {
@@ -162,24 +153,15 @@
                     });
             }
 
-            this.deleteAccount = function (userName, successCallback, failureCallback) {
+            this.deleteAccount = function (userName) {
                 var request = {
                     method: "DELETE",
                     url: this.baseUrl + userName,
                     headers: this.headers.json
                 };
 
-                $http(request)
-                    .success(function (data) {
-                        if (typeof successCallback === 'function') {
-                            successCallback(data);
-                        }
-                    })
-                    .error(function (data, code) {
-                        if (typeof failureCallback === 'function') {
-                            failureCallback(data, code);
-                        }
-                    });
+                var promise = $http(request);
+                return promise;
             }
 
             this.getUserRoles = function (userName, successCallback, failureCallback) {

@@ -12,30 +12,26 @@
             }
 
             function fillForm() {
-                accountService.getAccounts(
-                    onSuccessfulGettingAccounts,
-                    onFailedGettingAccounts);
+                accountService.getAccounts()
+                    .then(
+                        onSuccessfulGettingAccounts,
+                        $scope.onFailure);
             }
 
-            function onSuccessfulGettingAccounts(data) {
-                $scope.accounts = data;
-            }
-
-            function onFailedGettingAccounts(data, code) {
-                $scope.commonFailureCallback(data, code);
+            function onSuccessfulGettingAccounts(response) {
+                $scope.accounts = response.data;
             }
 
             $scope.deleteAccount = function (userName) {
-                accountService.deleteAccount(userName, onSuccessfulDeletingAccount, onFailedDeletingAccount);
+                accountService.deleteAccount(userName)
+                    .then(
+                        onSuccessfulDeletingAccount,
+                        $scope.onFailure);
             }
 
             function onSuccessfulDeletingAccount() {
                 $scope.toastSuccess("Account has been successfully deleted.");
                 fillForm();
-            }
-
-            function onFailedDeletingAccount(data, code) {
-                $scope.commonFailureCallback(data, code);
             }
         }
     ]);
