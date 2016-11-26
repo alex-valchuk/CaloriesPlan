@@ -40,6 +40,12 @@ namespace CaloriesPlan.DAL.Dao.EF
             return query.ToList<IMeal>();
         }
 
+        public int GetUserMealsCount(string userID)
+        {
+            return
+                this.dbContext.Meals.Count(m => m.UserID == userID);
+        }
+
         public IMeal GetMealByID(int mealID)
         {
             return 

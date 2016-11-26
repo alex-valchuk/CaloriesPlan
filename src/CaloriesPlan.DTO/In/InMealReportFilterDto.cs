@@ -10,7 +10,7 @@ namespace CaloriesPlan.DTO.In
         private DateTime? timeFrom;
         private DateTime? timeTo;
 
-        private int itemsCount = 10;
+        private int pageSize = 10;
         private int page = 0;
 
         public DateTime? DateFrom
@@ -62,10 +62,10 @@ namespace CaloriesPlan.DTO.In
         }
 
         [Range(1, int.MaxValue, ErrorMessage = "Value should be more than 0.")]
-        public int ItemsCount
+        public int PageSize
         {
-            get { return this.itemsCount; }
-            set { this.itemsCount = value; }
+            get { return this.pageSize; }
+            set { this.pageSize = value; }
         }
 
         [Range(0, int.MaxValue, ErrorMessage = "Value should be a positive integer.")]

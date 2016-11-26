@@ -55,15 +55,18 @@ namespace CaloriesPlan.BLL.Services.Impl
             var days = (filter.DateTo.Value - filter.DateFrom.Value).TotalDays + 1;
             filter.DateTo = filter.DateFrom.Value.AddDays(days);
 
-            var nutritionReport = new OutNutritionReportDto(user.DailyCaloriesLimit);
+            var totalItemsCount = this.mealDao.GetUserMealsCount(user.Id);
 
-            var offset = filter.Page * filter.ItemsCount;
-            var rows = filter.ItemsCount;
+            var nutritionReport = new OutNutritionReportDto(user.DailyCaloriesLimit, totalItemsCount);
+
+            var offset = filter.Page * filter.PageSize;
+            var rows = filter.PageSize;
 
             var dbMeals = this.mealDao.GetMealsByUserName(userName, 
                 filter.DateFrom.Value, filter.DateTo.Value,
                 filter.TimeFrom.Value, filter.TimeTo.Value,
                 offset, rows);
+
             if (dbMeals != null)
             {
                 nutritionReport.Meals = this.ConvertToDtoList(dbMeals);

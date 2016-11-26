@@ -68,8 +68,7 @@ namespace CaloriesPlan.API.Controllers
         {
             try
             {
-                var authentication = HttpContext.Current.GetOwinContext().Authentication;
-                authentication.Challenge();
+                //TODO:
 
                 return this.Ok();
             }

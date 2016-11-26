@@ -1,14 +1,14 @@
+using System.Data.Entity.Migrations;
+using System.Linq;
+
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+
+using CaloriesPlan.DAL.DataModel;
+using CaloriesPlan.DAL.Dao.EF;
+
 namespace CaloriesPlan.DAL.Migrations
 {
-    using Dao.EF;
-    using DataModel;
-    using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.EntityFramework;
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
-
     internal sealed class Configuration : DbMigrationsConfiguration<CaloriesPlan.DAL.AppContext>
     {
         public Configuration()

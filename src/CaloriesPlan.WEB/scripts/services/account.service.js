@@ -69,9 +69,9 @@
                 promise.then(
                     /* succeess */
                     function (response) {
-                        //clearHttpAuthHeader();
-                        //clearAuthData();
-                        //clearUserData();
+                        clearHttpAuthHeader();
+                        clearAuthData();
+                        clearUserData();
                     });
 
                 return promise;

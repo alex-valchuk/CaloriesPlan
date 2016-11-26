@@ -14,7 +14,7 @@
             }
 
             $scope.filter = {
-                itemsCount: 5,
+                pageSize: 5,
                 page: 0
             };
 

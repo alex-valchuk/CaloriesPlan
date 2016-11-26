@@ -14,5 +14,6 @@ namespace CaloriesPlan.DAL.Dao
         void Create(IMeal dbMeal);
         void Update(IMeal dbMeal);
         void Delete(IMeal dbMeal);
+        int GetUserMealsCount(string userID);
     }
 }
