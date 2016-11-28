@@ -218,6 +218,18 @@ namespace CaloriesPlan.BLL.Services.Impl
             this.userDao.DeleteUserRole(user, roleName);
         }
 
+        public ICollection<OutShortUserInfoDto> GetSubscribers(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("User Name");
+
+            var user = this.userDao.GetUserByName(userName);
+            var users = this.userDao.GetSubscribers(user);
+            var subscribers = this.ConvertToOutShortUserInfoDtoList(users);
+
+            return subscribers;
+        }
+
         private AuthenticationProperties CreateAuthProperties(string userName, string roleNames)
         {
             var data = new Dictionary<string, string>
@@ -229,65 +241,95 @@ namespace CaloriesPlan.BLL.Services.Impl
             return new AuthenticationProperties(data);
         }
 
-        private IList<OutAccountDto> ConvertToOutAccountDtoList(IList<Models.IUser> dbUsers)
+        private IList<OutAccountDto> ConvertToOutAccountDtoList(IList<Models.IUser> models)
         {
-            if (dbUsers == null ||
-                dbUsers.Count == 0)
+            if (models == null ||
+                models.Count == 0)
                 return null;
 
-            var dtoUsers = new List<OutAccountDto>();
+            var dtoList = new List<OutAccountDto>();
 
-            foreach (var dbUser in dbUsers)
+            foreach (var model in models)
             {
-                var dtoUser = this.ConvertToOutAccountDto(dbUser);
-                dtoUsers.Add(dtoUser);
+                var dto = this.ConvertToOutAccountDto(model);
+                dtoList.Add(dto);
             }
 
-            return dtoUsers;
+            return dtoList;
         }
 
-        private OutAccountDto ConvertToOutAccountDto(Models.IUser dbUser)
+        private OutAccountDto ConvertToOutAccountDto(Models.IUser model)
         {
-            if (dbUser == null)
+            if (model == null)
                 return null;
 
-            var dtoUser = new OutAccountDto
+            var dto = new OutAccountDto
             {
-                UserName = dbUser.UserName,
-                DailyCaloriesLimit = dbUser.DailyCaloriesLimit
+                UserName = model.UserName,
+                DailyCaloriesLimit = model.DailyCaloriesLimit
             };
 
-            return dtoUser;
+            return dto;
         }
 
-        private IList<OutUserRoleDto> ConvertToOutUserRoleDtoList(IList<Models.IRole> dbRoles)
+        private IList<OutUserRoleDto> ConvertToOutUserRoleDtoList(IList<Models.IRole> models)
         {
-            if (dbRoles == null)
+            if (models == null)
                 return null;
 
 
-            var dtoRoles = new List<OutUserRoleDto>();
+            var dtoList = new List<OutUserRoleDto>();
 
-            foreach (var dbRole in dbRoles)
+            foreach (var model in models)
             {
-                var dtoRole = this.ConvertToOutUserRoleDto(dbRole);
-                dtoRoles.Add(dtoRole);
+                var dto = this.ConvertToOutUserRoleDto(model);
+                dtoList.Add(dto);
             }
 
-            return dtoRoles;
+            return dtoList;
         }
 
-        private OutUserRoleDto ConvertToOutUserRoleDto(Models.IRole dbRole)
+        private OutUserRoleDto ConvertToOutUserRoleDto(Models.IRole model)
         {
-            if (dbRole == null)
+            if (model == null)
                 return null;
 
-            var dtoRole = new OutUserRoleDto
+            var dto = new OutUserRoleDto
             {
-                RoleName = dbRole.Name
+                RoleName = model.Name
             };
 
-            return dtoRole;
+            return dto;
+        }
+
+        private IList<OutShortUserInfoDto> ConvertToOutShortUserInfoDtoList(IList<Models.IUser> models)
+        {
+            if (models == null)
+                return null;
+
+
+            var dtoList = new List<OutShortUserInfoDto>();
+
+            foreach (var model in models)
+            {
+                var dto = this.ConvertToOutShortUserInfoDto(model);
+                dtoList.Add(dto);
+            }
+
+            return dtoList;
+        }
+
+        private OutShortUserInfoDto ConvertToOutShortUserInfoDto(Models.IUser model)
+        {
+            if (model == null)
+                return null;
+
+            var dto = new OutShortUserInfoDto
+            {
+                UserName = model.UserName
+            };
+
+            return dto;
         }
     }
 }

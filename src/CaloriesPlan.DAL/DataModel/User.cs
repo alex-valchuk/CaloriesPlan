@@ -11,7 +11,7 @@ namespace CaloriesPlan.DAL.DataModel
         [Required]
         public string PasswordSalt { get; set; }
 
-        [Required]        
+        [Required]
         public int DailyCaloriesLimit { get; set; }
     }
 }

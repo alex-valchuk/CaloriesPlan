@@ -190,6 +190,17 @@
                 return promise;
             }
 
+            this.getSubscribers = function (userName) {
+                var request = {
+                    method: "GET",
+                    url: this.baseUrl + userName + "/subscribers",
+                    headers: this.headers.json
+                };
+
+                var promise = $http(request);
+                return promise;
+            }
+
             this.isUserHasRoles = function (requiredRoles) {
                 if (userData.roles &&
                     requiredRoles &&

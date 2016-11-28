@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\TestsController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\Base\ControllerBase.cs" />
     <Compile Include="Controllers\MealsController.cs" />

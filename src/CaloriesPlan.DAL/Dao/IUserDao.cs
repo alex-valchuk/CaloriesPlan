@@ -17,6 +17,9 @@ namespace CaloriesPlan.DAL.Dao
         Task<Models.IUser> GetUserByCredentials(string userName, string password);
 
         IList<Models.IUser> GetUsers();
+        IList<Models.IUser> GetSubscribers(Models.IUser user);
+        IList<Models.IUser> GetSubscribingUsers(Models.IUser user);
+
         Models.IUser GetUserByName(string userName);
         void Update(Models.IUser user);
         void Delete(Models.IUser user);

@@ -17,5 +17,7 @@ namespace CaloriesPlan.BLL.Services
         IList<OutUserRoleDto> GetNotUserRoles(string userName);
         void AddUserRole(string userName, string roleName);
         void DeleteUserRole(string userName, string roleName);
+
+        ICollection<OutShortUserInfoDto> GetSubscribers(string userName);
     }
 }

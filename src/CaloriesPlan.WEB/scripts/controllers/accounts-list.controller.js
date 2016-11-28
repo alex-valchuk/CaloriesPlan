@@ -16,10 +16,19 @@
                     .then(
                         onSuccessfulGettingAccounts,
                         $scope.onFailure);
+
+                accountService.getUsers()
+                    .then(
+                        onSuccessfulGettingUsers,
+                        $scope.onFailure);
             }
 
             function onSuccessfulGettingAccounts(response) {
                 $scope.accounts = response.data;
+            }
+
+            function onSuccessfulGettingUsers(response) {
+                $scope.users = response.data;
             }
 
             $scope.deleteAccount = function (userName) {

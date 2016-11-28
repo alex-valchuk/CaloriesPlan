@@ -25,6 +25,11 @@
                 <ul>
                     <li ng-repeat="role in accountModel.userRoles">{{role.roleName}}</li>
                 </ul>
+
+                <label>Subscribers:</label>
+                <ul>
+                    <li ng-repeat="subscriber in subscribers">{{subscriber.userName}}</li>
+                </ul>
                 <div ng-if="isAdminOrManager()">
                     <a ng-click="editRoles()" class="btn btn-secondary">Edit Roles</a>
                 </div>

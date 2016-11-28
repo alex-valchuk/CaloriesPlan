@@ -94,6 +94,7 @@
     <Compile Include="DataModel\Abstractions\IMeal.cs" />
     <Compile Include="DataModel\Abstractions\IRole.cs" />
     <Compile Include="DataModel\Abstractions\IUser.cs" />
+    <Compile Include="DataModel\UserSubscription.cs" />
     <Compile Include="DataModel\Meal.cs" />
     <Compile Include="DataModel\Role.cs" />
     <Compile Include="DataModel\User.cs" />
@@ -120,6 +121,10 @@
     <Compile Include="Migrations\201611251850482_AddPagingToProcedure_sp_GetUserMeals.cs" />
     <Compile Include="Migrations\201611251850482_AddPagingToProcedure_sp_GetUserMeals.Designer.cs">
       <DependentUpon>201611251850482_AddPagingToProcedure_sp_GetUserMeals.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611281829010_AddUserSubscription.cs" />
+    <Compile Include="Migrations\201611281829010_AddUserSubscription.Designer.cs">
+      <DependentUpon>201611281829010_AddUserSubscription.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -154,7 +159,11 @@
     <EmbeddedResource Include="Migrations\201611251850482_AddPagingToProcedure_sp_GetUserMeals.resx">
       <DependentUpon>201611251850482_AddPagingToProcedure_sp_GetUserMeals.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611281829010_AddUserSubscription.resx">
+      <DependentUpon>201611281829010_AddUserSubscription.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

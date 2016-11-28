@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using System.Web.Http;
 
 using CaloriesPlan.BLL.Services;
@@ -276,6 +275,33 @@ namespace CaloriesPlan.API.Controllers
 
                 this.accountService.DeleteUserRole(userName, roleName);
                 return this.Ok();
+            }
+            catch (AccountDoesNotExistException)
+            {
+                //add logging functionality
+                return this.BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                //add logging functionality
+                return this.BadRequest(ex.Message);
+            }
+            catch
+            {
+                //add logging functionality
+                return this.InternalServerError();
+            }
+        }
+
+        //GET api/accounts/{userName}/subscribers
+        [HttpGet]
+        [Route(ParamUserName + "/subscribers")]
+        public IHttpActionResult GetSubscribers(string userName)
+        {
+            try
+            {
+                var subscribers = this.accountService.GetSubscribers(userName);
+                return this.Ok(subscribers);
             }
             catch (AccountDoesNotExistException)
             {

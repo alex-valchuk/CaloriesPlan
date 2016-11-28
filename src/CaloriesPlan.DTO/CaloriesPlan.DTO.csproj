@@ -49,6 +49,7 @@
     <Compile Include="Out\OutAccountDto.cs" />
     <Compile Include="Out\OutMealDto.cs" />
     <Compile Include="Out\OutNutritionReportDto.cs" />
+    <Compile Include="Out\OutShortUserInfoDto.cs" />
     <Compile Include="Out\OutUserRoleDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

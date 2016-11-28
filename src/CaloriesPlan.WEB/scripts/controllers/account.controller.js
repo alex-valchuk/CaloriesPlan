@@ -20,11 +20,20 @@
                         .then(
                             onSuccessfulGettingAccount,
                             $scope.onFailure);
+
+                    accountService.getSubscribers(userName)
+                        .then(
+                            onSuccessfulGettingSubscribers,
+                            $scope.onFailure);
                 }
             }
 
             function onSuccessfulGettingAccount(response) {
                 $scope.accountModel = response.data;
+            }
+
+            function onSuccessfulGettingSubscribers(response) {
+                $scope.subscribers = response.data;
             }
 
             $scope.save = function () {

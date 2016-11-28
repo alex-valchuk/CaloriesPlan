@@ -19,5 +19,6 @@ namespace CaloriesPlan.DAL
         }
 
         public virtual DbSet<Meal> Meals { get; set; }
+        public virtual DbSet<UserSubscription> Subscribtions { get; set; }
     }
 }

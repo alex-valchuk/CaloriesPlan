@@ -39,6 +39,14 @@
               {
                   templateUrl: 'scripts/views/user-roles.html'
               })
+          .when('/friends-list/:userID?',
+              {
+                  templateUrl: 'scripts/views/friends-list.html'
+              })
+          .when('/tests',
+              {
+                  templateUrl: 'scripts/views/tests.html'
+              })
           .otherwise({ redirectTo: '/' });
     }
   ]);

@@ -1,0 +1,26 @@
+﻿<my-menu></my-menu>
+<div ng-controller="TestsController" ng-init="init()" class="container">
+    <h2 class="form-group">Test</h2>
+
+    <div class="form-group" ng-repeat="error in errors">
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    </div>
+
+    Friends:
+    <table class="table table-bordered">
+        <thead class="thead-inverse">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="user in users">
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

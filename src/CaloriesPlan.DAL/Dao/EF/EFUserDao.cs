@@ -68,6 +68,22 @@ namespace CaloriesPlan.DAL.Dao.EF
             return this.userManager.Users.ToList<Models.IUser>();
         }
 
+        public IList<Models.IUser> GetSubscribers(Models.IUser user)
+        {
+            return this.dbContext.Subscribtions
+                .Where(s => s.UserID == user.Id)
+                .Select(s => s.Subscriber)
+                .ToList<Models.IUser>();
+        }
+
+        public IList<Models.IUser> GetSubscribingUsers(Models.IUser user)
+        {
+            return this.dbContext.Subscribtions
+                .Where(s => s.SubscriberID == user.Id)
+                .Select(s => s.User)
+                .ToList<Models.IUser>();
+        }
+
         public Models.IUser GetUserByName(string userName)
         {
             return this.userManager.Users.FirstOrDefault(u => u.UserName == userName);

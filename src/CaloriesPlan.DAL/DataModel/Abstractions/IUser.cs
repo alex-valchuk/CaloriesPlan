@@ -1,4 +1,6 @@
-﻿namespace CaloriesPlan.DAL.DataModel.Abstractions
+﻿using System.Collections.Generic;
+
+namespace CaloriesPlan.DAL.DataModel.Abstractions
 {
     public interface IUser
     {
