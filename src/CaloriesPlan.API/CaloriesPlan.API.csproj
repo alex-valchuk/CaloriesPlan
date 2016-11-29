@@ -207,13 +207,18 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionHandlers\Abstractions\IExceptionDecorator.cs" />
+    <Compile Include="ExceptionHandlers\ExceptionResponseBuilder.cs" />
+    <Compile Include="ExceptionHandlers\GlobalExceptionDecorator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\TestsController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\Base\ControllerBase.cs" />
     <Compile Include="Controllers\MealsController.cs" />
+    <Compile Include="Filters\ApplicationExceptionFilterAttribute.cs" />
     <Compile Include="Filters\AuthorizedOrOwnerParamOrIsInOneOfRoles.cs" />
     <Compile Include="Filters\OwnerRouteOrIsInOneOfRoles.cs" />
+    <Compile Include="ExceptionHandlers\PassthroughExceptionHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Startup.cs" />

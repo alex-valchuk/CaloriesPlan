@@ -7,7 +7,6 @@ using Microsoft.Owin.Security.OAuth;
 
 using Owin;
 
-using CaloriesPlan.API.Providers;
 using CaloriesPlan.BLL.Services;
 using CaloriesPlan.BLL.Services.Impl;
 using CaloriesPlan.DAL.Dao;
@@ -16,6 +15,9 @@ using CaloriesPlan.UTL;
 using CaloriesPlan.UTL.Config.Desktop;
 using CaloriesPlan.UTL.Loggers.Abstractions;
 using CaloriesPlan.UTL.Loggers;
+using CaloriesPlan.API.Providers;
+using CaloriesPlan.API.ExceptionHandlers;
+using CaloriesPlan.API.ExceptionHandlers.Abstractions;
 
 [assembly: OwinStartup(typeof(CaloriesPlan.API.Startup))]
 namespace CaloriesPlan.API
@@ -34,7 +36,13 @@ namespace CaloriesPlan.API
             this.ConfigureOAuth(app);
 
             WebApiConfig.Register(config);
-            app.UseWebApi(config);
+
+            var exceptionDecorator = this.unityContainer.Resolve<IExceptionDecorator>();
+
+            app
+                //global exception handling
+                .Use(async (ctx, next) => await exceptionDecorator.DecorateRequest(ctx, next))
+                .UseWebApi(config);
         }
 
         public void ConfigureOAuth(IAppBuilder app)
@@ -57,10 +65,14 @@ namespace CaloriesPlan.API
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
         }
 
+
         private void ConfigureDependencies(HttpConfiguration config)
         {
             this.unityContainer = new UnityContainer();
-            
+
+            //exception handlers
+            this.unityContainer.RegisterType<IExceptionDecorator, GlobalExceptionDecorator>(new HierarchicalLifetimeManager());
+
             //utils
             this.unityContainer.RegisterType<IConfigProvider, DesktopConfigProvider>(new HierarchicalLifetimeManager());
             this.unityContainer.RegisterType<IApplicationLogger, NLogger>(new HierarchicalLifetimeManager());

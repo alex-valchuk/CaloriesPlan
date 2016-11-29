@@ -1,8 +1,6 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 using CaloriesPlan.BLL.Services;
-using CaloriesPlan.BLL.Exceptions;
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.API.Controllers.Base;
 using CaloriesPlan.API.Filters;
@@ -27,36 +25,13 @@ namespace CaloriesPlan.API.Controllers
         [HttpPost]
         public IHttpActionResult SignUp(InSignUpDto signUpDto)
         {
-            try
+            if (!this.ModelState.IsValid)
             {
-                if (!this.ModelState.IsValid)
-                {
-                    return this.BadRequest(this.ModelState);
-                }
+                return this.BadRequest(this.ModelState);
+            }
 
-                this.accountService.SignUp(signUpDto);
-                return this.Ok();
-            }
-            catch (PropertyInconsistencyException ex)
-            {
-                //add logging functionality
-                return this.BadProperty(ex);
-            }
-            catch (RegistrationException ex)
-            {
-                //add logging functionality
-                return this.BadRegistration(ex);
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadArgument(ex);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            this.accountService.SignUp(signUpDto);
+            return this.Ok();
         }
 
         //POST api/accounts/signout
@@ -65,17 +40,8 @@ namespace CaloriesPlan.API.Controllers
         [HttpPost]
         public IHttpActionResult SignOut()
         {
-            try
-            {
-                //TODO:
-
-                return this.Ok();
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            //TODO:
+            return this.Ok();
         }
 
         //GET api/accounts
@@ -83,16 +49,8 @@ namespace CaloriesPlan.API.Controllers
         [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
         public IHttpActionResult Get()
         {
-            try
-            {
-                var accounts = this.accountService.GetAccounts();
-                return this.Ok(accounts);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            var accounts = this.accountService.GetAccounts();
+            return this.Ok(accounts);
         }
 
         //GET api/accounts/{userName}/user-roles
@@ -101,21 +59,8 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamUserName + "/user-roles")]
         public IHttpActionResult GetUserRoles(string userName)
         {
-            try
-            {
-                var userRoles = this.accountService.GetUserRoles(userName);
-                return this.Ok(userRoles);
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadRequest(ex.Message);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            var userRoles = this.accountService.GetUserRoles(userName);
+            return this.Ok(userRoles);
         }
 
         //GET api/accounts/{userName}/not-user-roles
@@ -124,21 +69,8 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamUserName + "/not-user-roles")]
         public IHttpActionResult GetNotUserRoles(string userName)
         {
-            try
-            {
-                var userRoles = this.accountService.GetNotUserRoles(userName);
-                return this.Ok(userRoles);
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadRequest(ex.Message);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            var userRoles = this.accountService.GetNotUserRoles(userName);
+            return this.Ok(userRoles);
         }
 
         //GET api/accounts/:userName
@@ -147,21 +79,8 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamUserName)]
         public IHttpActionResult Get(string userName)
         {
-            try
-            {
-                var account = this.accountService.GetAccount(userName);
-                return this.Ok(account);
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadRequest(ex.Message);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            var account = this.accountService.GetAccount(userName);
+            return this.Ok(account);
         }
 
         //PUT api/accounts/:userName
@@ -170,31 +89,13 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamUserName)]
         public IHttpActionResult Put(string userName, InAccountDto accountDto)
         {
-            try
+            if (!this.ModelState.IsValid)
             {
-                if (!this.ModelState.IsValid)
-                {
-                    return this.BadRequest(this.ModelState);
-                }
+                return this.BadRequest(this.ModelState);
+            }
 
-                this.accountService.UpdateAccount(userName, accountDto);
-                return this.Ok();
-            }
-            catch (AccountDoesNotExistException)
-            {
-                //add logging functionality
-                return this.BadRequest();
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadRequest(ex.Message);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            this.accountService.UpdateAccount(userName, accountDto);
+            return this.Ok();
         }
 
         //DELETE api/accounts/:userName
@@ -203,32 +104,14 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamUserName)]
         public IHttpActionResult Delete(string userName)
         {
-            try
+            var authenticatedName = this.User.Identity.Name;
+            if (authenticatedName.ToLower() == userName.ToLower())
             {
-                var authenticatedName = this.User.Identity.Name;
-                if (authenticatedName.ToLower() == userName.ToLower())
-                {
-                    return this.BadRequest("User cannot delete himself");
-                }
+                return this.BadRequest("User cannot delete himself");
+            }
 
-                this.accountService.DeleteAccount(userName);
-                return this.Ok();
-            }
-            catch (AccountDoesNotExistException)
-            {
-                //add logging functionality
-                return this.BadRequest();
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadRequest(ex.Message);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            this.accountService.DeleteAccount(userName);
+            return this.Ok();
         }
 
         //POST api/accounts/{userName}/user-roles/{roleName}
@@ -237,26 +120,8 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamUserName + "/user-roles/" + ParamRoleName)]
         public IHttpActionResult Post(string userName, string roleName)
         {
-            try
-            {
-                this.accountService.AddUserRole(userName, roleName);
-                return this.Ok();
-            }
-            catch (AccountDoesNotExistException)
-            {
-                //add logging functionality
-                return this.BadRequest();
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadRequest(ex.Message);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            this.accountService.AddUserRole(userName, roleName);
+            return this.Ok();
         }
 
         //DELETE api/accounts/{userName}/user-roles/{roleName}
@@ -265,32 +130,8 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamUserName + "/user-roles/" + ParamRoleName)]
         public IHttpActionResult Delete(string userName, string roleName)
         {
-            try
-            {
-                /*var authenticatedName = this.User.Identity.Name;
-                if (authenticatedName.ToLower() == userName.ToLower())
-                {
-                    return this.BadRequest("User cannot delete himself");
-                }*/
-
-                this.accountService.DeleteUserRole(userName, roleName);
-                return this.Ok();
-            }
-            catch (AccountDoesNotExistException)
-            {
-                //add logging functionality
-                return this.BadRequest();
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadRequest(ex.Message);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            this.accountService.DeleteUserRole(userName, roleName);
+            return this.Ok();
         }
 
         //GET api/accounts/{userName}/subscribers
@@ -298,26 +139,8 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamUserName + "/subscribers")]
         public IHttpActionResult GetSubscribers(string userName)
         {
-            try
-            {
-                var subscribers = this.accountService.GetSubscribers(userName);
-                return this.Ok(subscribers);
-            }
-            catch (AccountDoesNotExistException)
-            {
-                //add logging functionality
-                return this.BadRequest();
-            }
-            catch (ArgumentNullException ex)
-            {
-                //add logging functionality
-                return this.BadRequest(ex.Message);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            var subscribers = this.accountService.GetSubscribers(userName);
+            return this.Ok(subscribers);
         }
     }
 }

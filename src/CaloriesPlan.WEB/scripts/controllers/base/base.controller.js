@@ -4,6 +4,7 @@
             $scope.unableToContactServer = "Unable to contact server; please, try again later.";
             $scope.notAvailableResource = "Requested resource is not available.";
             $scope.internalServerError = "Internal server error.";
+            $scope.notFound = "The requested resource is not found.";
 
             $scope.errors = [];
 
@@ -30,10 +31,6 @@
 
                     if (code) {
                         switch (code) {
-                            case -1:
-                                $scope.addError($scope.unableToContactServer);
-                                break;
-
                             case 401:
                                 if (data.message) {
                                     $scope.toastFailure(data.message);
@@ -72,58 +69,12 @@
                                 break;
                         }
                     }
-                }
-
-                $scope.addError($scope.unableToContactServer);
-            }
-
-            $scope.commonFailureCallback = function (data, code) {
-                if (code) {
-                    switch (code) {
-                        case -1:
-                            $scope.addError($scope.unableToContactServer);
-                            break;
-
-                        case 401:
-                            if (data.message) {
-                                $scope.toastFailure(data.message);
-                            }
-
-                            navigator.goToSignIn();
-                            break;
-
-                        case 403:
-                            if (data.message) {
-                                $scope.toastFailure(data.message);
-                            } else {
-                                $scope.toastFailure($scope.notAvailableResource);
-                            }
-
-                            navigator.goBack();
-                            break;
-
-                        default:
-                            if (data) {
-                                if (data.modelState) {
-                                    $scope.parseModelErrors(data.modelState);
-                                    return;
-
-                                } else if (data.error_description) {
-                                    $scope.addError(data.error_description);
-                                    return;
-
-                                } else if (data.message) {
-                                    $scope.addError(data.message);
-                                    return;
-                                }
-                            }
-
-                            $scope.addError($scope.internalServerError);
-                            break;
+                    else {
+                        $scope.addError($scope.unableToContactServer);
                     }
+                } else {
+                    $scope.addError($scope.unableToContactServer);
                 }
-
-                $scope.addError($scope.unableToContactServer);
             }
 
             $scope.parseModelErrors = function (modelState) {

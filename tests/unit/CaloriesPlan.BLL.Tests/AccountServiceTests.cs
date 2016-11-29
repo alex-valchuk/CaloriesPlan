@@ -65,7 +65,7 @@ namespace CaloriesPlan.BLL.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(PropertyInconsistencyException), "Password does not match password confirmation")]
+        [ExpectedException(typeof(InvalidPasswordConfirmationException), "Password does not match password confirmation")]
         public void RegisterUser_PasswordDoesNotEqualToConfirmPassword_ArgumentNullExceptionThrown()
         {
             //arrange

@@ -39,7 +39,7 @@ namespace CaloriesPlan.BLL.Services.Impl
                 throw new ArgumentNullException("Register data");
 
             if (signUpDto.Password != signUpDto.ConfirmPassword)
-                throw new PropertyInconsistencyException("Password", "Password does not match password confirmation");
+                throw new InvalidPasswordConfirmationException("Password", "Password does not match password confirmation");
 
 
             var defaultCaloriesLimit = this.configProvider.GetDefaultCaloriesLimit();

@@ -2,11 +2,11 @@
 
 namespace CaloriesPlan.BLL.Exceptions
 {
-    public class PropertyInconsistencyException : Exception
+    public class InvalidPasswordConfirmationException : Exception
     {
         public string PropertyName { get; private set; }
 
-        public PropertyInconsistencyException(string propertyName, string message)
+        public InvalidPasswordConfirmationException(string propertyName, string message)
             : base(message)
         {
             this.PropertyName = propertyName;

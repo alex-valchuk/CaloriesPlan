@@ -88,7 +88,7 @@
   <ItemGroup>
     <Compile Include="Exceptions\InvalidDateRangeException.cs" />
     <Compile Include="Exceptions\AccountDoesNotExistException.cs" />
-    <Compile Include="Exceptions\PropertyInconsistencyException.cs" />
+    <Compile Include="Exceptions\InvalidPasswordConfirmationException.cs" />
     <Compile Include="Exceptions\MealDoesNotExistException.cs" />
     <Compile Include="Exceptions\RegistrationException.cs" />
     <Compile Include="Filters\DatesFilter.cs" />

@@ -34,7 +34,7 @@ namespace CaloriesPlan.API.Controllers.Base
             return this.BadRequest();
         }
 
-        protected IHttpActionResult BadProperty(PropertyInconsistencyException exception)
+        protected IHttpActionResult BadProperty(InvalidPasswordConfirmationException exception)
         {
             if (exception != null)
             {

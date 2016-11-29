@@ -22,9 +22,7 @@ namespace CaloriesPlan.API.Controllers
         [Route("friends_w")]
         public IHttpActionResult GetFriendsWrong([FromUri] int? userID = null)
         {
-            try
-            {
-                var users = new System.Collections.Generic.List<AUser> {
+            var users = new System.Collections.Generic.List<AUser> {
                     new AUser {
                         ID = 125,
                         UserName = "john.smith123",
@@ -45,13 +43,7 @@ namespace CaloriesPlan.API.Controllers
                     },
                 };
 
-                return this.Ok(users);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            return this.Ok(users);
         }
 
         //GET api/accounts/friends_r
@@ -59,9 +51,7 @@ namespace CaloriesPlan.API.Controllers
         [Route("friends_r")]
         public IHttpActionResult GetUsers([FromUri] int? userID = null)
         {
-            try
-            {
-                var users = new System.Collections.Generic.List<OutUserDetailDto> {
+            var users = new System.Collections.Generic.List<OutUserDetailDto> {
                     new OutUserDetailDto {
                         ID = 125,
                         FirstName = "John",
@@ -74,13 +64,7 @@ namespace CaloriesPlan.API.Controllers
                     },
                 };
 
-                return this.Ok(users);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            return this.Ok(users);
         }
 
         //GET api/accounts/profile
@@ -88,23 +72,16 @@ namespace CaloriesPlan.API.Controllers
         [Route("profile")]
         public IHttpActionResult GetUserProfile([FromUri] int? userID = null)
         {
-            try
-            {
-                var profile =
-                    new UserProfileDto {
-                        FirstName = "John",
-                        LastName = "Smith",
-                        Address = "Redmond, WA 98052-6399. UNITED STATES.",
-                        DateOfBirth = DateTime.Now.AddYears(38)
-                    };
+            var profile =
+                new UserProfileDto
+                {
+                    FirstName = "John",
+                    LastName = "Smith",
+                    Address = "Redmond, WA 98052-6399. UNITED STATES.",
+                    DateOfBirth = DateTime.Now.AddYears(38)
+                };
 
-                return this.Ok(profile);
-            }
-            catch
-            {
-                //add logging functionality
-                return this.InternalServerError();
-            }
+            return this.Ok(profile);
         }
 
         public class AUser
