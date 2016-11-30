@@ -25,7 +25,7 @@ namespace CaloriesPlan.API.ExceptionHandlers
             }
             catch (Exception ex)
             {
-                this.logger.Log(ex);
+                this.logger.Error(ex);
 
                 ExceptionResponseBuilder.HandleException(ctx, ex);
             }

@@ -2,13 +2,17 @@
 
 using CaloriesPlan.UTL.Loggers.Abstractions;
 
+using NLog;
+
 namespace CaloriesPlan.UTL.Loggers
 {
     public class NLogger : IApplicationLogger
     {
-        public void Log(Exception ex)
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        public void Error(Exception ex)
         {
-            //TODO:
+            logger.Error(ex);
         }
     }
 }

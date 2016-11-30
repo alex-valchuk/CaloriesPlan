@@ -4,6 +4,6 @@ namespace CaloriesPlan.UTL.Loggers.Abstractions
 {
     public interface IApplicationLogger
     {
-        void Log(Exception ex);
+        void Error(Exception ex);
     }
 }

@@ -31,7 +31,7 @@ namespace CaloriesPlan.API.Providers
             }
             catch (Exception ex)
             {
-                this.applicationLogger.Log(ex);
+                this.applicationLogger.Error(ex);
             }
 
             return Task.FromResult<object>(null);
@@ -56,7 +56,7 @@ namespace CaloriesPlan.API.Providers
             }
             catch (Exception ex)
             {
-                this.applicationLogger.Log(ex);
+                this.applicationLogger.Error(ex);
             }
         }
 
@@ -71,7 +71,7 @@ namespace CaloriesPlan.API.Providers
             }
             catch (Exception ex)
             {
-                this.applicationLogger.Log(ex);
+                this.applicationLogger.Error(ex);
             }
 
             return Task.FromResult<object>(null);
