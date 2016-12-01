@@ -1,23 +1,22 @@
-﻿using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Web;
-using System.Web.Http;
 using System.Web.Http.Controllers;
 
-using CaloriesPlan.UTL.Const;
+using CaloriesPlan.API.Filters.Base;
 
 namespace CaloriesPlan.API.Filters
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
-    public class AuthorizedInRouteOrHasOneOfRoles : AuthorizeAttribute
+    public class AuthorizedInRouteOrHasOneOfRoles : AuthorizedInQueryOrHasOneOfRoles
     {
-        private readonly string[] supportedRoles;
-
         public AuthorizedInRouteOrHasOneOfRoles(params string[] supportedRoles)
+            : base(authorizeIfParameterNotDefined: false, supportedRoles: supportedRoles)
         {
-            this.supportedRoles = supportedRoles;
+        }
+
+        protected override IDictionary<string, object> GetActionParameters(HttpActionContext actionContext)
+        {
+            return actionContext.Request.GetRouteData().Values;
         }
 
         public override void OnAuthorization(HttpActionContext actionContext)
@@ -31,29 +30,6 @@ namespace CaloriesPlan.API.Filters
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden);
-        }
-
-        private bool Authorized(HttpActionContext actionContext)
-        {
-            var currentUser = HttpContext.Current.User;
-            foreach (var supportedRole in this.supportedRoles)
-            {
-                if (currentUser.IsInRole(supportedRole))
-                    return true;
-            }
-
-            var isOwner = false;
-
-            var routeParams = actionContext.Request.GetRouteData().Values;
-            if (routeParams.ContainsKey(AuthorizationParams.ParameterUserName))
-            {
-                var currentUserName = currentUser.Identity.Name;
-                var requestUserName = (string)routeParams[AuthorizationParams.ParameterUserName];
-
-                isOwner = (currentUserName.ToLower() == requestUserName.ToLower());
-            }
-
-            return isOwner;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace CaloriesPlan.API
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+            //config.Filters.Add(new AuthorizeAttribute());
             //config.Filters.Add(new ApplicationExceptionFilterAttribute());// handles exceptions from controllers
 
             config.Services.Replace(typeof(IExceptionHandler), new PassthroughExceptionHandler());// handles all exceptions that were not intercepted

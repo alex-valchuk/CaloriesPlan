@@ -8,7 +8,6 @@ using CaloriesPlan.UTL.Const;
 
 namespace CaloriesPlan.API.Controllers
 {
-    [Authorize]
     [RoutePrefix("api/accounts")]
     public class AccountsController : ControllerBase
     {
