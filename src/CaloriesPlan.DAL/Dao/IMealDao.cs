@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 using CaloriesPlan.DAL.DataModel.Abstractions;
 
@@ -14,6 +15,7 @@ namespace CaloriesPlan.DAL.Dao
         void Create(IMeal dbMeal);
         void Update(IMeal dbMeal);
         void Delete(IMeal dbMeal);
-        int GetUserMealsCount(string userID);
+        int Count(Expression<Func<IMeal, bool>> predicate);
+        bool Contains(Expression<Func<IMeal, bool>> predicate);
     }
 }

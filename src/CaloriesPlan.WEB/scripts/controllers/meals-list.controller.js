@@ -1,5 +1,5 @@
 ﻿angular.module('appModule')
-    .controller('NutritionReportController', ['$scope', '$controller', '$routeParams', '$filter', 'MealService', 'AccountService', 'Navigator',
+    .controller('MealsListController', ['$scope', '$controller', '$routeParams', '$filter', 'MealService', 'AccountService', 'Navigator',
         function ($scope, $controller, $routeParams, $filter, mealService, accountService, navigator) {
             $controller('BaseSecuredController', {
                 $scope: $scope
@@ -118,7 +118,7 @@
             };
 
             $scope.fillForm = function () {
-                mealService.getNutritionReport($routeParams.userName, $scope.filter)
+                mealService.getMeals($routeParams.userName, $scope.filter)
                     .then(
                         onSuccessfulGettingNutritionReport,
                         $scope.onFailure);
@@ -133,7 +133,7 @@
             }
 
             $scope.deleteMeal = function (mealID) {
-                mealService.deleteMeal($routeParams.userName, mealID)
+                mealService.deleteMeal(mealID)
                     .then(
                         onSuccessfulDeletingMeal,
                         $scope.onFailure);

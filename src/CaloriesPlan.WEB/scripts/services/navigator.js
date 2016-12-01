@@ -6,7 +6,7 @@
             }
 
             this.goToNutritionReport = function (userName) {
-                goTo("nutrition-report/" + userName);
+                goTo("meals/" + userName);
             }
 
             this.goToAccountsList = function () {
@@ -18,7 +18,12 @@
             }
 
             this.goToMeal = function (userName, mealID) {
-                goTo("nutrition-report/" + userName + "/meal/" + mealID);
+                var uri = "meals/" + userName + "/meal/";
+                if (mealID > 0) {
+                    uri += mealID;
+                }
+
+                goTo(uri);
             }
 
             this.goBack = function () {

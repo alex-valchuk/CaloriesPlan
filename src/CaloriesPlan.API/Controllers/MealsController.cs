@@ -21,8 +21,7 @@ namespace CaloriesPlan.API.Controllers
 
         //GET api/meals/
         [HttpGet]
-        [Route("")]
-        [AuthorizedOrOwnerParamOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
+        [AuthorizedInParamOrHasOneOfRoles(AuthorizationParams.RoleAdmin)]
         public IHttpActionResult Get(
             [FromUri] string userName = null,
             [FromUri] InMealReportFilterDto filter = null)
@@ -40,53 +39,76 @@ namespace CaloriesPlan.API.Controllers
             return this.Ok(userMeals);
         }
 
-        //GET api/meals/{userName}/meal/{id}
-        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
-        [Route(ParamUserName + "/meal/" + ParamID)]
+        //GET api/meals/{id}
+        [Route(ParamID)]
         public IHttpActionResult Get(int id)
         {
-            var meal = this.mealService.GetMealByID(id);
-            return this.Ok(meal);
+            if (this.IsAuthorizedUserAnAdmin() ||
+                this.mealService.IsOwnerOfMeal(this.User.Identity.Name, id))
+            {
+                var meal = this.mealService.GetMealByID(id);
+
+                if (meal != null)
+                {
+                    return this.Ok(meal);
+                }
+
+                return this.NotFound();
+            }
+
+            return this.Unauthorized();
         }
 
-        //POST api/meals/{userName}/meal
+        //POST api/meals/?userName
         [HttpPost]
-        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
-        [Route(ParamUserName + "/meal")]
-        public IHttpActionResult Post(string userName, InMealDto mealDto)
+        [AuthorizedInParamOrHasOneOfRoles(AuthorizationParams.RoleAdmin)]
+        public IHttpActionResult Post(InMealDto mealDto, [FromUri] string userName = null)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(this.ModelState);
             }
+
+            if (string.IsNullOrEmpty(userName))
+                userName = this.User.Identity.Name;
 
             this.mealService.CreateMeal(userName, mealDto);
             return this.Ok();
         }
 
-        //PUT api/meals/{userName}/meal/{id}
+        //PUT api/meals/{id}
         [HttpPut]
-        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
-        [Route(ParamUserName + "/meal/" + ParamID)]
+        [Route(ParamID)]
         public IHttpActionResult Put(int id, InMealDto mealDto)
         {
-            if (!this.ModelState.IsValid)
+            if (this.IsAuthorizedUserAnAdmin() ||
+                this.mealService.IsOwnerOfMeal(this.User.Identity.Name, id))
             {
-                return this.BadRequest(this.ModelState);
+                if (!this.ModelState.IsValid)
+                {
+                    return this.BadRequest(this.ModelState);
+                }
+
+                this.mealService.UpdateMeal(id, mealDto);
+                return this.Ok();
             }
 
-            this.mealService.UpdateMeal(id, mealDto);
-            return this.Ok();
+            return this.Unauthorized();
         }
 
-        //DELETE api/meals/{userName}/meal/{id}
+        //DELETE api/meals/{id}
         [HttpDelete]
-        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin)]
-        [Route(ParamUserName + "/meal/" + ParamID)]
+        [Route(ParamID)]
         public IHttpActionResult Delete(int id)
         {
-            this.mealService.DeleteMeal(id);
-            return this.Ok();
+            if (this.IsAuthorizedUserAnAdmin() ||
+                this.mealService.IsOwnerOfMeal(this.User.Identity.Name, id))
+            {
+                this.mealService.DeleteMeal(id);
+                return this.Ok();
+            }
+
+            return this.Unauthorized();
         }
     }
 }

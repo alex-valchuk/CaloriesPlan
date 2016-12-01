@@ -12,5 +12,6 @@ namespace CaloriesPlan.BLL.Services
         void CreateMeal(string userName, InMealDto mealDto);
         void UpdateMeal(int id, InMealDto mealDto);
         void DeleteMeal(int id);
+        bool IsOwnerOfMeal(string userName, int mealID);
     }
 }

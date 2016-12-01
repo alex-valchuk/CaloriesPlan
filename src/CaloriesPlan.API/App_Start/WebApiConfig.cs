@@ -30,7 +30,7 @@ namespace CaloriesPlan.API
             config.Routes.MapHttpRoute(
                 name: "DefaultRoute",
                 routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional });
+                defaults: new { controller = RouteParameter.Optional, id = RouteParameter.Optional });
 
 
             var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();

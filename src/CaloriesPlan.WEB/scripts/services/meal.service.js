@@ -1,6 +1,6 @@
 ﻿angular.module('appModule')
-    .service('MealService', ['$http',
-        function ($http) {
+    .service('MealService', ['$http', '$routeParams',
+        function ($http, $routeParams) {
             this.baseUrl = "http://localhost/CaloriesPlan/api/meals/";
 
             var unableToContactServer = "Unable to contact server; please, try again later.";
@@ -20,7 +20,7 @@
                     : number;
             }
 
-            this.getNutritionReport = function (userName, filter) {
+            this.getMeals = function (userName, filter) {
                 var request = {
                     method: "GET",
                     url: this.baseUrl +
@@ -38,10 +38,10 @@
                 return promise;
             }
 
-            this.getMeal = function (userName, mealID) {
+            this.getMeal = function (mealID) {
                 var request = {
                     method: "GET",
-                    url: this.baseUrl + userName + "/meal/" + mealID,
+                    url: this.baseUrl + mealID,
                     headers: this.headers.json
                 };
 
@@ -49,11 +49,13 @@
                 return promise;
             }
 
-            this.saveMeal = function (userName, meal, successCallback, failureCallback) {
+            this.saveMeal = function (userName, meal) {
                 var apiMethod = (meal.id > 0) ? "PUT" : "POST";
-                var apiUrl = this.baseUrl + userName + "/meal/";
+                var apiUrl = this.baseUrl;
                 if (meal.id > 0) {
                     apiUrl += meal.id;
+                } else {
+                    apiUrl += "?userName=" + userName;
                 }
 
                 var request = {
@@ -67,10 +69,10 @@
                 return promise;
             }
 
-            this.deleteMeal = function (userName, mealID) {
+            this.deleteMeal = function (mealID) {
                 var request = {
                     method: "DELETE",
-                    url: this.baseUrl + userName + "/meal/" + mealID,
+                    url: this.baseUrl + mealID,
                     headers: this.headers.json
                 };
 

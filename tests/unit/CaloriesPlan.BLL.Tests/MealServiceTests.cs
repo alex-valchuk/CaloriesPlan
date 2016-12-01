@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -279,6 +280,88 @@ namespace CaloriesPlan.BLL.Tests
 
             //assert
             mealDaoMock.Verify(d => d.Delete(meal));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException), "UserName parameter cannot be null")]
+        public void CanObtainMeal_AuthorizedUserNameIsNull_ArgumentNullExceptionThrown()
+        {
+            //arrange
+            string authorizedUserName = null;
+            int mealID = 1;
+
+            //act
+            this.mealService.IsOwnerOfMeal(authorizedUserName, mealID);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException), "UserName parameter cannot be empty")]
+        public void IsOwnerOfMeal_AuthorizedUserNameIsEmpty_ArgumentNullExceptionThrown()
+        {
+            //arrange
+            string userName = "";
+            int mealID = 1;
+
+            //act
+            this.mealService.IsOwnerOfMeal(userName, mealID);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "MealID parameter should be more than 0")]
+        public void IsOwnerOfMeal_MealIDEquals0_ArgumentNullExceptionThrown()
+        {
+            //arrange
+            string userName = "asd";
+            int mealID = 0;
+
+            //act
+            this.mealService.IsOwnerOfMeal(userName, mealID);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(MealDoesNotExistException))]
+        public void IsOwnerOfMeal_UserDoesNotExist_MealDoesNotExistExceptionThrown()
+        {
+            //arrange
+            string userName = "asd";
+            int mealID = 1;
+
+            //act
+            this.mealService.IsOwnerOfMeal(userName, mealID);
+        }
+
+        [TestMethod]
+        public void IsOwnerOfMeal_NotUserMeal_FalseReturned()
+        {
+            //arrange
+            string userName = "asd";
+            int mealID = 1;
+
+            this.userDaoMock.Setup(d => d.GetUserByName(userName)).Returns(Mock.Of<IUser>());
+            //this.mealDaoMock.Setup(d => d.Contains(It.IsAny<Expression<Func<IMeal, bool>>>())).Returns(false);
+
+            //act
+            var actual = this.mealService.IsOwnerOfMeal(userName, mealID);
+
+            //assert
+            Assert.IsFalse(actual);
+        }
+
+        [TestMethod]
+        public void IsOwnerOfMeal_IsUserMeal_TrueReturned()
+        {
+            //arrange
+            string userName = "asd";
+            int mealID = 1;
+
+            this.userDaoMock.Setup(d => d.GetUserByName(userName)).Returns(Mock.Of<IUser>());
+            this.mealDaoMock.Setup(d => d.Contains(It.IsAny<Expression<Func<IMeal, bool>>>())).Returns(true);
+
+            //act
+            var actual = this.mealService.IsOwnerOfMeal(userName, mealID);
+
+            //assert
+            Assert.IsTrue(actual);
         }
 
         private InMealDto GetValidMealDto()

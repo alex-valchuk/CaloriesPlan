@@ -19,12 +19,11 @@
             }
 
             function fillForm() {
-                var userName = $routeParams.userName;
                 var mealID = $routeParams.mealID;
                 if (mealID > 0) {
                     $scope.mealOperationName = "Edit Meal";
 
-                    mealService.getMeal(userName, mealID)
+                    mealService.getMeal(mealID)
                         .then(
                             onSuccessfulGettingMeal,
                             $scope.onFailure);

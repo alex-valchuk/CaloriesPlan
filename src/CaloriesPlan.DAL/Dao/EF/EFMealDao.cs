@@ -7,6 +7,7 @@ using System.Linq;
 using CaloriesPlan.DAL.DataModel;
 using CaloriesPlan.DAL.DataModel.Abstractions;
 using CaloriesPlan.DAL.Dao.EF.Base;
+using System.Linq.Expressions;
 
 namespace CaloriesPlan.DAL.Dao.EF
 {
@@ -40,12 +41,6 @@ namespace CaloriesPlan.DAL.Dao.EF
             return query.ToList<IMeal>();
         }
 
-        public int GetUserMealsCount(string userID)
-        {
-            return
-                this.dbContext.Meals.Count(m => m.UserID == userID);
-        }
-
         public IMeal GetMealByID(int mealID)
         {
             return 
@@ -68,6 +63,18 @@ namespace CaloriesPlan.DAL.Dao.EF
         {
             this.dbContext.Meals.Remove((Meal)dbMeal);
             this.dbContext.SaveChanges();
+        }
+
+        public int Count(Expression<Func<IMeal, bool>> predicate)
+        {
+            var count = this.dbContext.Meals.Count(predicate);
+            return count;
+        }
+
+        public bool Contains(Expression<Func<IMeal, bool>> predicate)
+        {
+            var contains = this.dbContext.Meals.Any(predicate);
+            return contains;
         }
     }
 }

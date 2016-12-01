@@ -4,7 +4,7 @@
             $scope.unableToContactServer = "Unable to contact server; please, try again later.";
             $scope.notAvailableResource = "Requested resource is not available.";
             $scope.internalServerError = "Internal server error.";
-            $scope.notFound = "The requested resource is not found.";
+            $scope.notFound = "The resource you are trying to get is not found.";
 
             $scope.errors = [];
 
@@ -45,6 +45,12 @@
                                 } else {
                                     $scope.toastFailure($scope.notAvailableResource);
                                 }
+
+                                navigator.goBack();
+                                break;
+
+                            case 404:
+                                $scope.toastFailure($scope.notFound);
 
                                 navigator.goBack();
                                 break;

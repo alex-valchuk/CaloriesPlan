@@ -1,7 +1,9 @@
 ﻿angular.module('appModule')
     .service('AccountService', ['$http', '$cookieStore', '$q',
         function ($http, $cookieStore, $q) {
-            this.baseUrl = "http://localhost/CaloriesPlan/api/accounts/";
+            this.subscribersUrl = "http://localhost/CaloriesPlan/api/subscribers/";
+            this.accountsUrl = "http://localhost/CaloriesPlan/api/accounts/";
+            this.rolesUrl = "http://localhost/CaloriesPlan/api/roles/";
 
             var userData = {
                 isAuthenticated: false,
@@ -23,7 +25,7 @@
             this.signUp = function (signUpModel) {
                 var request = {
                     method: 'POST',
-                    url: this.baseUrl + "signup",
+                    url: this.accountsUrl + "signup",
                     headers: this.headers.json,
                     data: signUpModel
                 };
@@ -35,7 +37,7 @@
             this.signIn = function (signInModel) {
                 var request = {
                     method: 'POST',
-                    url: this.baseUrl + "signin",
+                    url: this.accountsUrl + "signin",
                     headers: this.headers.form,
                     data: 'grant_type=password&userName=' + signInModel.userName + '&password=' + signInModel.password,
                 };
@@ -62,7 +64,7 @@
             this.signOut = function () {
                 var request = {
                     method: 'POST',
-                    url: this.baseUrl + "signout",
+                    url: this.accountsUrl + "signout",
                 };
 
                 var promise = $http(request);
@@ -102,7 +104,7 @@
             this.getAccounts = function () {
                 var request = {
                     method: 'GET',
-                    url: this.baseUrl,
+                    url: this.accountsUrl,
                     headers: this.headers.json
                 };
 
@@ -113,7 +115,7 @@
             this.getAccount = function (userName) {
                 var request = {
                     method: 'GET',
-                    url: this.baseUrl + userName,
+                    url: this.accountsUrl + userName,
                     headers: this.headers.json
                 };
 
@@ -124,7 +126,7 @@
             this.saveAccount = function (accountModel) {
                 var request = {
                     method: 'PUT',
-                    url: this.baseUrl + accountModel.userName,
+                    url: this.accountsUrl + accountModel.userName,
                     headers: this.headers.json,
                     data: {
                         "dailyCaloriesLimit": accountModel.dailyCaloriesLimit
@@ -138,7 +140,7 @@
             this.deleteAccount = function (userName) {
                 var request = {
                     method: "DELETE",
-                    url: this.baseUrl + userName,
+                    url: this.accountsUrl + userName,
                     headers: this.headers.json
                 };
 
@@ -149,7 +151,7 @@
             this.getUserRoles = function (userName) {
                 var request = {
                     method: "GET",
-                    url: this.baseUrl + userName + "/user-roles",
+                    url: this.rolesUrl + "?userName=" + userName,
                     headers: this.headers.json
                 };
 
@@ -160,7 +162,7 @@
             this.getNonUserRoles = function (userName) {
                 var request = {
                     method: "GET",
-                    url: this.baseUrl + userName + "/not-user-roles",
+                    url: this.rolesUrl + "?userName=" + userName + "&getUserRoles=false",
                     headers: this.headers.json
                 };
 
@@ -171,8 +173,11 @@
             this.addUserRole = function (userName, roleName) {
                 var request = {
                     method: "POST",
-                    url: this.baseUrl + userName + "/user-roles/" + roleName,
-                    headers: this.headers.json
+                    url: this.rolesUrl + "?userName=" + userName,
+                    headers: this.headers.json,
+                    data: {
+                        roleName: roleName
+                    }
                 };
 
                 var promise = $http(request);
@@ -182,8 +187,11 @@
             this.deleteUserRole = function (userName, roleName) {
                 var request = {
                     method: "DELETE",
-                    url: this.baseUrl + userName + "/user-roles/" + roleName,
-                    headers: this.headers.json
+                    url: this.rolesUrl + roleName + "?userName=" + userName,
+                    headers: this.headers.json,
+                    data: {
+                        roleName: roleName
+                    }
                 };
 
                 var promise = $http(request);
@@ -193,7 +201,7 @@
             this.getSubscribers = function (userName) {
                 var request = {
                     method: "GET",
-                    url: this.baseUrl + userName + "/subscribers",
+                    url: this.subscribersUrl + "?userName=" + userName,
                     headers: this.headers.json
                 };
 

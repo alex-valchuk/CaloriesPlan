@@ -55,7 +55,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             var days = (filter.DateTo.Value - filter.DateFrom.Value).TotalDays + 1;
             filter.DateTo = filter.DateFrom.Value.AddDays(days);
 
-            var totalItemsCount = this.mealDao.GetUserMealsCount(user.Id);
+            var totalItemsCount = this.mealDao.Count(m => m.UserID == user.Id);
 
             var nutritionReport = new OutNutritionReportDto(user.DailyCaloriesLimit, totalItemsCount);
 
@@ -136,6 +136,26 @@ namespace CaloriesPlan.BLL.Services.Impl
                 throw new MealDoesNotExistException();
 
             this.mealDao.Delete(dbMeal);
+        }
+
+        public bool IsOwnerOfMeal(string userName, int mealID)
+        {
+            if (string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException("userName");
+
+            if (mealID <= 0)
+                throw new ArgumentException("MealID should be more than 0");
+
+            var user = this.userDao.GetUserByName(userName);
+            if (user == null)
+                throw new MealDoesNotExistException();
+
+            var contains = this.mealDao
+                .Contains(m =>
+                    m.UserID == user.Id &&
+                    m.ID == mealID);
+
+            return contains;
         }
 
         private List<OutMealDto> ConvertToDtoList(IList<IMeal> dbMeals)

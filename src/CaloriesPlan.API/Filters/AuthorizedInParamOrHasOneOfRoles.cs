@@ -11,11 +11,11 @@ using CaloriesPlan.UTL.Const;
 namespace CaloriesPlan.API.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
-    public class OwnerRouteOrIsInOneOfRoles : AuthorizeAttribute
+    public class AuthorizedInParamOrHasOneOfRoles : AuthorizeAttribute
     {
         private readonly string[] supportedRoles;
 
-        public OwnerRouteOrIsInOneOfRoles(params string[] supportedRoles)
+        public AuthorizedInParamOrHasOneOfRoles(params string[] supportedRoles)
         {
             this.supportedRoles = supportedRoles;
         }
@@ -42,18 +42,24 @@ namespace CaloriesPlan.API.Filters
                     return true;
             }
 
-            var isOwner = false;
+            var isAllowed = false;
 
-            var routeParams = actionContext.Request.GetRouteData().Values;
-            if (routeParams.ContainsKey(AuthorizationParams.ParameterUserName))
+            var queryParams = actionContext.Request.GetQueryNameValuePairs();
+            if (queryParams != null &&
+                queryParams.Any(p => p.Key.ToLower() == AuthorizationParams.ParameterUserName.ToLower()))
             {
                 var currentUserName = currentUser.Identity.Name;
-                var requestUserName = (string)routeParams[AuthorizationParams.ParameterUserName];
+                var requestUserName = queryParams.First(p => p.Key.ToLower() == AuthorizationParams.ParameterUserName.ToLower()).Value;
 
-                isOwner = (currentUserName.ToLower() == requestUserName.ToLower());
+                isAllowed = (currentUserName.ToLower() == requestUserName.ToLower());
+            }
+            else
+            {
+                isAllowed = true;
             }
 
-            return isOwner;
+
+            return isAllowed;
         }
     }
 }

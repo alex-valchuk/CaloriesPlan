@@ -1,5 +1,5 @@
 ﻿<my-menu></my-menu>
-<div ng-controller="NutritionReportController" ng-init="init()" class="container">
+<div ng-controller="MealsListController" ng-init="init()" class="container">
     <h2 class="form-group">{{requestedUser}}'s Nutrition Report</h2>
 
     <div class="form-group" ng-repeat="error in errors">
@@ -53,7 +53,7 @@
             <div class="col-md-6"></div>
             <div class="col-md-6">
                 <span class="pull-right">
-                    <a href="#/nutrition-report/{{requestedUser}}/meal" class="btn btn-primary">Add New Meal</a>
+                    <a class="btn btn-primary" ng-click="editMeal()">Add New Meal</a>
                 </span>
             </div>
         </div>

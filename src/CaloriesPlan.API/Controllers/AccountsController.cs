@@ -19,11 +19,30 @@ namespace CaloriesPlan.API.Controllers
             this.accountService = accountService;
         }
 
+        //GET api/accounts
+        [HttpGet]
+        [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
+        public IHttpActionResult Get()
+        {
+            var accounts = this.accountService.GetAccounts();
+            return this.Ok(accounts);
+        }
+
+        //GET api/accounts/:userName
+        [HttpGet]
+        [Route(ParamUserName)]
+        [AuthorizedInRouteOrHasOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
+        public IHttpActionResult Get(string userName)
+        {
+            var account = this.accountService.GetAccount(userName);
+            return this.Ok(account);
+        }
+
         //POST api/accounts/signup
+        [HttpPost]
         [AllowAnonymous]
         [Route("signup")]
-        [HttpPost]
-        public IHttpActionResult SignUp(InSignUpDto signUpDto)
+        public IHttpActionResult Post(InSignUpDto signUpDto)
         {
             if (!this.ModelState.IsValid)
             {
@@ -35,58 +54,17 @@ namespace CaloriesPlan.API.Controllers
         }
 
         //POST api/accounts/signout
-        [AllowAnonymous]
-        [Route("signout")]
         [HttpPost]
-        public IHttpActionResult SignOut()
+        [Route("signout")]
+        public IHttpActionResult Post()
         {
-            //TODO:
             return this.Ok();
-        }
-
-        //GET api/accounts
-        [HttpGet]
-        [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
-        public IHttpActionResult Get()
-        {
-            var accounts = this.accountService.GetAccounts();
-            return this.Ok(accounts);
-        }
-
-        //GET api/accounts/{userName}/user-roles
-        [HttpGet]
-        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
-        [Route(ParamUserName + "/user-roles")]
-        public IHttpActionResult GetUserRoles(string userName)
-        {
-            var userRoles = this.accountService.GetUserRoles(userName);
-            return this.Ok(userRoles);
-        }
-
-        //GET api/accounts/{userName}/not-user-roles
-        [HttpGet]
-        [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
-        [Route(ParamUserName + "/not-user-roles")]
-        public IHttpActionResult GetNotUserRoles(string userName)
-        {
-            var userRoles = this.accountService.GetNotUserRoles(userName);
-            return this.Ok(userRoles);
-        }
-
-        //GET api/accounts/:userName
-        [HttpGet]
-        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
-        [Route(ParamUserName)]
-        public IHttpActionResult Get(string userName)
-        {
-            var account = this.accountService.GetAccount(userName);
-            return this.Ok(account);
         }
 
         //PUT api/accounts/:userName
         [HttpPut]
-        [OwnerRouteOrIsInOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
         [Route(ParamUserName)]
+        [AuthorizedInRouteOrHasOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
         public IHttpActionResult Put(string userName, InAccountDto accountDto)
         {
             if (!this.ModelState.IsValid)
@@ -100,8 +78,8 @@ namespace CaloriesPlan.API.Controllers
 
         //DELETE api/accounts/:userName
         [HttpDelete]
-        [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
         [Route(ParamUserName)]
+        [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
         public IHttpActionResult Delete(string userName)
         {
             var authenticatedName = this.User.Identity.Name;
@@ -112,35 +90,6 @@ namespace CaloriesPlan.API.Controllers
 
             this.accountService.DeleteAccount(userName);
             return this.Ok();
-        }
-
-        //POST api/accounts/{userName}/user-roles/{roleName}
-        [HttpPost]
-        [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
-        [Route(ParamUserName + "/user-roles/" + ParamRoleName)]
-        public IHttpActionResult Post(string userName, string roleName)
-        {
-            this.accountService.AddUserRole(userName, roleName);
-            return this.Ok();
-        }
-
-        //DELETE api/accounts/{userName}/user-roles/{roleName}
-        [HttpDelete]
-        [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
-        [Route(ParamUserName + "/user-roles/" + ParamRoleName)]
-        public IHttpActionResult Delete(string userName, string roleName)
-        {
-            this.accountService.DeleteUserRole(userName, roleName);
-            return this.Ok();
-        }
-
-        //GET api/accounts/{userName}/subscribers
-        [HttpGet]
-        [Route(ParamUserName + "/subscribers")]
-        public IHttpActionResult GetSubscribers(string userName)
-        {
-            var subscribers = this.accountService.GetSubscribers(userName);
-            return this.Ok(subscribers);
         }
     }
 }

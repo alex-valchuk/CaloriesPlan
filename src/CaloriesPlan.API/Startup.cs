@@ -43,6 +43,8 @@ namespace CaloriesPlan.API
                 //global exception handling
                 .Use(async (ctx, next) => await exceptionDecorator.DecorateRequest(ctx, next))
                 .UseWebApi(config);
+
+            config.EnsureInitialized();
         }
 
         public void ConfigureOAuth(IAppBuilder app)

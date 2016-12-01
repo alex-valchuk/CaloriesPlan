@@ -15,11 +15,11 @@
               {
                   templateUrl: 'scripts/views/sign-up.html'
               })
-          .when('/nutrition-report/:userName',
+          .when('/meals/:userName',
               {
-                  templateUrl: 'scripts/views/nutrition-report.html'
+                  templateUrl: 'scripts/views/meals-list.html'
               })
-          .when('/nutrition-report/:userName/meal/:mealID?',
+          .when('/meals/:userName/meal/:mealID?',
               {
                   templateUrl: 'scripts/views/meal.html'
               })
