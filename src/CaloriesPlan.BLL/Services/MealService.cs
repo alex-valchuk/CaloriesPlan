@@ -9,19 +9,22 @@ using CaloriesPlan.DTO.In;
 using CaloriesPlan.DTO.Out;
 using CaloriesPlan.BLL.Exceptions;
 using CaloriesPlan.BLL.Services.Abstractions;
+using CaloriesPlan.BLL.Mappers.Abstractions;
 
 namespace CaloriesPlan.BLL.Services
 {
     public class MealService : IMealService
     {
         private readonly IConfigProvider configProvider;
+        private readonly IMealMapper mealMapper;
 
         private readonly IMealDao mealDao;
         private readonly IUserDao userDao;
 
-        public MealService(IConfigProvider configProvider, IMealDao mealDao, IUserDao userDao)
+        public MealService(IConfigProvider configProvider, IMealMapper mealMapper, IMealDao mealDao, IUserDao userDao)
         {
             this.configProvider = configProvider;
+            this.mealMapper = mealMapper;
 
             this.mealDao = mealDao;
             this.userDao = userDao;
@@ -69,10 +72,7 @@ namespace CaloriesPlan.BLL.Services
                 filter.TimeFrom.Value, filter.TimeTo.Value,
                 offset, rows);
 
-            if (dbMeals != null)
-            {
-                nutritionReport.Meals = this.ConvertToDtoList(dbMeals);
-            }
+            nutritionReport.Meals = this.mealMapper.ConvertToDtoList(dbMeals);
 
             return nutritionReport;
         }
@@ -83,7 +83,7 @@ namespace CaloriesPlan.BLL.Services
             if (dbMeal == null)
                 return null;
 
-            var dtoMeal = this.ConvertToDto(dbMeal);
+            var dtoMeal = this.mealMapper.ConvertToDto(dbMeal);
             return dtoMeal;
         }
 
@@ -158,37 +158,6 @@ namespace CaloriesPlan.BLL.Services
                     m.ID == mealID);
 
             return contains;
-        }
-
-        private List<OutMealDto> ConvertToDtoList(IList<IMeal> dbMeals)
-        {
-            if (dbMeals == null)
-                return null;
-
-
-            var dtoMeals = new List<OutMealDto>();
-
-            foreach (var dbMeal in dbMeals)
-            {
-                var dto = this.ConvertToDto(dbMeal);
-                dtoMeals.Add(dto);
-            }
-
-            return dtoMeals;
-        }
-
-        private OutMealDto ConvertToDto(IMeal dbMeal)
-        {
-            if (dbMeal == null)
-                return null;
-
-            var dto = new OutMealDto();
-            dto.ID = dbMeal.ID;
-            dto.Calories = dbMeal.Calories;
-            dto.Text = dbMeal.Text;
-            dto.EatingDate = dbMeal.EatingDate;
-
-            return dto;
         }
     }
 }

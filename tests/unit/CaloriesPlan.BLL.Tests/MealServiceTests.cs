@@ -14,6 +14,8 @@ using CaloriesPlan.DAL.Dao.Abstractions;
 using CaloriesPlan.DAL.DataModel.Abstractions;
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.UTL.Config.Abstractions;
+using CaloriesPlan.BLL.Mappers.Abstractions;
+using CaloriesPlan.DTO.Out;
 
 namespace CaloriesPlan.BLL.Tests
 {
@@ -21,6 +23,8 @@ namespace CaloriesPlan.BLL.Tests
     public class MealServiceTests
     {
         private Mock<IConfigProvider> configProviderMock;
+        private Mock<IMealMapper> mealMapperMock;
+
         private Mock<IMealDao> mealDaoMock;
         private Mock<IUserDao> userDaoMock;
 
@@ -30,9 +34,12 @@ namespace CaloriesPlan.BLL.Tests
         public void Setup()
         {
             this.configProviderMock = new Mock<IConfigProvider>();
+            this.mealMapperMock = new Mock<IMealMapper>();
+
             this.mealDaoMock = new Mock<IMealDao>();
             this.userDaoMock = new Mock<IUserDao>();
-            this.mealService = new MealService(configProviderMock.Object, mealDaoMock.Object, userDaoMock.Object);
+
+            this.mealService = new MealService(configProviderMock.Object, mealMapperMock.Object, mealDaoMock.Object, userDaoMock.Object);
         }
 
         [TestMethod]
@@ -133,6 +140,8 @@ namespace CaloriesPlan.BLL.Tests
                 It.IsAny<int>(),
                 It.IsAny<int>())).Returns(dbMealsTask);
 
+            this.mealMapperMock.Setup(mm => mm.ConvertToDtoList(dbMeals)).Returns(new List<OutMealDto> { Mock.Of<OutMealDto>() });
+
             //act
             var report = await this.mealService.GetUserNutritionReportAsync(userName, filter);
 
@@ -154,8 +163,11 @@ namespace CaloriesPlan.BLL.Tests
         public async Task GetMealByIDAsync_MealExists_MealReturned()
         {
             //arrange
-            var dbMealTask = Task.FromResult(Mock.Of<IMeal>());
+            var dbMeal = Mock.Of<IMeal>();
+            var dbMealTask = Task.FromResult(dbMeal);
+
             this.mealDaoMock.Setup(md => md.GetMealByIDAsync(It.IsAny<int>())).Returns(dbMealTask);
+            this.mealMapperMock.Setup(mm => mm.ConvertToDto(dbMeal)).Returns(new OutMealDto());
 
             //act
             var meal = await this.mealService.GetMealByIDAsync(It.IsAny<int>());

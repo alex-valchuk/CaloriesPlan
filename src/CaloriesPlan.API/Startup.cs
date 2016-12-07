@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 using Microsoft.Practices.Unity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 
+using AutoMapper;
 using Owin;
 
 using CaloriesPlan.BLL.Services.Abstractions;
@@ -18,6 +20,11 @@ using CaloriesPlan.UTL.Loggers;
 using CaloriesPlan.API.Providers;
 using CaloriesPlan.API.ExceptionHandlers.Abstractions;
 using CaloriesPlan.API.ExceptionHandlers;
+using CaloriesPlan.DAL.DataModel;
+using CaloriesPlan.DTO.Out;
+using CaloriesPlan.BLL.Mappers.Abstractions;
+using CaloriesPlan.BLL.Mappers.AutoMappers;
+using CaloriesPlan.DAL.DataModel.Abstractions;
 
 [assembly: OwinStartup(typeof(CaloriesPlan.API.Startup))]
 namespace CaloriesPlan.API
@@ -33,6 +40,7 @@ namespace CaloriesPlan.API
             HttpConfiguration config = new HttpConfiguration();
             
             this.ConfigureDependencies(config);
+            this.ConfigureObjectMappings();
             this.ConfigureOAuth(app);
 
             WebApiConfig.Register(config);
@@ -79,6 +87,9 @@ namespace CaloriesPlan.API
             this.unityContainer.RegisterType<IConfigProvider, DesktopConfigProvider>(new HierarchicalLifetimeManager());
             this.unityContainer.RegisterType<IApplicationLogger, NLogger>(new HierarchicalLifetimeManager());
 
+            //object mappers
+            this.unityContainer.RegisterType<IMealMapper, MealAutoMapper>(new HierarchicalLifetimeManager());
+
             //dao
             this.unityContainer.RegisterType<IMealDao, EFMealDao>(new HierarchicalLifetimeManager());
             this.unityContainer.RegisterType<IUserDao, EFUserDao>(new HierarchicalLifetimeManager());
@@ -89,6 +100,11 @@ namespace CaloriesPlan.API
             this.unityContainer.RegisterType<IMealService, MealService>(new HierarchicalLifetimeManager());
 
             config.DependencyResolver = new UnityDependencyResolver(this.unityContainer);
+        }
+
+        private void ConfigureObjectMappings()
+        {
+            Mapper.Initialize(cfg => cfg.CreateMap<IMeal, OutMealDto>());
         }
     }
 }
