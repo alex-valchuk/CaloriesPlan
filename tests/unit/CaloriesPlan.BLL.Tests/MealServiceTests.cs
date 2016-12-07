@@ -7,13 +7,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
-using CaloriesPlan.BLL.Services;
-using CaloriesPlan.BLL.Services.Impl;
-using CaloriesPlan.DAL.Dao;
-using CaloriesPlan.DTO.In;
 using CaloriesPlan.BLL.Exceptions;
+using CaloriesPlan.BLL.Services.Abstractions;
+using CaloriesPlan.BLL.Services;
+using CaloriesPlan.DAL.Dao.Abstractions;
 using CaloriesPlan.DAL.DataModel.Abstractions;
-using CaloriesPlan.UTL;
+using CaloriesPlan.DTO.In;
+using CaloriesPlan.UTL.Config.Abstractions;
 
 namespace CaloriesPlan.BLL.Tests
 {

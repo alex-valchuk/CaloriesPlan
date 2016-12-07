@@ -1,4 +1,4 @@
-﻿namespace CaloriesPlan.UTL
+﻿namespace CaloriesPlan.UTL.Config.Abstractions
 {
     public interface IConfigProvider
     {

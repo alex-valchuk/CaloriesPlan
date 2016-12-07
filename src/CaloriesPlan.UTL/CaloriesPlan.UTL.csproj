@@ -45,8 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\Desktop\DesktopConfigProvider.cs" />
-    <Compile Include="Config\IConfigProvider.cs" />
+    <Compile Include="Config\DesktopConfigProvider.cs" />
+    <Compile Include="Config\Abstractions\IConfigProvider.cs" />
     <Compile Include="Const\AuthorizationParams.cs" />
     <Compile Include="Loggers\Abstractions\IApplicationLogger.cs" />
     <Compile Include="Loggers\NLogger.cs" />

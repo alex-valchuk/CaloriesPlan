@@ -3,7 +3,7 @@
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.DTO.Out;
 
-namespace CaloriesPlan.BLL.Services
+namespace CaloriesPlan.BLL.Services.Abstractions
 {
     public interface IMealService
     {

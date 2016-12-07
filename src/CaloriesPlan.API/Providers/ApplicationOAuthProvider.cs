@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Owin.Security.OAuth;
 
-using CaloriesPlan.BLL.Services;
+using CaloriesPlan.BLL.Services.Abstractions;
 using CaloriesPlan.UTL.Loggers.Abstractions;
 
 namespace CaloriesPlan.API.Providers

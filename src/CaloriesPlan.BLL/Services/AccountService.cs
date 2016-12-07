@@ -8,18 +8,18 @@ using Microsoft.Owin.Security;
 
 using Newtonsoft.Json;
 
-using CaloriesPlan.DAL.Dao;
-using CaloriesPlan.DTO.Out;
-using CaloriesPlan.UTL;
-using CaloriesPlan.BLL.Exceptions;
-using CaloriesPlan.BLL.Services.Impl.Base;
+using CaloriesPlan.UTL.Config.Abstractions;
+using CaloriesPlan.DAL.Dao.Abstractions;
 using CaloriesPlan.DTO.In;
+using CaloriesPlan.DTO.Out;
+using CaloriesPlan.BLL.Services.Abstractions;
+using CaloriesPlan.BLL.Exceptions;
 
 using Models = CaloriesPlan.DAL.DataModel.Abstractions;
 
-namespace CaloriesPlan.BLL.Services.Impl
+namespace CaloriesPlan.BLL.Services
 {
-    public class AccountService : ServiceBase, IAccountService, IOAuthService
+    public class AccountService : IAccountService, IOAuthService
     {
         private readonly IConfigProvider configProvider;
         private readonly IUserDao userDao;

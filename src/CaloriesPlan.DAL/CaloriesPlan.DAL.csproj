@@ -87,10 +87,10 @@
   <ItemGroup>
     <Compile Include="AppContext.cs" />
     <Compile Include="Dao\EF\EFUserDao.cs" />
-    <Compile Include="Dao\IMealDao.cs" />
+    <Compile Include="Dao\Abstractions\IMealDao.cs" />
     <Compile Include="Dao\EF\Base\EFDaoBase.cs" />
     <Compile Include="Dao\EF\EFMealDao.cs" />
-    <Compile Include="Dao\IUserDao.cs" />
+    <Compile Include="Dao\Abstractions\IUserDao.cs" />
     <Compile Include="DataModel\Abstractions\IMeal.cs" />
     <Compile Include="DataModel\Abstractions\IRole.cs" />
     <Compile Include="DataModel\Abstractions\IUser.cs" />

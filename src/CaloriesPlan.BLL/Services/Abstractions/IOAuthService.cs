@@ -2,7 +2,7 @@
 
 using Microsoft.Owin.Security;
 
-namespace CaloriesPlan.BLL.Services
+namespace CaloriesPlan.BLL.Services.Abstractions
 {
     public interface IOAuthService
     {

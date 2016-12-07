@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using CaloriesPlan.DAL.DataModel.Abstractions;
 
-namespace CaloriesPlan.DAL.Dao
+namespace CaloriesPlan.DAL.Dao.Abstractions
 {
     public interface IMealDao
     {

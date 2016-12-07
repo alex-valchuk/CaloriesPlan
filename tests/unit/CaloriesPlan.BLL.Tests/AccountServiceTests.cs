@@ -6,14 +6,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
-using CaloriesPlan.BLL.Services;
-using CaloriesPlan.BLL.Services.Impl;
-using CaloriesPlan.DAL.Dao;
-using CaloriesPlan.DTO.In;
-using CaloriesPlan.BLL.Exceptions;
-using CaloriesPlan.DAL.DataModel.Abstractions;
-using CaloriesPlan.UTL;
+using CaloriesPlan.UTL.Config.Abstractions;
 using CaloriesPlan.UTL.Wrappers;
+using CaloriesPlan.DTO.In;
+using CaloriesPlan.DAL.Dao.Abstractions;
+using CaloriesPlan.DAL.DataModel.Abstractions;
+using CaloriesPlan.BLL.Services.Abstractions;
+using CaloriesPlan.BLL.Services;
+using CaloriesPlan.BLL.Exceptions;
 
 namespace CaloriesPlan.BLL.Tests
 {

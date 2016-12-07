@@ -6,7 +6,7 @@ using CaloriesPlan.UTL.Wrappers;
 
 using Models = CaloriesPlan.DAL.DataModel.Abstractions;
 
-namespace CaloriesPlan.DAL.Dao
+namespace CaloriesPlan.DAL.Dao.Abstractions
 {
     public interface IUserDao
     {

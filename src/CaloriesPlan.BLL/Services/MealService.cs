@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using CaloriesPlan.DAL.Dao;
+using CaloriesPlan.UTL.Config.Abstractions;
+using CaloriesPlan.DAL.Dao.Abstractions;
 using CaloriesPlan.DAL.DataModel.Abstractions;
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.DTO.Out;
 using CaloriesPlan.BLL.Exceptions;
-using CaloriesPlan.UTL;
+using CaloriesPlan.BLL.Services.Abstractions;
 
-namespace CaloriesPlan.BLL.Services.Impl
+namespace CaloriesPlan.BLL.Services
 {
     public class MealService : IMealService
     {

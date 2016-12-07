@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 using CaloriesPlan.DAL.DataModel;
 using CaloriesPlan.DAL.DataModel.Abstractions;
+using CaloriesPlan.DAL.Dao.Abstractions;
 using CaloriesPlan.DAL.Dao.EF.Base;
 
 namespace CaloriesPlan.DAL.Dao.EF

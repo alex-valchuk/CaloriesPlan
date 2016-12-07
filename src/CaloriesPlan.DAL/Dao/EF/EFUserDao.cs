@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 using CaloriesPlan.UTL.Wrappers;
+using CaloriesPlan.DAL.Dao.Abstractions;
 using CaloriesPlan.DAL.Dao.EF.Base;
 using CaloriesPlan.DAL.DataModel;
 using CaloriesPlan.DAL.Wrappers;

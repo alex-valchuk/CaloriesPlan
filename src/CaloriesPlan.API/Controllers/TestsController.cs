@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Http;
 
-using CaloriesPlan.BLL.Services;
 using CaloriesPlan.API.Controllers.Base;
+using CaloriesPlan.BLL.Services.Abstractions;
 
 namespace CaloriesPlan.API.Controllers
 {

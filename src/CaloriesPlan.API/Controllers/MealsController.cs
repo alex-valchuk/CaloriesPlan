@@ -2,10 +2,10 @@
 using System.Web.Http;
 
 using CaloriesPlan.DTO.In;
-using CaloriesPlan.BLL.Services;
 using CaloriesPlan.API.Controllers.Base;
 using CaloriesPlan.API.Filters;
 using CaloriesPlan.UTL.Const;
+using CaloriesPlan.BLL.Services.Abstractions;
 
 namespace CaloriesPlan.API.Controllers
 {

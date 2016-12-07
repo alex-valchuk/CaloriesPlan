@@ -1,6 +1,8 @@
 ﻿using System.Configuration;
 
-namespace CaloriesPlan.UTL.Config.Desktop
+using CaloriesPlan.UTL.Config.Abstractions;
+
+namespace CaloriesPlan.UTL.Config
 {
     public class DesktopConfigProvider : IConfigProvider
     {

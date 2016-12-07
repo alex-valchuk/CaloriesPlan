@@ -7,17 +7,17 @@ using Microsoft.Owin.Security.OAuth;
 
 using Owin;
 
+using CaloriesPlan.BLL.Services.Abstractions;
 using CaloriesPlan.BLL.Services;
-using CaloriesPlan.BLL.Services.Impl;
-using CaloriesPlan.DAL.Dao;
+using CaloriesPlan.DAL.Dao.Abstractions;
 using CaloriesPlan.DAL.Dao.EF;
-using CaloriesPlan.UTL;
-using CaloriesPlan.UTL.Config.Desktop;
+using CaloriesPlan.UTL.Config.Abstractions;
+using CaloriesPlan.UTL.Config;
 using CaloriesPlan.UTL.Loggers.Abstractions;
 using CaloriesPlan.UTL.Loggers;
 using CaloriesPlan.API.Providers;
-using CaloriesPlan.API.ExceptionHandlers;
 using CaloriesPlan.API.ExceptionHandlers.Abstractions;
+using CaloriesPlan.API.ExceptionHandlers;
 
 [assembly: OwinStartup(typeof(CaloriesPlan.API.Startup))]
 namespace CaloriesPlan.API

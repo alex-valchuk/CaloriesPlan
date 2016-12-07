@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
 
-using CaloriesPlan.BLL.Services;
+using CaloriesPlan.BLL.Services.Abstractions;
 using CaloriesPlan.API.Controllers.Base;
 using CaloriesPlan.API.Filters;
 using CaloriesPlan.UTL.Const;
