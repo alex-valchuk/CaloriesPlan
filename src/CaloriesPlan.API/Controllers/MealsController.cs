@@ -43,8 +43,7 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamID)]
         public IHttpActionResult Get(int id)
         {
-            if (this.IsAuthorizedUserAnAdmin() ||
-                this.mealService.IsOwnerOfMeal(this.User.Identity.Name, id))
+            if (this.IsAuthorizedUserAnAdminOrOwnerOfMeal(id))
             {
                 var meal = this.mealService.GetMealByID(id);
 
@@ -81,8 +80,7 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamID)]
         public IHttpActionResult Put(int id, InMealDto mealDto)
         {
-            if (this.IsAuthorizedUserAnAdmin() ||
-                this.mealService.IsOwnerOfMeal(this.User.Identity.Name, id))
+            if (this.IsAuthorizedUserAnAdminOrOwnerOfMeal(id))
             {
                 if (!this.ModelState.IsValid)
                 {
@@ -101,14 +99,20 @@ namespace CaloriesPlan.API.Controllers
         [Route(ParamID)]
         public IHttpActionResult Delete(int id)
         {
-            if (this.IsAuthorizedUserAnAdmin() ||
-                this.mealService.IsOwnerOfMeal(this.User.Identity.Name, id))
+            if (this.IsAuthorizedUserAnAdminOrOwnerOfMeal(id))
             {
                 this.mealService.DeleteMeal(id);
                 return this.Ok();
             }
 
             return this.Unauthorized();
+        }
+
+        private bool IsAuthorizedUserAnAdminOrOwnerOfMeal(int mealID)
+        {
+            return
+                this.IsAuthorizedUserAnAdmin() ||
+                this.mealService.IsOwnerOfMeal(this.User.Identity.Name, mealID);
         }
     }
 }
