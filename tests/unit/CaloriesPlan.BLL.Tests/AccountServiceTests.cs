@@ -13,6 +13,7 @@ using CaloriesPlan.BLL.Exceptions;
 using CaloriesPlan.DAL.DataModel.Abstractions;
 using CaloriesPlan.UTL;
 using CaloriesPlan.UTL.Wrappers;
+using System.Threading.Tasks;
 
 namespace CaloriesPlan.BLL.Tests
 {
@@ -34,78 +35,78 @@ namespace CaloriesPlan.BLL.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Register data not specified correctly")]
-        public void RegisterUser_EmptyRegisterDto_ArgumentNullExceptionThrown()
+        public async Task SignUpAsync_EmptyRegisterDto_ArgumentNullExceptionThrown()
         {
             //act
-            this.accountService.SignUp(null);
+            await this.accountService.SignUpAsync(null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Register data not specified correctly")]
-        public void RegisterUser_EmptyUserName_ArgumentNullExceptionThrown()
+        public async Task SignUpAsync_EmptyUserName_ArgumentNullExceptionThrown()
         {
             //arrange
             var registerDto = this.GetValidRegisterDto();
             registerDto.UserName = null;
 
             //act
-            this.accountService.SignUp(registerDto);
+            await this.accountService.SignUpAsync(registerDto);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Register data not specified correctly")]
-        public void RegisterUser_EmptyPassword_ArgumentNullExceptionThrown()
+        public async Task SignUpAsync_EmptyPassword_ArgumentNullExceptionThrown()
         {
             //arrange
             var registerDto = this.GetValidRegisterDto();
             registerDto.Password = null;
 
             //act
-            this.accountService.SignUp(registerDto);
+            await this.accountService.SignUpAsync(registerDto);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidPasswordConfirmationException), "Password does not match password confirmation")]
-        public void RegisterUser_PasswordDoesNotEqualToConfirmPassword_ArgumentNullExceptionThrown()
+        public async Task SignUpAsync_PasswordDoesNotEqualToConfirmPassword_ArgumentNullExceptionThrown()
         {
             //arrange
             var registerDto = this.GetValidRegisterDto();
             registerDto.Password += "2";
 
             //act
-            this.accountService.SignUp(registerDto);
+            await this.accountService.SignUpAsync(registerDto);
         }
 
         [TestMethod]
         [ExpectedException(typeof(RegistrationException), "Problem while creating the user")]
-        public void RegisterUser_NotSuccededUserRegistration_ArgumentNullExceptionThrown()
+        public async Task SignUpAsync_NotSuccededUserRegistration_ArgumentNullExceptionThrown()
         {
             //arrange
             var registerDto = this.GetValidRegisterDto();
-            var result = this.GetNotSuccededRegistrationResult();
+            var resultTask = this.GetNotSuccededRegistrationResultTask();
 
             this.userDaoMock.Setup(d => d.NewUserInstance()).Returns(Mock.Of<IUser>());
-            this.userDaoMock.Setup(d => d.CreateUser(It.IsAny<IUser>(), registerDto.Password)).Returns(result);
+            this.userDaoMock.Setup(d => d.CreateUserAsync(It.IsAny<IUser>(), registerDto.Password)).Returns(resultTask);
 
             //act
-            this.accountService.SignUp(registerDto);
+            await this.accountService.SignUpAsync(registerDto);
         }
 
         [TestMethod]
         [ExpectedException(typeof(RegistrationException), "Problem while assigning user to role")]
-        public void RegisterUser_NotSuccededRoleRegistration_ArgumentNullExceptionThrown()
+        public async Task SignUpAsync_NotSuccededRoleRegistration_ArgumentNullExceptionThrown()
         {
             //arrange
             var registerDto = this.GetValidRegisterDto();
-            var userResult = this.GetSuccededRegistrationResult();
-            var roleResult = this.GetNotSuccededRegistrationResult();
+            var userResultTask = this.GetSuccededRegistrationResultTask();
+            var roleResultTask = this.GetNotSuccededRegistrationResultTask();
 
             this.userDaoMock.Setup(d => d.NewUserInstance()).Returns(Mock.Of<IUser>());
-            this.userDaoMock.Setup(d => d.CreateUser(It.IsAny<IUser>(), registerDto.Password)).Returns(userResult);
-            this.userDaoMock.Setup(d => d.AddUserRole(It.IsAny<IUser>(), "User")).Returns(roleResult);
+            this.userDaoMock.Setup(d => d.CreateUserAsync(It.IsAny<IUser>(), registerDto.Password)).Returns(userResultTask);
+            this.userDaoMock.Setup(d => d.AddUserRoleAsync(It.IsAny<IUser>(), "User")).Returns(roleResultTask);
 
             //act
-            this.accountService.SignUp(registerDto);
+            await this.accountService.SignUpAsync(registerDto);
         }
 
         [TestMethod]
@@ -248,20 +249,20 @@ namespace CaloriesPlan.BLL.Tests
             };
         }
 
-        private IAccountRegistrationResult GetNotSuccededRegistrationResult()
+        private Task<IAccountRegistrationResult> GetNotSuccededRegistrationResultTask()
         {
             var resultMock = new Mock<IAccountRegistrationResult>();
             resultMock.Setup(r => r.Succeeded).Returns(false);
 
-            return resultMock.Object;
+            return Task.FromResult(resultMock.Object);
         }
 
-        private IAccountRegistrationResult GetSuccededRegistrationResult()
+        private Task<IAccountRegistrationResult> GetSuccededRegistrationResultTask()
         {
             var resultMock = new Mock<IAccountRegistrationResult>();
             resultMock.Setup(r => r.Succeeded).Returns(true);
 
-            return resultMock.Object;
+            return Task.FromResult(resultMock.Object);
         }
     }
 }

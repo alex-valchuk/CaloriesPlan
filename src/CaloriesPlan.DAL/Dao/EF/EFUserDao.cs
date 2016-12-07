@@ -33,24 +33,24 @@ namespace CaloriesPlan.DAL.Dao.EF
             return new User();
         }
 
-        public IAccountRegistrationResult CreateUser(Models.IUser user, string password)
+        public async Task<IAccountRegistrationResult> CreateUserAsync(Models.IUser user, string password)
         {
             var identityUser = (User)user;
             identityUser.PasswordSalt = this.GenerateSalt(32);
             password = this.GetPasswordWithSalt(password: password, passwordSalt: identityUser.PasswordSalt);
 
-            var identityResult = this.userManager.Create(identityUser, password);
+            var identityResult = await this.userManager.CreateAsync(identityUser, password);
 
             return new AspNetIdentityRegistrationResult(identityResult);
         }
 
-        public async Task<ClaimsIdentity> CreateIdentity(Models.IUser user, string authType)
+        public async Task<ClaimsIdentity> CreateIdentityAsync(Models.IUser user, string authType)
         {
             var claimsIdentity = await this.userManager.CreateIdentityAsync((User)user, authType);
             return claimsIdentity;
         }
 
-        public async Task<Models.IUser> GetUserByCredentials(string userName, string password)
+        public async Task<Models.IUser> GetUserByCredentialsAsync(string userName, string password)
         {
             var identityUser = this.userManager.Users.FirstOrDefault(u => u.UserName == userName);
             if (identityUser != null)
@@ -115,9 +115,9 @@ namespace CaloriesPlan.DAL.Dao.EF
                 .ToList<Models.IRole>();
         }
 
-        public IAccountRegistrationResult AddUserRole(Models.IUser user, string roleName)
+        public async Task<IAccountRegistrationResult> AddUserRoleAsync(Models.IUser user, string roleName)
         {
-            var identityResult = this.userManager.AddToRole(user.Id, roleName);
+            var identityResult = await this.userManager.AddToRoleAsync(user.Id, roleName);
             return new AspNetIdentityRegistrationResult(identityResult);
         }
 

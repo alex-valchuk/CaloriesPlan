@@ -43,7 +43,7 @@ namespace CaloriesPlan.API.Providers
             {
                 //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
 
-                var authTicket = await this.oAuthService.SignIn(context.UserName, context.Password, context.Options.AuthenticationType);
+                var authTicket = await this.oAuthService.SignInAsync(context.UserName, context.Password, context.Options.AuthenticationType);
                 if (authTicket == null)
                 {
                     context.SetError("invalid_grant", "The user name or password is incorrect.");

@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 
 using CaloriesPlan.BLL.Services;
 using CaloriesPlan.DTO.In;
@@ -42,14 +43,14 @@ namespace CaloriesPlan.API.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("signup")]
-        public IHttpActionResult Post(InSignUpDto signUpDto)
+        public async Task<IHttpActionResult> Post(InSignUpDto signUpDto)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(this.ModelState);
             }
 
-            this.accountService.SignUp(signUpDto);
+            await this.accountService.SignUpAsync(signUpDto);
             return this.Ok();
         }
 

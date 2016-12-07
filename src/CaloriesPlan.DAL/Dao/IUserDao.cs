@@ -12,9 +12,9 @@ namespace CaloriesPlan.DAL.Dao
     {
         Models.IUser NewUserInstance();
 
-        IAccountRegistrationResult CreateUser(Models.IUser user, string password);
-        Task<ClaimsIdentity> CreateIdentity(Models.IUser user, string authType);
-        Task<Models.IUser> GetUserByCredentials(string userName, string password);
+        Task<IAccountRegistrationResult> CreateUserAsync(Models.IUser user, string password);
+        Task<ClaimsIdentity> CreateIdentityAsync(Models.IUser user, string authType);
+        Task<Models.IUser> GetUserByCredentialsAsync(string userName, string password);
 
         IList<Models.IUser> GetUsers();
         IList<Models.IUser> GetSubscribers(Models.IUser user);
@@ -26,7 +26,7 @@ namespace CaloriesPlan.DAL.Dao
 
         IList<Models.IRole> GetUserRoles(Models.IUser user);
         IList<Models.IRole> GetNotUserRoles(Models.IUser user);
-        IAccountRegistrationResult AddUserRole(Models.IUser user, string roleName);
+        Task<IAccountRegistrationResult> AddUserRoleAsync(Models.IUser user, string roleName);
         void DeleteUserRole(Models.IUser user, string roleName);
     }
 }

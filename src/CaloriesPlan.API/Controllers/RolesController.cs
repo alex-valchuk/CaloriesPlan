@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 
 using CaloriesPlan.BLL.Services;
 using CaloriesPlan.API.Controllers.Base;
@@ -37,12 +38,12 @@ namespace CaloriesPlan.API.Controllers
         //POST api/roles/?userName
         [HttpPost]
         [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
-        public IHttpActionResult Post(InRoleDto roleDto, [FromUri] string userName = null)
+        public async Task<IHttpActionResult> Post(InRoleDto roleDto, [FromUri] string userName = null)
         {
             if (string.IsNullOrEmpty(userName))
                 userName = this.User.Identity.Name;
 
-            this.accountService.AddUserRole(userName, roleDto.RoleName);
+            await this.accountService.AddUserRoleAsync(userName, roleDto.RoleName);
             return this.Ok();
         }
 

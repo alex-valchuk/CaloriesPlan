@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.DTO.Out;
@@ -7,7 +8,7 @@ namespace CaloriesPlan.BLL.Services
 {
     public interface IAccountService
     {
-        void SignUp(InSignUpDto signUpDto);
+        Task SignUpAsync(InSignUpDto signUpDto);
         IList<OutAccountDto> GetAccounts();
         OutAccountDto GetAccount(string userName);
         void UpdateAccount(string userName, InAccountDto accountDto);
@@ -15,7 +16,7 @@ namespace CaloriesPlan.BLL.Services
 
         IList<OutUserRoleDto> GetUserRoles(string userName);
         IList<OutUserRoleDto> GetNotUserRoles(string userName);
-        void AddUserRole(string userName, string roleName);
+        Task AddUserRoleAsync(string userName, string roleName);
         void DeleteUserRole(string userName, string roleName);
 
         ICollection<OutShortUserInfoDto> GetSubscribers(string userName);

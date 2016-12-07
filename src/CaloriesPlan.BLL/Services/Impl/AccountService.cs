@@ -16,7 +16,6 @@ using CaloriesPlan.BLL.Services.Impl.Base;
 using CaloriesPlan.DTO.In;
 
 using Models = CaloriesPlan.DAL.DataModel.Abstractions;
-using System.Net;
 
 namespace CaloriesPlan.BLL.Services.Impl
 {
@@ -31,7 +30,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             this.userDao = userDao;
         }
 
-        public void SignUp(InSignUpDto signUpDto)
+        public async Task SignUpAsync(InSignUpDto signUpDto)
         {
             if (signUpDto == null ||
                 string.IsNullOrEmpty(signUpDto.UserName) ||
@@ -52,16 +51,16 @@ namespace CaloriesPlan.BLL.Services.Impl
                     : 50;//if not configured
 
 
-            var userRegistrationResult = this.userDao.CreateUser(user, signUpDto.Password);
+            var userRegistrationResult = await this.userDao.CreateUserAsync(user, signUpDto.Password);
             if (userRegistrationResult.Succeeded == false)
                 throw new RegistrationException(userRegistrationResult);
 
-            var roleRegistrationResult = this.userDao.AddUserRole(user, "User");
+            var roleRegistrationResult = await this.userDao.AddUserRoleAsync(user, "User");
             if (roleRegistrationResult.Succeeded == false)
                 throw new RegistrationException(roleRegistrationResult);
         }
 
-        public async Task<AuthenticationTicket> SignIn(string userName, string password, string authType)
+        public async Task<AuthenticationTicket> SignInAsync(string userName, string password, string authType)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
@@ -72,11 +71,11 @@ namespace CaloriesPlan.BLL.Services.Impl
             if (string.IsNullOrEmpty(authType))
                 throw new ArgumentNullException("Authentication Type");
 
-            var user = await this.userDao.GetUserByCredentials(userName, password);
+            var user = await this.userDao.GetUserByCredentialsAsync(userName, password);
             if (user == null)
                 return null;
 
-            var claimsIdentity = await this.userDao.CreateIdentity(user, authType);
+            var claimsIdentity = await this.userDao.CreateIdentityAsync(user, authType);
 
             var roles = claimsIdentity.Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
             var roleNames = JsonConvert.SerializeObject(roles.Select(x => x.Value));
@@ -186,7 +185,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             return dtoRoles;
         }
 
-        public void AddUserRole(string userName, string roleName)
+        public async Task AddUserRoleAsync(string userName, string roleName)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
@@ -199,7 +198,7 @@ namespace CaloriesPlan.BLL.Services.Impl
                 throw new AccountDoesNotExistException();
 
 
-            this.userDao.AddUserRole(user, roleName);
+            await this.userDao.AddUserRoleAsync(user, roleName);
         }
 
         public void DeleteUserRole(string userName, string roleName)
