@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -110,27 +111,30 @@ namespace CaloriesPlan.BLL.Tests
         }
 
         [TestMethod]
-        public void GetAccounts_AccountsExist_DtoAccountsReturned()
+        public async Task GetAccountsAsync_AccountsExist_DtoAccountsReturned()
         {
             //arrange
-            var dbUsers = new List<IUser>
+            IList<IUser> dbUsers = new List<IUser>
             {
                 Mock.Of<IUser>()
             };
-            this.userDaoMock.Setup(d => d.GetUsers()).Returns(dbUsers);
+                
+            var dbUsersTask = Task.FromResult(dbUsers);
+
+            this.userDaoMock.Setup(d => d.GetUsersAsync()).Returns(dbUsersTask);
 
             //act
-            var accounts = this.accountService.GetAccounts();
+            var accounts = await this.accountService.GetAccountsAsync();
 
             //assert
             Assert.IsNotNull(accounts);
         }
 
         [TestMethod]
-        public void GetAccounts_AccountsNotExist_NullReturned()
+        public async Task GetAccounts_AccountsNotExist_NullReturned()
         {
             //act
-            var accounts = this.accountService.GetAccounts();
+            var accounts = await this.accountService.GetAccountsAsync();
 
             //assert
             Assert.IsNull(accounts);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -63,9 +64,9 @@ namespace CaloriesPlan.DAL.Dao.EF
             return null;
         }
 
-        public IList<Models.IUser> GetUsers()
+        public async Task<IList<Models.IUser>> GetUsersAsync()
         {
-            return this.userManager.Users.ToList<Models.IUser>();
+            return await this.userManager.Users.ToListAsync<Models.IUser>();
         }
 
         public IList<Models.IUser> GetSubscribers(Models.IUser user)

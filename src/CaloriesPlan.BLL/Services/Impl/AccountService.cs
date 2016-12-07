@@ -86,9 +86,9 @@ namespace CaloriesPlan.BLL.Services.Impl
             return authTicket;
         }
 
-        public IList<OutAccountDto> GetAccounts()
+        public async Task<IList<OutAccountDto>> GetAccountsAsync()
         {
-            var dbUsers = this.userDao.GetUsers();
+            var dbUsers = await this.userDao.GetUsersAsync();
             var dtoUsers = this.ConvertToOutAccountDtoList(dbUsers);
 
             return dtoUsers;

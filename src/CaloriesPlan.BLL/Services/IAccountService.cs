@@ -9,7 +9,7 @@ namespace CaloriesPlan.BLL.Services
     public interface IAccountService
     {
         Task SignUpAsync(InSignUpDto signUpDto);
-        IList<OutAccountDto> GetAccounts();
+        Task<IList<OutAccountDto>> GetAccountsAsync();
         OutAccountDto GetAccount(string userName);
         void UpdateAccount(string userName, InAccountDto accountDto);
         void DeleteAccount(string userName);

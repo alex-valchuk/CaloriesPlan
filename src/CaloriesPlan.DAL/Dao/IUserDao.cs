@@ -16,7 +16,7 @@ namespace CaloriesPlan.DAL.Dao
         Task<ClaimsIdentity> CreateIdentityAsync(Models.IUser user, string authType);
         Task<Models.IUser> GetUserByCredentialsAsync(string userName, string password);
 
-        IList<Models.IUser> GetUsers();
+        Task<IList<Models.IUser>> GetUsersAsync();
         IList<Models.IUser> GetSubscribers(Models.IUser user);
         IList<Models.IUser> GetSubscribingUsers(Models.IUser user);
 

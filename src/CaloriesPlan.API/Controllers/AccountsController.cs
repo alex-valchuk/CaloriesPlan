@@ -23,9 +23,9 @@ namespace CaloriesPlan.API.Controllers
         //GET api/accounts
         [HttpGet]
         [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
-        public IHttpActionResult Get()
+        public async Task<IHttpActionResult> Get()
         {
-            var accounts = this.accountService.GetAccounts();
+            var accounts = await this.accountService.GetAccountsAsync();
             return this.Ok(accounts);
         }
 
