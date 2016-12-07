@@ -122,16 +122,16 @@ namespace CaloriesPlan.BLL.Tests
             {
                 Mock.Of<IMeal>()
             };
-            //var dbMealsTask = Task.FromResult(dbMeals);
+            var dbMealsTask = Task.FromResult(dbMeals);
 
-            this.mealDaoMock.Setup(md => md.GetMeals(
+            this.mealDaoMock.Setup(md => md.GetMealsAsync(
                 It.IsAny<string>(), 
                 It.IsAny<DateTime>(), 
                 It.IsAny<DateTime>(), 
                 It.IsAny<DateTime>(), 
                 It.IsAny<DateTime>(),
                 It.IsAny<int>(),
-                It.IsAny<int>())).Returns(dbMeals);
+                It.IsAny<int>())).Returns(dbMealsTask);
 
             //act
             var report = await this.mealService.GetUserNutritionReportAsync(userName, filter);

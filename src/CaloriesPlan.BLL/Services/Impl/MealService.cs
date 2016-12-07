@@ -63,7 +63,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             var offset = filter.Page * filter.PageSize;
             var rows = filter.PageSize;
 
-            var dbMeals = this.mealDao.GetMeals(userName, 
+            var dbMeals = await this.mealDao.GetMealsAsync(userName, 
                 filter.DateFrom.Value, filter.DateTo.Value,
                 filter.TimeFrom.Value, filter.TimeTo.Value,
                 offset, rows);

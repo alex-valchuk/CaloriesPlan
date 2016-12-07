@@ -230,8 +230,6 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\UnityDependencyResolver.cs" />
-    <Compile Include="Converters\Abstractions\IMealReportFilterConverter.cs" />
-    <Compile Include="Converters\Result\DtoConvertionResult.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

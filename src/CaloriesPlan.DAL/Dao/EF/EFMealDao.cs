@@ -20,7 +20,7 @@ namespace CaloriesPlan.DAL.Dao.EF
             return new Meal();
         }
 
-        public IList<IMeal> GetMeals(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows)
+        public async Task<IList<IMeal>> GetMealsAsync(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows)
         {
             var userNameParam = new SqlParameter("@UserName", SqlDbType.NVarChar, 200) { Value = userName };
             var dateFromParam = new SqlParameter("@DateFrom", SqlDbType.DateTime) { Value = dateFrom };
@@ -30,7 +30,7 @@ namespace CaloriesPlan.DAL.Dao.EF
             var offsetParam = new SqlParameter("@Offset", SqlDbType.Int) { Value = offset };
             var rowsParam = new SqlParameter("@Rows", SqlDbType.Int) { Value = rows };
 
-            var query = this.dbContext.Database
+            var meals = await this.dbContext.Database
                 .SqlQuery<Meal>("execute [dbo].sp_GetUserMeals @UserName, @DateFrom, @DateTo, @TimeFrom, @TimeTo, @Offset, @Rows",
                     userNameParam,
                     dateFromParam,
@@ -38,9 +38,10 @@ namespace CaloriesPlan.DAL.Dao.EF
                     timeFromParam,
                     timeToParam,
                     offsetParam,
-                    rowsParam);
+                    rowsParam)
+                    .ToListAsync();
 
-            return query.ToList<IMeal>();
+            return meals.ToList<IMeal>();
         }
 
         public async Task<IMeal> GetMealByIDAsync(int mealID)

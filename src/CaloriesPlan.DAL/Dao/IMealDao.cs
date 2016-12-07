@@ -11,7 +11,7 @@ namespace CaloriesPlan.DAL.Dao
     {
         IMeal NewMealInstance();
 
-        IList<IMeal> GetMeals(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows);
+        Task<IList<IMeal>> GetMealsAsync(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows);
         Task<IMeal> GetMealByIDAsync(int mealID);
         Task CreateAsync(IMeal dbMeal);
         Task UpdateAsync(IMeal dbMeal);
