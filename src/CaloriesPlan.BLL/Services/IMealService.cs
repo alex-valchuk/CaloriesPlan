@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.DTO.Out;
@@ -7,11 +7,11 @@ namespace CaloriesPlan.BLL.Services
 {
     public interface IMealService
     {
-        OutNutritionReportDto GetUserNutritionReport(string userName, InMealReportFilterDto filter);
-        OutMealDto GetMealByID(int mealID);
-        void CreateMeal(string userName, InMealDto mealDto);
-        void UpdateMeal(int id, InMealDto mealDto);
-        void DeleteMeal(int id);
-        bool IsOwnerOfMeal(string userName, int mealID);
+        Task<OutNutritionReportDto> GetUserNutritionReportAsync(string userName, InMealReportFilterDto filter);
+        Task<OutMealDto> GetMealByIDAsync(int mealID);
+        Task CreateMealAsync(string userName, InMealDto mealDto);
+        Task UpdateMealAsync(int id, InMealDto mealDto);
+        Task DeleteMealAsync(int id);
+        Task<bool> IsOwnerOfMealAsync(string userName, int mealID);
     }
 }

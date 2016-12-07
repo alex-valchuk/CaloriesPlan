@@ -10,15 +10,15 @@ namespace CaloriesPlan.BLL.Services
     {
         Task SignUpAsync(InSignUpDto signUpDto);
         Task<IList<OutAccountDto>> GetAccountsAsync();
-        OutAccountDto GetAccount(string userName);
-        void UpdateAccount(string userName, InAccountDto accountDto);
-        void DeleteAccount(string userName);
+        Task<OutAccountDto> GetAccountAsync(string userName);
+        Task UpdateAccountAsync(string userName, InAccountDto accountDto);
+        Task DeleteAccountAsync(string userName);
 
-        IList<OutUserRoleDto> GetUserRoles(string userName);
-        IList<OutUserRoleDto> GetNotUserRoles(string userName);
+        Task<IList<OutUserRoleDto>> GetUserRolesAsync(string userName);
+        Task<IList<OutUserRoleDto>> GetNotUserRolesAsync(string userName);
         Task AddUserRoleAsync(string userName, string roleName);
-        void DeleteUserRole(string userName, string roleName);
+        Task DeleteUserRoleAsync(string userName, string roleName);
 
-        ICollection<OutShortUserInfoDto> GetSubscribers(string userName);
+        Task<ICollection<OutShortUserInfoDto>> GetSubscribersAsync(string userName);
     }
 }

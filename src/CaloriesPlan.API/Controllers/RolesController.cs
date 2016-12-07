@@ -23,14 +23,14 @@ namespace CaloriesPlan.API.Controllers
         //GET api/roles/?userName&getUserRoles
         [HttpGet]
         [AuthorizedInParamOrHasOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
-        public IHttpActionResult Get([FromUri] string userName = null, [FromUri] bool getUserRoles = true)
+        public async Task<IHttpActionResult> Get([FromUri] string userName = null, [FromUri] bool getUserRoles = true)
         {
             if (string.IsNullOrEmpty(userName))
                 userName = this.User.Identity.Name;
 
             var userRoles = (getUserRoles)
-                ? this.accountService.GetUserRoles(userName)
-                : this.accountService.GetNotUserRoles(userName);
+                ? await this.accountService.GetUserRolesAsync(userName)
+                : await this.accountService.GetNotUserRolesAsync(userName);
 
             return this.Ok(userRoles);
         }
@@ -51,12 +51,12 @@ namespace CaloriesPlan.API.Controllers
         [HttpDelete]
         [Route(ParamRoleName)]
         [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
-        public IHttpActionResult Delete(string roleName, [FromUri] string userName = null)
+        public async Task<IHttpActionResult> Delete(string roleName, [FromUri] string userName = null)
         {
             if (string.IsNullOrEmpty(userName))
                 userName = this.User.Identity.Name;
 
-            this.accountService.DeleteUserRole(userName, roleName);
+            await this.accountService.DeleteUserRoleAsync(userName, roleName);
             return this.Ok();
         }
     }

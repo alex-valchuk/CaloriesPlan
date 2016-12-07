@@ -69,51 +69,51 @@ namespace CaloriesPlan.DAL.Dao.EF
             return await this.userManager.Users.ToListAsync<Models.IUser>();
         }
 
-        public IList<Models.IUser> GetSubscribers(Models.IUser user)
+        public async Task<IList<Models.IUser>> GetSubscribersAsync(Models.IUser user)
         {
-            return this.dbContext.Subscribtions
+            return await this.dbContext.Subscribtions
                 .Where(s => s.UserID == user.Id)
                 .Select(s => s.Subscriber)
-                .ToList<Models.IUser>();
+                .ToListAsync<Models.IUser>();
         }
 
-        public IList<Models.IUser> GetSubscribingUsers(Models.IUser user)
+        public async Task<IList<Models.IUser>> GetSubscribingUsersAsync(Models.IUser user)
         {
-            return this.dbContext.Subscribtions
+            return await this.dbContext.Subscribtions
                 .Where(s => s.SubscriberID == user.Id)
                 .Select(s => s.User)
-                .ToList<Models.IUser>();
+                .ToListAsync<Models.IUser>();
         }
 
-        public Models.IUser GetUserByName(string userName)
+        public async Task<Models.IUser> GetUserByNameAsync(string userName)
         {
-            return this.userManager.Users.FirstOrDefault(u => u.UserName == userName);
+            return await this.userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName);
         }
 
-        public void Update(Models.IUser user)
+        public async Task UpdateAsync(Models.IUser user)
         {
-            this.userManager.Update((User)user);
+            await this.userManager.UpdateAsync((User)user);
         }
 
-        public void Delete(Models.IUser user)
+        public async Task DeleteAsync(Models.IUser user)
         {
-            this.userManager.Delete((User)user);
+            await this.userManager.DeleteAsync((User)user);
         }
 
-        public IList<Models.IRole> GetUserRoles(Models.IUser user)
+        public async Task<IList<Models.IRole>> GetUserRolesAsync(Models.IUser user)
         {            
-            return this.dbContext.Roles
+            return await this.dbContext.Roles
                 .Where(r => r.Users.Any(u => u.UserId == user.Id))
                 .Select(r => new Role { Name = r.Name })
-                .ToList<Models.IRole>();
+                .ToListAsync<Models.IRole>();
         }
 
-        public IList<Models.IRole> GetNotUserRoles(Models.IUser user)
+        public async Task<IList<Models.IRole>> GetNotUserRolesAsync(Models.IUser user)
         {
-            return this.dbContext.Roles
+            return await this.dbContext.Roles
                 .Where(r => r.Users.Any(u => u.UserId == user.Id) == false)
                 .Select(r => new Role { Name = r.Name })
-                .ToList<Models.IRole>();
+                .ToListAsync<Models.IRole>();
         }
 
         public async Task<IAccountRegistrationResult> AddUserRoleAsync(Models.IUser user, string roleName)
@@ -122,9 +122,9 @@ namespace CaloriesPlan.DAL.Dao.EF
             return new AspNetIdentityRegistrationResult(identityResult);
         }
 
-        public void DeleteUserRole(Models.IUser user, string roleName)
+        public async Task DeleteUserRoleAsync(Models.IUser user, string roleName)
         {
-            this.userManager.RemoveFromRole(user.Id, roleName);
+            await this.userManager.RemoveFromRoleAsync(user.Id, roleName);
         }
 
         public string GetPasswordWithSalt(string password, string passwordSalt)

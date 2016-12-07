@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 
 using CaloriesPlan.BLL.Services;
 using CaloriesPlan.API.Controllers.Base;
@@ -21,12 +22,12 @@ namespace CaloriesPlan.API.Controllers
         //GET api/subscribers/?userName
         [HttpGet]
         [AuthorizedInParamOrHasOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
-        public IHttpActionResult Get([FromUri] string userName = null)
+        public async Task<IHttpActionResult> Get([FromUri] string userName = null)
         {
             if (string.IsNullOrEmpty(userName))
                 userName = this.User.Identity.Name;
 
-            var subscribers = this.accountService.GetSubscribers(userName);
+            var subscribers = await this.accountService.GetSubscribersAsync(userName);
             return this.Ok(subscribers);
         }
     }

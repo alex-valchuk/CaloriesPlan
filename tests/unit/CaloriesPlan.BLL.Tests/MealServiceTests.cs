@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -36,84 +37,94 @@ namespace CaloriesPlan.BLL.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "UserName not specified")]
-        public void GetUserNutritionReport_EmptyUserName_ArgumentNullExceptionThrown()
+        public async Task GetUserNutritionReportAsync_EmptyUserName_ArgumentNullExceptionThrown()
         {
             //act
-            this.mealService.GetUserNutritionReport(null, null);
+            await this.mealService.GetUserNutritionReportAsync(null, null);
         }
         [TestMethod]
         [ExpectedException(typeof(AccountDoesNotExistException), "User does not exist")]
-        public void GetUserNutritionReport_OfNotExistedUser_AccountDoesNotExistExceptionThrown()
+        public async Task GetUserNutritionReportAsync_OfNotExistedUser_AccountDoesNotExistExceptionThrown()
         {
             //arrange
             var userName = "Test";
             var filter = this.GetValidFilter();
 
             //act
-            this.mealService.GetUserNutritionReport(userName, filter);
+            await this.mealService.GetUserNutritionReportAsync(userName, filter);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDateRangeException), "DateFrom should be less or equal to DateTo")]
-        public void GetUserNutritionReport_DateFromMoreThanDateTo_InvalidDateRangeExceptionThrown()
+        public async Task GetUserNutritionReportAsync_DateFromMoreThanDateTo_InvalidDateRangeExceptionThrown()
         {
             //arrange
             var userName = "Alex";
-            this.userDaoMock.Setup(ud => ud.GetUserByName(It.IsAny<string>())).Returns(Mock.Of<IUser>());
+            var userTask = Task.FromResult(Mock.Of<IUser>());
+
+            this.userDaoMock.Setup(ud => ud.GetUserByNameAsync(It.IsAny<string>())).Returns(userTask);
 
             var filter = this.GetValidFilter();
             filter.DateFrom = filter.DateTo.Value.AddDays(1);
 
             //act
-            this.mealService.GetUserNutritionReport(userName, filter);
+            await this.mealService.GetUserNutritionReportAsync(userName, filter);
         }
 
         [TestMethod]
-        public void GetUserNutritionReport_ValidInput_ReportReturned()
+        public async Task GetUserNutritionReportAsync_ValidInput_ReportReturned()
         {
             //arrange
             var userName = "Alex";
-            this.userDaoMock.Setup(ud => ud.GetUserByName(It.IsAny<string>())).Returns(Mock.Of<IUser>());
+            var userTask = Task.FromResult(Mock.Of<IUser>());
+
+            this.userDaoMock.Setup(ud => ud.GetUserByNameAsync(It.IsAny<string>())).Returns(userTask);
 
             var filter = this.GetValidFilter();
 
             //act
-            var report = this.mealService.GetUserNutritionReport(userName, filter);
+            var report = await this.mealService.GetUserNutritionReportAsync(userName, filter);
 
             //assert
             Assert.IsNotNull(report);
         }
 
         [TestMethod]
-        public void GetUserNutritionReport_UserDoesNotHaveMeals_ReportWithoutMealsReturned()
+        public async Task GetUserNutritionReportAsync_UserDoesNotHaveMeals_ReportWithoutMealsReturned()
         {
             //arrange
             var userName = "Alex";
-            this.userDaoMock.Setup(ud => ud.GetUserByName(It.IsAny<string>())).Returns(Mock.Of<IUser>());
+            var userTask = Task.FromResult(Mock.Of<IUser>());
+
+            this.userDaoMock.Setup(ud => ud.GetUserByNameAsync(It.IsAny<string>())).Returns(userTask);
 
             var filter = this.GetValidFilter();
 
             //act
-            var report = this.mealService.GetUserNutritionReport(userName, filter);
+            var report = await this.mealService.GetUserNutritionReportAsync(userName, filter);
 
             //assert
             Assert.IsNull(report.Meals);
         }
 
         [TestMethod]
-        public void GetUserNutritionReport_UserHasMeals_ReportWithMealsReturned()
+        public async Task GetUserNutritionReportAsync_UserHasMeals_ReportWithMealsReturned()
         {
             //arrange
             var userName = "Alex";
-            this.userDaoMock.Setup(ud => ud.GetUserByName(It.IsAny<string>())).Returns(Mock.Of<IUser>());
+            var userTask = Task.FromResult(Mock.Of<IUser>());
+
+            this.userDaoMock.Setup(ud => ud.GetUserByNameAsync(It.IsAny<string>())).Returns(userTask);
 
             var filter = this.GetValidFilter();
 
-            var dbMeals = new List<IMeal>
+            IList<IMeal> dbMeals = new List<IMeal>
             {
                 Mock.Of<IMeal>()
             };
-            this.mealDaoMock.Setup(md => md.GetMealsByUserName(
+            //var dbMealsTask = Task.FromResult(dbMeals);
+
+            this.mealDaoMock.Setup(md => md.GetMeals(
                 It.IsAny<string>(), 
                 It.IsAny<DateTime>(), 
                 It.IsAny<DateTime>(), 
@@ -123,30 +134,31 @@ namespace CaloriesPlan.BLL.Tests
                 It.IsAny<int>())).Returns(dbMeals);
 
             //act
-            var report = this.mealService.GetUserNutritionReport(userName, filter);
+            var report = await this.mealService.GetUserNutritionReportAsync(userName, filter);
 
             //assert
             Assert.IsNotNull(report.Meals);
         }
 
         [TestMethod]
-        public void GetMealByID_MealDoesNotExists_NullReturned()
+        public async Task GetMealByIDAsync_MealDoesNotExists_NullReturned()
         {
             //act
-            var meal = this.mealService.GetMealByID(It.IsAny<int>());
+            var meal = await this.mealService.GetMealByIDAsync(It.IsAny<int>());
 
             //assert
             Assert.IsNull(meal);
         }
 
         [TestMethod]
-        public void GetMealByID_MealExists_MealReturned()
+        public async Task GetMealByIDAsync_MealExists_MealReturned()
         {
             //arrange
-            this.mealDaoMock.Setup(md => md.GetMealByID(It.IsAny<int>())).Returns(Mock.Of<IMeal>());
+            var dbMealTask = Task.FromResult(Mock.Of<IMeal>());
+            this.mealDaoMock.Setup(md => md.GetMealByIDAsync(It.IsAny<int>())).Returns(dbMealTask);
 
             //act
-            var meal = this.mealService.GetMealByID(It.IsAny<int>());
+            var meal = await this.mealService.GetMealByIDAsync(It.IsAny<int>());
 
             //assert
             Assert.IsNotNull(meal);
@@ -154,211 +166,221 @@ namespace CaloriesPlan.BLL.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "UserName not specified")]
-        public void CreateMeal_EmptyUserName_ArgumentNullExceptionThrown()
+        public async Task CreateMealAsync_EmptyUserName_ArgumentNullExceptionThrown()
         {
             //act
-            this.mealService.CreateMeal(null, null);
+            await this.mealService.CreateMealAsync(null, null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Meal not specified")]
-        public void CreateMeal_EmptyMealDto_ArgumentNullExceptionThrown()
+        public async Task CreateMealAsync_EmptyMealDto_ArgumentNullExceptionThrown()
         {
             //act
-            this.mealService.CreateMeal("Alex", null);
+            await this.mealService.CreateMealAsync("Alex", null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(AccountDoesNotExistException), "Account does not exist")]
-        public void CreateMeal_ForNotExistentUser_AccountDoesNotExistExceptionThrown()
+        public async Task CreateMealAsync_ForNotExistentUser_AccountDoesNotExistExceptionThrown()
         {
             //act
-            this.mealService.CreateMeal("Alex", Mock.Of<InMealDto>());
+            await this.mealService.CreateMealAsync("Alex", Mock.Of<InMealDto>());
         }
 
         [TestMethod]
-        public void CreateMeal_ForExistentUser_NewMealCreated()
+        public async Task CreateMealAsync_ForExistentUser_NewMealCreated()
         {
             //arrange
-            this.userDaoMock.Setup(d => d.GetUserByName(It.IsAny<string>())).Returns(Mock.Of<IUser>());
+            var userTask = Task.FromResult(Mock.Of<IUser>());
+
+            this.userDaoMock.Setup(d => d.GetUserByNameAsync(It.IsAny<string>())).Returns(userTask);
             this.mealDaoMock.Setup(d => d.NewMealInstance()).Returns(Mock.Of<IMeal>());
 
             //act
-            this.mealService.CreateMeal("Alex", Mock.Of<InMealDto>());
+            await this.mealService.CreateMealAsync("Alex", Mock.Of<InMealDto>());
 
             //assert
-            this.mealDaoMock.Verify(d => d.Create(It.IsAny<IMeal>()));
+            this.mealDaoMock.Verify(d => d.CreateAsync(It.IsAny<IMeal>()));
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Meal not specified correctly")]
-        public void UpdateMeal_EmptyMealDto_ArgumentNullExceptionThrown()
+        public async Task UpdateMealAsync_EmptyMealDto_ArgumentNullExceptionThrown()
         {
             //act
-            this.mealService.UpdateMeal(1, null);
+            await this.mealService.UpdateMealAsync(1, null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Meal not specified correctly")]
-        public void UpdateMeal_EmptyMealText_ArgumentNullExceptionThrown()
+        public async Task UpdateMealAsync_EmptyMealText_ArgumentNullExceptionThrown()
         {
             //arrange
             var meal = this.GetValidMealDto();
             meal.Text = null;
 
             //act
-            this.mealService.UpdateMeal(1, meal);
+            await this.mealService.UpdateMealAsync(1, meal);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Meal not specified correctly")]
-        public void UpdateMeal_EmptyMealCalories_ArgumentNullExceptionThrown()
+        public async Task UpdateMealAsync_EmptyMealCalories_ArgumentNullExceptionThrown()
         {
             //arrange
             var meal = this.GetValidMealDto();
             meal.Calories = null;
 
             //act
-            this.mealService.UpdateMeal(1, meal);
+            await this.mealService.UpdateMealAsync(1, meal);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Meal not specified correctly")]
-        public void UpdateMeal_EmptyMealEatingDate_ArgumentNullExceptionThrown()
+        public async Task UpdateMealAsync_EmptyMealEatingDate_ArgumentNullExceptionThrown()
         {
             //arrange
             var meal = this.GetValidMealDto();
             meal.EatingDate = null;
 
             //act
-            this.mealService.UpdateMeal(1, meal);
+            await this.mealService.UpdateMealAsync(1, meal);
         }
 
         [TestMethod]
         [ExpectedException(typeof(MealDoesNotExistException), "Meal does not exist")]
-        public void UpdateMeal_MealDoesNotExist_ArgumentNullExceptionThrown()
+        public async Task UpdateMealAsync_MealDoesNotExist_MealDoesNotExistExceptionThrown()
         {
             //arrange
             var meal = this.GetValidMealDto();
 
             //act
-            this.mealService.UpdateMeal(1, meal);
+            await this.mealService.UpdateMealAsync(1, meal);
         }
 
         [TestMethod]
-        public void UpdateMeal_ValidInput_MealUpdated()
+        public async Task UpdateMealAsync_ValidInput_MealUpdated()
         {
             //arrange
             var meal = this.GetValidMealDto();
-            this.mealDaoMock.Setup(d => d.GetMealByID(It.IsAny<int>())).Returns(Mock.Of<IMeal>());
+            var dbMealTask = Task.FromResult(Mock.Of<IMeal>());
+
+            this.mealDaoMock.Setup(d => d.GetMealByIDAsync(It.IsAny<int>())).Returns(dbMealTask);
 
             //act
-            this.mealService.UpdateMeal(1, meal);
+            await this.mealService.UpdateMealAsync(1, meal);
 
             //assert
-            this.mealDaoMock.Verify(d => d.Update(It.IsAny<IMeal>()));
+            this.mealDaoMock.Verify(d => d.UpdateAsync(It.IsAny<IMeal>()));
         }
 
         [TestMethod]
         [ExpectedException(typeof(MealDoesNotExistException), "Meal does not exist")]
-        public void DeleteMeal_NotExistentMeal_MealDoesNotExistExceptionThrown()
+        public async Task DeleteMealAsync_NotExistentMeal_MealDoesNotExistExceptionThrown()
         {
             //act
-            this.mealService.DeleteMeal(1);
+            await this.mealService.DeleteMealAsync(1);
         }
 
         [TestMethod]
-        public void DeleteMeal_ExistentMeal_MealDeleted()
+        public async Task DeleteMealAsync_ExistentMeal_MealDeleted()
         {
             //arrange
             var mealID = 1;
             var meal = Mock.Of<IMeal>();
-            this.mealDaoMock.Setup(d => d.GetMealByID(mealID)).Returns(meal);
+            var mealTask = Task.FromResult(meal);
+
+            this.mealDaoMock.Setup(d => d.GetMealByIDAsync(mealID)).Returns(mealTask);
 
             //act
-            this.mealService.DeleteMeal(1);
+            await this.mealService.DeleteMealAsync(1);
 
             //assert
-            mealDaoMock.Verify(d => d.Delete(meal));
+            mealDaoMock.Verify(d => d.DeleteAsync(meal));
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "UserName parameter cannot be null")]
-        public void CanObtainMeal_AuthorizedUserNameIsNull_ArgumentNullExceptionThrown()
+        public async Task IsOwnerOfMealAsync_AuthorizedUserNameIsNull_ArgumentNullExceptionThrown()
         {
             //arrange
             string authorizedUserName = null;
             int mealID = 1;
 
             //act
-            this.mealService.IsOwnerOfMeal(authorizedUserName, mealID);
+            await this.mealService.IsOwnerOfMealAsync(authorizedUserName, mealID);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "UserName parameter cannot be empty")]
-        public void IsOwnerOfMeal_AuthorizedUserNameIsEmpty_ArgumentNullExceptionThrown()
+        public async Task IsOwnerOfMealAsync_AuthorizedUserNameIsEmpty_ArgumentNullExceptionThrown()
         {
             //arrange
             string userName = "";
             int mealID = 1;
 
             //act
-            this.mealService.IsOwnerOfMeal(userName, mealID);
+            await this.mealService.IsOwnerOfMealAsync(userName, mealID);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "MealID parameter should be more than 0")]
-        public void IsOwnerOfMeal_MealIDEquals0_ArgumentNullExceptionThrown()
+        public async Task IsOwnerOfMealAsync_MealIDEquals0_ArgumentExceptionThrown()
         {
             //arrange
             string userName = "asd";
             int mealID = 0;
 
             //act
-            this.mealService.IsOwnerOfMeal(userName, mealID);
+            await this.mealService.IsOwnerOfMealAsync(userName, mealID);
         }
 
         [TestMethod]
         [ExpectedException(typeof(MealDoesNotExistException))]
-        public void IsOwnerOfMeal_UserDoesNotExist_MealDoesNotExistExceptionThrown()
+        public async Task IsOwnerOfMealAsync_UserDoesNotExist_MealDoesNotExistExceptionThrown()
         {
             //arrange
             string userName = "asd";
             int mealID = 1;
 
             //act
-            this.mealService.IsOwnerOfMeal(userName, mealID);
+            await this.mealService.IsOwnerOfMealAsync(userName, mealID);
         }
 
         [TestMethod]
-        public void IsOwnerOfMeal_NotUserMeal_FalseReturned()
+        public async Task IsOwnerOfMealAsync_NotUserMeal_FalseReturned()
         {
             //arrange
             string userName = "asd";
             int mealID = 1;
 
-            this.userDaoMock.Setup(d => d.GetUserByName(userName)).Returns(Mock.Of<IUser>());
-            //this.mealDaoMock.Setup(d => d.Contains(It.IsAny<Expression<Func<IMeal, bool>>>())).Returns(false);
+            var userTask = Task.FromResult(Mock.Of<IUser>());
+
+            this.userDaoMock.Setup(d => d.GetUserByNameAsync(userName)).Returns(userTask);
 
             //act
-            var actual = this.mealService.IsOwnerOfMeal(userName, mealID);
+            var actual = await this.mealService.IsOwnerOfMealAsync(userName, mealID);
 
             //assert
             Assert.IsFalse(actual);
         }
 
         [TestMethod]
-        public void IsOwnerOfMeal_IsUserMeal_TrueReturned()
+        public async Task IsOwnerOfMealAsync_IsUserMeal_TrueReturned()
         {
             //arrange
             string userName = "asd";
             int mealID = 1;
 
-            this.userDaoMock.Setup(d => d.GetUserByName(userName)).Returns(Mock.Of<IUser>());
-            this.mealDaoMock.Setup(d => d.Contains(It.IsAny<Expression<Func<IMeal, bool>>>())).Returns(true);
+            var userTask = Task.FromResult(Mock.Of<IUser>());
+            var trueTask = Task.FromResult(true);
+
+            this.userDaoMock.Setup(d => d.GetUserByNameAsync(userName)).Returns(userTask);
+            this.mealDaoMock.Setup(d => d.ContainsAsync(It.IsAny<Expression<Func<IMeal, bool>>>())).Returns(trueTask);
 
             //act
-            var actual = this.mealService.IsOwnerOfMeal(userName, mealID);
+            var actual = await this.mealService.IsOwnerOfMealAsync(userName, mealID);
 
             //assert
             Assert.IsTrue(actual);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using CaloriesPlan.DAL.Dao;
 using CaloriesPlan.DAL.DataModel.Abstractions;
@@ -25,7 +26,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             this.userDao = userDao;
         }
 
-        public OutNutritionReportDto GetUserNutritionReport(string userName, InMealReportFilterDto filter)
+        public async Task<OutNutritionReportDto> GetUserNutritionReportAsync(string userName, InMealReportFilterDto filter)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("UserName");
@@ -45,7 +46,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             if (filter.TimeTo == null)
                 filter.TimeTo = new DateTime(1970, 1, 1, 23, 59, 59).ToUniversalTime();
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
 
@@ -55,14 +56,14 @@ namespace CaloriesPlan.BLL.Services.Impl
             var days = (filter.DateTo.Value - filter.DateFrom.Value).TotalDays + 1;
             filter.DateTo = filter.DateFrom.Value.AddDays(days);
 
-            var totalItemsCount = this.mealDao.Count(m => m.UserID == user.Id);
+            var totalItemsCount = await this.mealDao.CountAsync(m => m.UserID == user.Id);
 
             var nutritionReport = new OutNutritionReportDto(user.DailyCaloriesLimit, totalItemsCount);
 
             var offset = filter.Page * filter.PageSize;
             var rows = filter.PageSize;
 
-            var dbMeals = this.mealDao.GetMealsByUserName(userName, 
+            var dbMeals = this.mealDao.GetMeals(userName, 
                 filter.DateFrom.Value, filter.DateTo.Value,
                 filter.TimeFrom.Value, filter.TimeTo.Value,
                 offset, rows);
@@ -75,9 +76,9 @@ namespace CaloriesPlan.BLL.Services.Impl
             return nutritionReport;
         }
 
-        public OutMealDto GetMealByID(int mealID)
+        public async Task<OutMealDto> GetMealByIDAsync(int mealID)
         {
-            var dbMeal = this.mealDao.GetMealByID(mealID);
+            var dbMeal = await this.mealDao.GetMealByIDAsync(mealID);
             if (dbMeal == null)
                 return null;
 
@@ -85,7 +86,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             return dtoMeal;
         }
 
-        public void CreateMeal(string userName, InMealDto mealDto)
+        public async Task CreateMealAsync(string userName, InMealDto mealDto)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("UserName");
@@ -94,7 +95,7 @@ namespace CaloriesPlan.BLL.Services.Impl
                 throw new ArgumentNullException("Meal");
 
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
 
@@ -106,10 +107,10 @@ namespace CaloriesPlan.BLL.Services.Impl
             dbMeal.EatingDate = mealDto.EatingDate ?? DateTime.Now;
             dbMeal.UserID = user.Id;
 
-            this.mealDao.Create(dbMeal);
+            await this.mealDao.CreateAsync(dbMeal);
         }
 
-        public void UpdateMeal(int id, InMealDto mealDto)
+        public async Task UpdateMealAsync(int id, InMealDto mealDto)
         {
             if (mealDto == null ||
                 string.IsNullOrEmpty(mealDto.Text) ||
@@ -118,7 +119,7 @@ namespace CaloriesPlan.BLL.Services.Impl
                 throw new ArgumentNullException("Meal");
 
 
-            var dbMeal = this.mealDao.GetMealByID(id);
+            var dbMeal = await this.mealDao.GetMealByIDAsync(id);
             if (dbMeal == null)
                 throw new MealDoesNotExistException();
 
@@ -126,19 +127,19 @@ namespace CaloriesPlan.BLL.Services.Impl
             dbMeal.Calories = mealDto.Calories.Value;
             dbMeal.EatingDate = mealDto.EatingDate.Value;
 
-            this.mealDao.Update(dbMeal);
+            await this.mealDao.UpdateAsync(dbMeal);
         }
 
-        public void DeleteMeal(int id)
+        public async Task DeleteMealAsync(int id)
         {
-            var dbMeal = this.mealDao.GetMealByID(id);
+            var dbMeal = await this.mealDao.GetMealByIDAsync(id);
             if (dbMeal == null)
                 throw new MealDoesNotExistException();
 
-            this.mealDao.Delete(dbMeal);
+            await this.mealDao.DeleteAsync(dbMeal);
         }
 
-        public bool IsOwnerOfMeal(string userName, int mealID)
+        public async Task <bool> IsOwnerOfMealAsync(string userName, int mealID)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("userName");
@@ -146,12 +147,12 @@ namespace CaloriesPlan.BLL.Services.Impl
             if (mealID <= 0)
                 throw new ArgumentException("MealID should be more than 0");
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 throw new MealDoesNotExistException();
 
-            var contains = this.mealDao
-                .Contains(m =>
+            var contains = await this.mealDao
+                .ContainsAsync(m =>
                     m.UserID == user.Id &&
                     m.ID == mealID);
 

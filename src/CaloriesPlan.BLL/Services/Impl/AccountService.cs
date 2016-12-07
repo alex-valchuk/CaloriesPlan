@@ -94,19 +94,19 @@ namespace CaloriesPlan.BLL.Services.Impl
             return dtoUsers;
         }
 
-        public OutAccountDto GetAccount(string userName)
+        public async Task<OutAccountDto> GetAccountAsync(string userName)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 return null;
 
 
             var dto = this.ConvertToOutAccountDto(user);
 
-            var dbUserRoles = this.userDao.GetUserRoles(user);
+            var dbUserRoles = await this.userDao.GetUserRolesAsync(user);
             if (dbUserRoles != null)
             {
                 dto.UserRoles = this.ConvertToOutUserRoleDtoList(dbUserRoles);
@@ -115,7 +115,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             return dto;
         }
 
-        public void UpdateAccount(string userName, InAccountDto accountDto)
+        public async Task UpdateAccountAsync(string userName, InAccountDto accountDto)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
@@ -127,38 +127,38 @@ namespace CaloriesPlan.BLL.Services.Impl
                 throw new ArgumentNullException("DailyCaloriesLimit");
 
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
 
             user.DailyCaloriesLimit = accountDto.DailyCaloriesLimit.Value;
 
-            this.userDao.Update(user);
+            await this.userDao.UpdateAsync(user);
         }
 
-        public void DeleteAccount(string userName)
+        public async Task DeleteAccountAsync(string userName)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
 
 
-            this.userDao.Delete(user);
+            await this.userDao.DeleteAsync(user);
         }
 
-        public IList<OutUserRoleDto> GetUserRoles(string userName)
+        public async Task<IList<OutUserRoleDto>> GetUserRolesAsync(string userName)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
 
-            var dbRoles = this.userDao.GetUserRoles(user);
+            var dbRoles = await this.userDao.GetUserRolesAsync(user);
             if (dbRoles == null)
                 return null;
 
@@ -167,16 +167,16 @@ namespace CaloriesPlan.BLL.Services.Impl
             return dtoRoles;
         }
 
-        public IList<OutUserRoleDto> GetNotUserRoles(string userName)
+        public async Task<IList<OutUserRoleDto>> GetNotUserRolesAsync(string userName)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
 
-            var dbRoles = this.userDao.GetNotUserRoles(user);
+            var dbRoles = await this.userDao.GetNotUserRolesAsync(user);
             if (dbRoles == null)
                 return null;
 
@@ -193,7 +193,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             if (string.IsNullOrEmpty(roleName))
                 throw new ArgumentNullException("RoleName");
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
 
@@ -201,7 +201,7 @@ namespace CaloriesPlan.BLL.Services.Impl
             await this.userDao.AddUserRoleAsync(user, roleName);
         }
 
-        public void DeleteUserRole(string userName, string roleName)
+        public async Task DeleteUserRoleAsync(string userName, string roleName)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
@@ -209,23 +209,23 @@ namespace CaloriesPlan.BLL.Services.Impl
             if (string.IsNullOrEmpty(roleName))
                 throw new ArgumentNullException("RoleName");
 
-            var user = this.userDao.GetUserByName(userName);
+            var user = await this.userDao.GetUserByNameAsync(userName);
             if (user == null)
                 throw new AccountDoesNotExistException();
 
 
-            this.userDao.DeleteUserRole(user, roleName);
+            await this.userDao.DeleteUserRoleAsync(user, roleName);
         }
 
-        public ICollection<OutShortUserInfoDto> GetSubscribers(string userName)
+        public async Task<ICollection<OutShortUserInfoDto>> GetSubscribersAsync(string userName)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
 
-            var user = this.userDao.GetUserByName(userName);
-            var users = this.userDao.GetSubscribers(user);
-            var subscribers = this.ConvertToOutShortUserInfoDtoList(users);
+            var user = await this.userDao.GetUserByNameAsync(userName);
+            var users = await this.userDao.GetSubscribersAsync(user);
 
+            var subscribers = this.ConvertToOutShortUserInfoDtoList(users);
             return subscribers;
         }
 

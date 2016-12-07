@@ -17,16 +17,16 @@ namespace CaloriesPlan.DAL.Dao
         Task<Models.IUser> GetUserByCredentialsAsync(string userName, string password);
 
         Task<IList<Models.IUser>> GetUsersAsync();
-        IList<Models.IUser> GetSubscribers(Models.IUser user);
-        IList<Models.IUser> GetSubscribingUsers(Models.IUser user);
+        Task<IList<Models.IUser>> GetSubscribersAsync(Models.IUser user);
+        Task<IList<Models.IUser>> GetSubscribingUsersAsync(Models.IUser user);
 
-        Models.IUser GetUserByName(string userName);
-        void Update(Models.IUser user);
-        void Delete(Models.IUser user);
+        Task<Models.IUser> GetUserByNameAsync(string userName);
+        Task UpdateAsync(Models.IUser user);
+        Task DeleteAsync(Models.IUser user);
 
-        IList<Models.IRole> GetUserRoles(Models.IUser user);
-        IList<Models.IRole> GetNotUserRoles(Models.IUser user);
+        Task<IList<Models.IRole>> GetUserRolesAsync(Models.IUser user);
+        Task<IList<Models.IRole>> GetNotUserRolesAsync(Models.IUser user);
         Task<IAccountRegistrationResult> AddUserRoleAsync(Models.IUser user, string roleName);
-        void DeleteUserRole(Models.IUser user, string roleName);
+        Task DeleteUserRoleAsync(Models.IUser user, string roleName);
     }
 }

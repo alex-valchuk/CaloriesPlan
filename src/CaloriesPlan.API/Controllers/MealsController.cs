@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.BLL.Services;
@@ -22,7 +23,7 @@ namespace CaloriesPlan.API.Controllers
         //GET api/meals/
         [HttpGet]
         [AuthorizedInParamOrHasOneOfRoles(AuthorizationParams.RoleAdmin)]
-        public IHttpActionResult Get(
+        public async Task<IHttpActionResult> Get(
             [FromUri] string userName = null,
             [FromUri] InMealReportFilterDto filter = null)
         {
@@ -34,19 +35,18 @@ namespace CaloriesPlan.API.Controllers
             if (string.IsNullOrEmpty(userName))
                 userName = this.User.Identity.Name;
 
-            var userMeals = this.mealService.GetUserNutritionReport(userName, filter);
+            var userMeals = await this.mealService.GetUserNutritionReportAsync(userName, filter);
 
             return this.Ok(userMeals);
         }
 
         //GET api/meals/{id}
         [Route(ParamID)]
-        public IHttpActionResult Get(int id)
+        public async Task<IHttpActionResult> Get(int id)
         {
-            if (this.IsAuthorizedUserAnAdminOrOwnerOfMeal(id))
+            if (await this.IsAuthorizedUserAnAdminOrOwnerOfMeal(id))
             {
-                var meal = this.mealService.GetMealByID(id);
-
+                var meal = await this.mealService.GetMealByIDAsync(id);
                 if (meal != null)
                 {
                     return this.Ok(meal);
@@ -61,7 +61,7 @@ namespace CaloriesPlan.API.Controllers
         //POST api/meals/?userName
         [HttpPost]
         [AuthorizedInParamOrHasOneOfRoles(AuthorizationParams.RoleAdmin)]
-        public IHttpActionResult Post(InMealDto mealDto, [FromUri] string userName = null)
+        public async Task<IHttpActionResult> Post(InMealDto mealDto, [FromUri] string userName = null)
         {
             if (!this.ModelState.IsValid)
             {
@@ -71,23 +71,23 @@ namespace CaloriesPlan.API.Controllers
             if (string.IsNullOrEmpty(userName))
                 userName = this.User.Identity.Name;
 
-            this.mealService.CreateMeal(userName, mealDto);
+            await this.mealService.CreateMealAsync(userName, mealDto);
             return this.Ok();
         }
 
         //PUT api/meals/{id}
         [HttpPut]
         [Route(ParamID)]
-        public IHttpActionResult Put(int id, InMealDto mealDto)
+        public async Task<IHttpActionResult> Put(int id, InMealDto mealDto)
         {
-            if (this.IsAuthorizedUserAnAdminOrOwnerOfMeal(id))
+            if (await this.IsAuthorizedUserAnAdminOrOwnerOfMeal(id))
             {
                 if (!this.ModelState.IsValid)
                 {
                     return this.BadRequest(this.ModelState);
                 }
 
-                this.mealService.UpdateMeal(id, mealDto);
+                await this.mealService.UpdateMealAsync(id, mealDto);
                 return this.Ok();
             }
 
@@ -97,22 +97,22 @@ namespace CaloriesPlan.API.Controllers
         //DELETE api/meals/{id}
         [HttpDelete]
         [Route(ParamID)]
-        public IHttpActionResult Delete(int id)
+        public async Task<IHttpActionResult> Delete(int id)
         {
-            if (this.IsAuthorizedUserAnAdminOrOwnerOfMeal(id))
+            if (await this.IsAuthorizedUserAnAdminOrOwnerOfMeal(id))
             {
-                this.mealService.DeleteMeal(id);
+                await this.mealService.DeleteMealAsync(id);
                 return this.Ok();
             }
 
             return this.Unauthorized();
         }
 
-        private bool IsAuthorizedUserAnAdminOrOwnerOfMeal(int mealID)
+        private async Task<bool> IsAuthorizedUserAnAdminOrOwnerOfMeal(int mealID)
         {
             return
                 this.IsAuthorizedUserAnAdmin() ||
-                this.mealService.IsOwnerOfMeal(this.User.Identity.Name, mealID);
+                await this.mealService.IsOwnerOfMealAsync(this.User.Identity.Name, mealID);
         }
     }
 }

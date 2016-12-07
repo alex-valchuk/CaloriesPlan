@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 using CaloriesPlan.DAL.DataModel.Abstractions;
 
@@ -10,12 +11,12 @@ namespace CaloriesPlan.DAL.Dao
     {
         IMeal NewMealInstance();
 
-        List<IMeal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows);
-        IMeal GetMealByID(int mealID);
-        void Create(IMeal dbMeal);
-        void Update(IMeal dbMeal);
-        void Delete(IMeal dbMeal);
-        int Count(Expression<Func<IMeal, bool>> predicate);
-        bool Contains(Expression<Func<IMeal, bool>> predicate);
+        IList<IMeal> GetMeals(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows);
+        Task<IMeal> GetMealByIDAsync(int mealID);
+        Task CreateAsync(IMeal dbMeal);
+        Task UpdateAsync(IMeal dbMeal);
+        Task DeleteAsync(IMeal dbMeal);
+        Task<int> CountAsync(Expression<Func<IMeal, bool>> predicate);
+        Task<bool> ContainsAsync(Expression<Func<IMeal, bool>> predicate);
     }
 }

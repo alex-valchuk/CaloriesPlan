@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 using CaloriesPlan.DAL.DataModel;
 using CaloriesPlan.DAL.DataModel.Abstractions;
@@ -18,7 +20,7 @@ namespace CaloriesPlan.DAL.Dao.EF
             return new Meal();
         }
 
-        public List<IMeal> GetMealsByUserName(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows)
+        public IList<IMeal> GetMeals(string userName, DateTime dateFrom, DateTime dateTo, DateTime timeFrom, DateTime timeTo, int offset, int rows)
         {
             var userNameParam = new SqlParameter("@UserName", SqlDbType.NVarChar, 200) { Value = userName };
             var dateFromParam = new SqlParameter("@DateFrom", SqlDbType.DateTime) { Value = dateFrom };
@@ -28,8 +30,8 @@ namespace CaloriesPlan.DAL.Dao.EF
             var offsetParam = new SqlParameter("@Offset", SqlDbType.Int) { Value = offset };
             var rowsParam = new SqlParameter("@Rows", SqlDbType.Int) { Value = rows };
 
-            var query = this.dbContext.Meals
-                .SqlQuery("execute [dbo].sp_GetUserMeals @UserName, @DateFrom, @DateTo, @TimeFrom, @TimeTo, @Offset, @Rows",
+            var query = this.dbContext.Database
+                .SqlQuery<Meal>("execute [dbo].sp_GetUserMeals @UserName, @DateFrom, @DateTo, @TimeFrom, @TimeTo, @Offset, @Rows",
                     userNameParam,
                     dateFromParam,
                     dateToParam,
@@ -41,39 +43,39 @@ namespace CaloriesPlan.DAL.Dao.EF
             return query.ToList<IMeal>();
         }
 
-        public IMeal GetMealByID(int mealID)
+        public async Task<IMeal> GetMealByIDAsync(int mealID)
         {
-            return 
+            return await
                 this.dbContext.Meals
-                    .FirstOrDefault(m => m.ID == mealID);
+                    .FirstOrDefaultAsync(m => m.ID == mealID);
         }
 
-        public void Create(IMeal dbMeal)
+        public async Task CreateAsync(IMeal dbMeal)
         {
             this.dbContext.Meals.Add((Meal)dbMeal);
-            this.dbContext.SaveChanges();
+            await this.dbContext.SaveChangesAsync();
         }
 
-        public void Update(IMeal dbMeal)
+        public async Task UpdateAsync(IMeal dbMeal)
         {
-            this.dbContext.SaveChanges();
+            await this.dbContext.SaveChangesAsync();
         }
 
-        public void Delete(IMeal dbMeal)
+        public async Task DeleteAsync(IMeal dbMeal)
         {
             this.dbContext.Meals.Remove((Meal)dbMeal);
-            this.dbContext.SaveChanges();
+            await this.dbContext.SaveChangesAsync();
         }
 
-        public int Count(Expression<Func<IMeal, bool>> predicate)
+        public async Task<int> CountAsync(Expression<Func<IMeal, bool>> predicate)
         {
-            var count = this.dbContext.Meals.Count(predicate);
+            var count = await this.dbContext.Meals.CountAsync(predicate);
             return count;
         }
 
-        public bool Contains(Expression<Func<IMeal, bool>> predicate)
+        public async Task<bool> ContainsAsync(Expression<Func<IMeal, bool>> predicate)
         {
-            var contains = this.dbContext.Meals.Any(predicate);
+            var contains = await this.dbContext.Meals.AnyAsync(predicate);
             return contains;
         }
     }

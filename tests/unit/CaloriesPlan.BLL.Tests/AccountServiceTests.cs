@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,7 +14,6 @@ using CaloriesPlan.BLL.Exceptions;
 using CaloriesPlan.DAL.DataModel.Abstractions;
 using CaloriesPlan.UTL;
 using CaloriesPlan.UTL.Wrappers;
-using System.Threading.Tasks;
 
 namespace CaloriesPlan.BLL.Tests
 {
@@ -68,7 +67,7 @@ namespace CaloriesPlan.BLL.Tests
 
         [TestMethod]
         [ExpectedException(typeof(InvalidPasswordConfirmationException), "Password does not match password confirmation")]
-        public async Task SignUpAsync_PasswordDoesNotEqualToConfirmPassword_ArgumentNullExceptionThrown()
+        public async Task SignUpAsync_PasswordDoesNotEqualToConfirmPassword_InvalidPasswordConfirmationExceptionThrown()
         {
             //arrange
             var registerDto = this.GetValidRegisterDto();
@@ -80,7 +79,7 @@ namespace CaloriesPlan.BLL.Tests
 
         [TestMethod]
         [ExpectedException(typeof(RegistrationException), "Problem while creating the user")]
-        public async Task SignUpAsync_NotSuccededUserRegistration_ArgumentNullExceptionThrown()
+        public async Task SignUpAsync_NotSuccededUserRegistration_RegistrationExceptionThrown()
         {
             //arrange
             var registerDto = this.GetValidRegisterDto();
@@ -95,7 +94,7 @@ namespace CaloriesPlan.BLL.Tests
 
         [TestMethod]
         [ExpectedException(typeof(RegistrationException), "Problem while assigning user to role")]
-        public async Task SignUpAsync_NotSuccededRoleRegistration_ArgumentNullExceptionThrown()
+        public async Task SignUpAsync_NotSuccededRoleRegistration_RegistrationExceptionThrown()
         {
             //arrange
             var registerDto = this.GetValidRegisterDto();
@@ -131,7 +130,7 @@ namespace CaloriesPlan.BLL.Tests
         }
 
         [TestMethod]
-        public async Task GetAccounts_AccountsNotExist_NullReturned()
+        public async Task GetAccountsAsync_AccountsNotExist_NullReturned()
         {
             //act
             var accounts = await this.accountService.GetAccountsAsync();
@@ -142,49 +141,54 @@ namespace CaloriesPlan.BLL.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "UserName not specified")]
-        public void GetAccount_EmptyUserName_ArgumentNullExceptionThrown()
+        public async Task GetAccountAsync_EmptyUserName_ArgumentNullExceptionThrown()
         {
             //act
-            this.accountService.GetAccount(null);
+            await this.accountService.GetAccountAsync(null);
         }
 
         [TestMethod]
-        public void GetAccount_AccountDoesNotExist_NullReturned()
+        public async Task GetAccountAsync_AccountDoesNotExist_NullReturned()
         {
             //act
-            var account = this.accountService.GetAccount("Alex");
+            var account = await this.accountService.GetAccountAsync("Alex");
 
             //assert
             Assert.IsNull(account);
         }
 
         [TestMethod]
-        public void GetAccount_AccountExistsWithoutRoles_AccountReturned()
+        public async Task GetAccountAsync_AccountExistsWithoutRoles_AccountReturned()
         {
             //arrange
-            this.userDaoMock.Setup(d => d.GetUserByName(It.IsAny<string>())).Returns(Mock.Of<IUser>());
+            var task = Task.FromResult(Mock.Of<IUser>());
+
+            this.userDaoMock.Setup(d => d.GetUserByNameAsync(It.IsAny<string>())).Returns(task);
 
             //act
-            var account = this.accountService.GetAccount("Alex");
+            var account = await this.accountService.GetAccountAsync("Alex");
 
             //assert
             Assert.IsNotNull(account);
         }
 
         [TestMethod]
-        public void GetAccount_AccountExistsWithRoles_AccountWithRolesReturned()
+        public async Task GetAccountAsync_AccountExistsWithRoles_AccountWithRolesReturned()
         {
             //arrange
-            var dbRoles = new List<IRole>
+            IList<IRole> dbRoles = new List<IRole>
             {
                 Mock.Of<IRole>()
             };
 
-            this.userDaoMock.Setup(d => d.GetUserByName(It.IsAny<string>())).Returns(Mock.Of<IUser>());
-            this.userDaoMock.Setup(d => d.GetUserRoles(It.IsAny<IUser>())).Returns(dbRoles);
+            var userTask = Task.FromResult(Mock.Of<IUser>());
+            var rolesTask = Task.FromResult(dbRoles);
+
+            this.userDaoMock.Setup(d => d.GetUserByNameAsync(It.IsAny<string>())).Returns(userTask);
+            this.userDaoMock.Setup(d => d.GetUserRolesAsync(It.IsAny<IUser>())).Returns(rolesTask);
 
             //act
-            var account = this.accountService.GetAccount("Alex");
+            var account = await this.accountService.GetAccountAsync("Alex");
 
             //assert
             Assert.IsNotNull(account.UserRoles);
@@ -192,55 +196,57 @@ namespace CaloriesPlan.BLL.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "UserName not specified")]
-        public void UpdateAccount_UserNameNotSpecified_ArgumentNullExceptionThrown()
+        public async Task UpdateAccountAsync_UserNameNotSpecified_ArgumentNullExceptionThrown()
         {
             //act
-            this.accountService.UpdateAccount(null, It.IsAny<InAccountDto>());
+            await this.accountService.UpdateAccountAsync(null, It.IsAny<InAccountDto>());
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Account not specified")]
-        public void UpdateAccount_AccountDtoNotSpecified_ArgumentNullExceptionThrown()
+        public async Task UpdateAccountAsync_AccountDtoNotSpecified_ArgumentNullExceptionThrown()
         {
             //act
-            this.accountService.UpdateAccount("Alex", null);
+            await this.accountService.UpdateAccountAsync("Alex", null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "DailyCaloriesLimit not specified")]
-        public void UpdateAccount_DailyCaloriesLimitNotSpecified_ArgumentNullExceptionThrown()
+        public async Task UpdateAccountAsync_DailyCaloriesLimitNotSpecified_ArgumentNullExceptionThrown()
         {
             //act
-            this.accountService.UpdateAccount("Alex", Mock.Of<InAccountDto>());
+            await this.accountService.UpdateAccountAsync("Alex", Mock.Of<InAccountDto>());
         }
 
         [TestMethod]
         [ExpectedException(typeof(AccountDoesNotExistException), "Account does not exist")]
-        public void UpdateAccount_AccountDoesNotExist_ArgumentNullExceptionThrown()
+        public async Task UpdateAccountAsync_AccountDoesNotExist_AccountDoesNotExistExceptionThrown()
         {
             //arrange
             var accountDto = Mock.Of<InAccountDto>();
             accountDto.DailyCaloriesLimit = 20;
 
             //act
-            this.accountService.UpdateAccount("Alex", accountDto);
+            await this.accountService.UpdateAccountAsync("Alex", accountDto);
         }
 
         [TestMethod]
-        public void UpdateAccount_CorrectInput_AccountUpdated()
+        public async Task UpdateAccountAsync_CorrectInput_AccountUpdated()
         {
             //arrange
             var accountDto = Mock.Of<InAccountDto>();
             accountDto.DailyCaloriesLimit = 20;
 
             var dbUser = Mock.Of<IUser>();
-            this.userDaoMock.Setup(d => d.GetUserByName(It.IsAny<string>())).Returns(dbUser);
+            var accountTask = Task.FromResult(dbUser);
+
+            this.userDaoMock.Setup(d => d.GetUserByNameAsync(It.IsAny<string>())).Returns(accountTask);
 
             //act
-            this.accountService.UpdateAccount("Alex", accountDto);
+            await this.accountService.UpdateAccountAsync("Alex", accountDto);
 
             //assert
-            this.userDaoMock.Verify(d => d.Update(dbUser));
+            this.userDaoMock.Verify(d => d.UpdateAsync(dbUser));
         }
 
         private InSignUpDto GetValidRegisterDto()

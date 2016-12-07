@@ -44,12 +44,12 @@ namespace CaloriesPlan.DAL.Migrations
                 {
                     user = new User { UserName = userName, DailyCaloriesLimit = 50 };
 
-                    userDao.CreateUserAsync(user, "123456");
+                    userDao.CreateUserAsync(user, "123456").Wait();
                 }
 
                 if (!context.Users.Any(u => u.UserName == userName && u.Roles.Any(ur => context.Roles.Any(r => r.Id == ur.RoleId && r.Name == roleName))))
                 {
-                    userDao.AddUserRoleAsync(user, roleName);
+                    userDao.AddUserRoleAsync(user, roleName).Wait();
                 }
             }
         }

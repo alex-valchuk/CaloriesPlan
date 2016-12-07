@@ -33,9 +33,9 @@ namespace CaloriesPlan.API.Controllers
         [HttpGet]
         [Route(ParamUserName)]
         [AuthorizedInRouteOrHasOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
-        public IHttpActionResult Get(string userName)
+        public async Task<IHttpActionResult> Get(string userName)
         {
-            var account = this.accountService.GetAccount(userName);
+            var account = await this.accountService.GetAccountAsync(userName);
             return this.Ok(account);
         }
 
@@ -66,14 +66,14 @@ namespace CaloriesPlan.API.Controllers
         [HttpPut]
         [Route(ParamUserName)]
         [AuthorizedInRouteOrHasOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
-        public IHttpActionResult Put(string userName, InAccountDto accountDto)
+        public async Task<IHttpActionResult> Put(string userName, InAccountDto accountDto)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(this.ModelState);
             }
 
-            this.accountService.UpdateAccount(userName, accountDto);
+            await this.accountService.UpdateAccountAsync(userName, accountDto);
             return this.Ok();
         }
 
@@ -81,7 +81,7 @@ namespace CaloriesPlan.API.Controllers
         [HttpDelete]
         [Route(ParamUserName)]
         [Authorize(Roles = AuthorizationParams.RoleAdmin + "," + AuthorizationParams.RoleManager)]
-        public IHttpActionResult Delete(string userName)
+        public async Task<IHttpActionResult> Delete(string userName)
         {
             var authenticatedName = this.User.Identity.Name;
             if (authenticatedName.ToLower() == userName.ToLower())
@@ -89,7 +89,7 @@ namespace CaloriesPlan.API.Controllers
                 return this.BadRequest("User cannot delete himself");
             }
 
-            this.accountService.DeleteAccount(userName);
+            await this.accountService.DeleteAccountAsync(userName);
             return this.Ok();
         }
     }
