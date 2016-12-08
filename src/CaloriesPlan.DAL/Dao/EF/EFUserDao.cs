@@ -88,7 +88,7 @@ namespace CaloriesPlan.DAL.Dao.EF
 
         public async Task<Models.IUser> GetUserByNameAsync(string userName)
         {
-            return await this.userManager.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+            return await this.userManager.Users.FirstOrDefaultAsync<Models.IUser>(u => u.UserName == userName);
         }
 
         public async Task UpdateAsync(Models.IUser user)

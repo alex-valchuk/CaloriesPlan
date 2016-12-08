@@ -12,8 +12,9 @@ using CaloriesPlan.UTL.Config.Abstractions;
 using CaloriesPlan.DAL.Dao.Abstractions;
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.DTO.Out;
-using CaloriesPlan.BLL.Services.Abstractions;
 using CaloriesPlan.BLL.Exceptions;
+using CaloriesPlan.BLL.Mapping.Abstractions;
+using CaloriesPlan.BLL.Services.Abstractions;
 
 using Models = CaloriesPlan.DAL.DataModel.Abstractions;
 
@@ -22,11 +23,14 @@ namespace CaloriesPlan.BLL.Services
     public class AccountService : IAccountService, IOAuthService
     {
         private readonly IConfigProvider configProvider;
+        private readonly IUserMapper userMapper;
+
         private readonly IUserDao userDao;
 
-        public AccountService(IConfigProvider configProvider, IUserDao userDao)
+        public AccountService(IConfigProvider configProvider, IUserMapper userMapper, IUserDao userDao)
         {
             this.configProvider = configProvider;
+            this.userMapper = userMapper;
             this.userDao = userDao;
         }
 
@@ -86,33 +90,27 @@ namespace CaloriesPlan.BLL.Services
             return authTicket;
         }
 
-        public async Task<IList<OutAccountDto>> GetAccountsAsync()
+        public async Task<IList<OutUserDto>> GetAccountsAsync()
         {
             var dbUsers = await this.userDao.GetUsersAsync();
-            var dtoUsers = this.ConvertToOutAccountDtoList(dbUsers);
+            var dtoUsers = this.userMapper.ConvertToUserDtoList(dbUsers);
 
             return dtoUsers;
         }
 
-        public async Task<OutAccountDto> GetAccountAsync(string userName)
+        public async Task<OutUserProfileDto> GetUserProfileAsync(string userName)
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException("User Name");
 
-            var user = await this.userDao.GetUserByNameAsync(userName);
-            if (user == null)
+            var userModel = await this.userDao.GetUserByNameAsync(userName);
+            if (userModel == null)
                 return null;
 
+            var roleModels = await this.userDao.GetUserRolesAsync(userModel);
 
-            var dto = this.ConvertToOutAccountDto(user);
-
-            var dbUserRoles = await this.userDao.GetUserRolesAsync(user);
-            if (dbUserRoles != null)
-            {
-                dto.UserRoles = this.ConvertToOutUserRoleDtoList(dbUserRoles);
-            }
-
-            return dto;
+            var userProfileDto = this.userMapper.ConvertToUserProfileDto(userModel, roleModels);
+            return userProfileDto;
         }
 
         public async Task UpdateAccountAsync(string userName, InAccountDto accountDto)
@@ -158,12 +156,9 @@ namespace CaloriesPlan.BLL.Services
             if (user == null)
                 throw new AccountDoesNotExistException();
 
-            var dbRoles = await this.userDao.GetUserRolesAsync(user);
-            if (dbRoles == null)
-                return null;
+            var roleModels = await this.userDao.GetUserRolesAsync(user);
 
-
-            var dtoRoles = this.ConvertToOutUserRoleDtoList(dbRoles);
+            var dtoRoles = this.userMapper.ConvertToUserRoleDtoList(roleModels);
             return dtoRoles;
         }
 
@@ -176,12 +171,9 @@ namespace CaloriesPlan.BLL.Services
             if (user == null)
                 throw new AccountDoesNotExistException();
 
-            var dbRoles = await this.userDao.GetNotUserRolesAsync(user);
-            if (dbRoles == null)
-                return null;
+            var roleModels = await this.userDao.GetNotUserRolesAsync(user);
 
-
-            var dtoRoles = this.ConvertToOutUserRoleDtoList(dbRoles);
+            var dtoRoles = this.userMapper.ConvertToUserRoleDtoList(roleModels);
             return dtoRoles;
         }
 
@@ -225,7 +217,7 @@ namespace CaloriesPlan.BLL.Services
             var user = await this.userDao.GetUserByNameAsync(userName);
             var users = await this.userDao.GetSubscribersAsync(user);
 
-            var subscribers = this.ConvertToOutShortUserInfoDtoList(users);
+            var subscribers = this.userMapper.ConvertToOutShortUserInfoDtoList(users);
             return subscribers;
         }
 
@@ -238,97 +230,6 @@ namespace CaloriesPlan.BLL.Services
             };
 
             return new AuthenticationProperties(data);
-        }
-
-        private IList<OutAccountDto> ConvertToOutAccountDtoList(IList<Models.IUser> models)
-        {
-            if (models == null ||
-                models.Count == 0)
-                return null;
-
-            var dtoList = new List<OutAccountDto>();
-
-            foreach (var model in models)
-            {
-                var dto = this.ConvertToOutAccountDto(model);
-                dtoList.Add(dto);
-            }
-
-            return dtoList;
-        }
-
-        private OutAccountDto ConvertToOutAccountDto(Models.IUser model)
-        {
-            if (model == null)
-                return null;
-
-            var dto = new OutAccountDto
-            {
-                UserName = model.UserName,
-                DailyCaloriesLimit = model.DailyCaloriesLimit
-            };
-
-            return dto;
-        }
-
-        private IList<OutUserRoleDto> ConvertToOutUserRoleDtoList(IList<Models.IRole> models)
-        {
-            if (models == null)
-                return null;
-
-
-            var dtoList = new List<OutUserRoleDto>();
-
-            foreach (var model in models)
-            {
-                var dto = this.ConvertToOutUserRoleDto(model);
-                dtoList.Add(dto);
-            }
-
-            return dtoList;
-        }
-
-        private OutUserRoleDto ConvertToOutUserRoleDto(Models.IRole model)
-        {
-            if (model == null)
-                return null;
-
-            var dto = new OutUserRoleDto
-            {
-                RoleName = model.Name
-            };
-
-            return dto;
-        }
-
-        private IList<OutShortUserInfoDto> ConvertToOutShortUserInfoDtoList(IList<Models.IUser> models)
-        {
-            if (models == null)
-                return null;
-
-
-            var dtoList = new List<OutShortUserInfoDto>();
-
-            foreach (var model in models)
-            {
-                var dto = this.ConvertToOutShortUserInfoDto(model);
-                dtoList.Add(dto);
-            }
-
-            return dtoList;
-        }
-
-        private OutShortUserInfoDto ConvertToOutShortUserInfoDto(Models.IUser model)
-        {
-            if (model == null)
-                return null;
-
-            var dto = new OutShortUserInfoDto
-            {
-                UserName = model.UserName
-            };
-
-            return dto;
         }
     }
 }

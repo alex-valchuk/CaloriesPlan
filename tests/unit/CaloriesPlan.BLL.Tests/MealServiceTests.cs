@@ -14,7 +14,7 @@ using CaloriesPlan.DAL.Dao.Abstractions;
 using CaloriesPlan.DAL.DataModel.Abstractions;
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.UTL.Config.Abstractions;
-using CaloriesPlan.BLL.Mappers.Abstractions;
+using CaloriesPlan.BLL.Mapping.Abstractions;
 using CaloriesPlan.DTO.Out;
 
 namespace CaloriesPlan.BLL.Tests

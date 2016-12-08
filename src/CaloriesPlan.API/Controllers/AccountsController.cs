@@ -35,7 +35,7 @@ namespace CaloriesPlan.API.Controllers
         [AuthorizedInRouteOrHasOneOfRoles(AuthorizationParams.RoleAdmin, AuthorizationParams.RoleManager)]
         public async Task<IHttpActionResult> Get(string userName)
         {
-            var account = await this.accountService.GetAccountAsync(userName);
+            var account = await this.accountService.GetUserProfileAsync(userName);
             return this.Ok(account);
         }
 

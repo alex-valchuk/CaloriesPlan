@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using CaloriesPlan.UTL.Config.Abstractions;
 using CaloriesPlan.DAL.Dao.Abstractions;
-using CaloriesPlan.DAL.DataModel.Abstractions;
 using CaloriesPlan.DTO.In;
 using CaloriesPlan.DTO.Out;
 using CaloriesPlan.BLL.Exceptions;
 using CaloriesPlan.BLL.Services.Abstractions;
-using CaloriesPlan.BLL.Mappers.Abstractions;
+using CaloriesPlan.BLL.Mapping.Abstractions;
 
 namespace CaloriesPlan.BLL.Services
 {
@@ -152,12 +150,12 @@ namespace CaloriesPlan.BLL.Services
             if (user == null)
                 throw new MealDoesNotExistException();
 
-            var contains = await this.mealDao
+            var isOwner = await this.mealDao
                 .ContainsAsync(m =>
                     m.UserID == user.Id &&
                     m.ID == mealID);
 
-            return contains;
+            return isOwner;
         }
     }
 }

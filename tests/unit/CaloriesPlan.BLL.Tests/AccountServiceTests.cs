@@ -14,6 +14,8 @@ using CaloriesPlan.DAL.DataModel.Abstractions;
 using CaloriesPlan.BLL.Services.Abstractions;
 using CaloriesPlan.BLL.Services;
 using CaloriesPlan.BLL.Exceptions;
+using CaloriesPlan.BLL.Mapping.Abstractions;
+using CaloriesPlan.BLL.Mapping;
 
 namespace CaloriesPlan.BLL.Tests
 {
@@ -21,6 +23,8 @@ namespace CaloriesPlan.BLL.Tests
     public class AccountServiceTests
     {
         private Mock<IConfigProvider> configProviderMock;
+        private IUserMapper userMapper;
+
         private Mock<IUserDao> userDaoMock;
 
         private IAccountService accountService;
@@ -29,8 +33,14 @@ namespace CaloriesPlan.BLL.Tests
         public void Setup()
         {
             this.configProviderMock = new Mock<IConfigProvider>();
+            this.userMapper = new UserMapper();
+
             this.userDaoMock = new Mock<IUserDao>();
-            this.accountService = new AccountService(configProviderMock.Object, userDaoMock.Object);
+
+            this.accountService = new AccountService(
+                this.configProviderMock.Object, 
+                this.userMapper, 
+                this.userDaoMock.Object);
         }
 
         [TestMethod]
@@ -113,14 +123,15 @@ namespace CaloriesPlan.BLL.Tests
         public async Task GetAccountsAsync_AccountsExist_DtoAccountsReturned()
         {
             //arrange
-            IList<IUser> dbUsers = new List<IUser>
+            IList<IUser> userModels = new List<IUser>
             {
                 Mock.Of<IUser>()
             };
                 
-            var dbUsersTask = Task.FromResult(dbUsers);
+            var dbUsersTask = Task.FromResult(userModels);
 
             this.userDaoMock.Setup(d => d.GetUsersAsync()).Returns(dbUsersTask);
+            //this.userMapperMock.Setup(m => m.ConvertToUserDtoList(userModels)).Returns(new List<OutUserDto> { new OutUserDto() });
 
             //act
             var accounts = await this.accountService.GetAccountsAsync();
@@ -144,14 +155,14 @@ namespace CaloriesPlan.BLL.Tests
         public async Task GetAccountAsync_EmptyUserName_ArgumentNullExceptionThrown()
         {
             //act
-            await this.accountService.GetAccountAsync(null);
+            await this.accountService.GetUserProfileAsync(null);
         }
 
         [TestMethod]
         public async Task GetAccountAsync_AccountDoesNotExist_NullReturned()
         {
             //act
-            var account = await this.accountService.GetAccountAsync("Alex");
+            var account = await this.accountService.GetUserProfileAsync("Alex");
 
             //assert
             Assert.IsNull(account);
@@ -161,12 +172,14 @@ namespace CaloriesPlan.BLL.Tests
         public async Task GetAccountAsync_AccountExistsWithoutRoles_AccountReturned()
         {
             //arrange
-            var task = Task.FromResult(Mock.Of<IUser>());
+            var userModel = Mock.Of<IUser>();
+            var task = Task.FromResult(userModel);
 
             this.userDaoMock.Setup(d => d.GetUserByNameAsync(It.IsAny<string>())).Returns(task);
+            //this.userMapperMock.Setup(m => m.ConvertToUserDto(userModel)).Returns(new OutUserDto());
 
             //act
-            var account = await this.accountService.GetAccountAsync("Alex");
+            var account = await this.accountService.GetUserProfileAsync("Alex");
 
             //assert
             Assert.IsNotNull(account);
@@ -181,14 +194,18 @@ namespace CaloriesPlan.BLL.Tests
                 Mock.Of<IRole>()
             };
 
-            var userTask = Task.FromResult(Mock.Of<IUser>());
+            var userModel = Mock.Of<IUser>();
+
+            var userTask = Task.FromResult(userModel);
             var rolesTask = Task.FromResult(dbRoles);
 
             this.userDaoMock.Setup(d => d.GetUserByNameAsync(It.IsAny<string>())).Returns(userTask);
             this.userDaoMock.Setup(d => d.GetUserRolesAsync(It.IsAny<IUser>())).Returns(rolesTask);
 
+            //this.userMapperMock.Setup(m => m.ConvertToUserDto(userModel)).Returns(new OutUserDto());
+
             //act
-            var account = await this.accountService.GetAccountAsync("Alex");
+            var account = await this.accountService.GetUserProfileAsync("Alex");
 
             //assert
             Assert.IsNotNull(account.UserRoles);
