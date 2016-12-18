@@ -6,7 +6,7 @@ using CaloriesPlan.BLL.Services.Abstractions;
 
 namespace CaloriesPlan.API.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     [RoutePrefix("api/tests")]
     public class TestsController : ControllerBase
     {
@@ -84,6 +84,13 @@ namespace CaloriesPlan.API.Controllers
             return this.Ok(profile);
         }
 
+        [HttpPut]
+        [Route("student")]
+        public IHttpActionResult Put(int id, Student student)
+        {
+            return this.Ok();
+        }
+
         public class AUser
         {
             public int ID { get; set; }
@@ -109,6 +116,12 @@ namespace CaloriesPlan.API.Controllers
             public string LastName { get; set; }
             public string Address { get; set; }
             public DateTime DateOfBirth { get; set; }
+        }
+
+        public class Student
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
         }
     }
 }
