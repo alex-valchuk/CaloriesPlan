@@ -212,6 +212,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ActionResultsController.cs" />
+    <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\SubscribersController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="ExceptionHandlers\Abstractions\IExceptionDecorator.cs" />
@@ -232,7 +233,9 @@
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\UnityDependencyResolver.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Friends\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CaloriesPlan.BLL\CaloriesPlan.BLL.csproj">
       <Project>{19ca4aea-8c3e-4b6c-98a7-d383e0bd05a8}</Project>

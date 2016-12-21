@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
 
 using CaloriesPlan.API.Controllers.Base;
 using CaloriesPlan.BLL.Services.Abstractions;
+using System.Collections.Generic;
 
 namespace CaloriesPlan.API.Controllers
 {
@@ -17,36 +19,7 @@ namespace CaloriesPlan.API.Controllers
             this.accountService = accountService;
         }
 
-        //GET api/accounts/friends_w
-        [HttpGet]
-        [Route("friends_w")]
-        public IHttpActionResult GetFriendsWrong([FromUri] int? userID = null)
-        {
-            var users = new System.Collections.Generic.List<AUser> {
-                    new AUser {
-                        ID = 125,
-                        UserName = "john.smith123",
-                        Password = "123456",
-                        FirstName = "John",
-                        LastName = "Smith",
-                        Address = "Redmond, WA 98052-6399. UNITED STATES.",
-                        DateOfBirth = DateTime.Now.AddYears(38)
-                    },
-                    new AUser {
-                        ID = 168,
-                        UserName = "john.doe456",
-                        Password = "987654",
-                        FirstName = "John",
-                        LastName = "Doe",
-                        Address = "Cupertino, CA 95014. UNITED STATES.",
-                        DateOfBirth = DateTime.Now.AddYears(37)
-                    },
-                };
-
-            return this.Ok(users);
-        }
-
-        //GET api/accounts/friends_r
+        //GET api/tests/friends_r
         [HttpGet]
         [Route("friends_r")]
         public IHttpActionResult GetUsers([FromUri] int? userID = null)
@@ -67,7 +40,7 @@ namespace CaloriesPlan.API.Controllers
             return this.Ok(users);
         }
 
-        //GET api/accounts/profile
+        //GET api/tests/profile
         [HttpGet]
         [Route("profile")]
         public IHttpActionResult GetUserProfile([FromUri] int? userID = null)
@@ -78,7 +51,7 @@ namespace CaloriesPlan.API.Controllers
                     FirstName = "John",
                     LastName = "Smith",
                     Address = "Redmond, WA 98052-6399. UNITED STATES.",
-                    DateOfBirth = DateTime.Now.AddYears(38)
+                    DateOfBirth = DateTime.Now.AddYears(-38)
                 };
 
             return this.Ok(profile);
@@ -89,18 +62,6 @@ namespace CaloriesPlan.API.Controllers
         public IHttpActionResult Put(int id, Student student)
         {
             return this.Ok();
-        }
-
-        public class AUser
-        {
-            public int ID { get; set; }
-            public string UserName { get; set; }
-            public string Password { get; set; }
-            public string ConfirmPassword { get; set; }
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string Address { get; set; }
-            public DateTime DateOfBirth { get; set; }
         }
 
         public class OutUserDetailDto
