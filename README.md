@@ -14,5 +14,5 @@ The project structure:
 
 http://www.protractortest.org/#/tutorial
 
-webdriver-manager start
-protractor config.js
+1) webdriver-manager start
+2) protractor config.js
